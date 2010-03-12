@@ -1,0 +1,3 @@
+﻿English text: Hello world
+Lithuanian text: Lietuviškos raidės ąčęėįšųūžĄČĘĖĮŠŲŪŽ
+Russian text: русский техт.
