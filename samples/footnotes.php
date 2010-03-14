@@ -5,8 +5,6 @@ require '../lib/PHPRtfLite.php';
 // register PHPRtfLite class loader
 PHPRtfLite::registerAutoloader();
 
-$sectionTexts = explode("\r\n----\r\n", file_get_contents('sections.txt'));
-
 //rtf document
 $rtf = new PHPRtfLite();
 // restart footnote numbering on each page
