@@ -1011,7 +1011,7 @@ class PHPRtfLite {
      */
     public static function quoteRtfCode($text) {
         // escape backslashes
-        $text = addslashes($text);
+        $text = str_replace('\\', '\\\\', $text);
         // convert breaks into rtf break
         $text = str_replace(array("\r\n", "\n", "\r"), '\par ', $text);
 
