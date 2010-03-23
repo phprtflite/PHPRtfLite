@@ -88,21 +88,21 @@ class PHPRtfLite_Container_Footer extends PHPRtfLite_Container {
     protected function getTypeAsRtfCode() {
         switch ($this->_type) {
             case self::TYPE_ALL:
-                if (!$rtf->isOddEvenDifferent()) {
+                if (!$this->_rtf->isOddEvenDifferent()) {
                     return 'footer';
                 }
 
                 throw new PHPRtfLite_Exception('Footer type ' . $this->_type . ' is not allowed, when using odd even different!');
 
             case self::TYPE_LEFT:
-                if ($rtf->isOddEvenDifferent()) {
+                if ($this->_rtf->isOddEvenDifferent()) {
                     return 'footerl';
                 }
 
                 throw new PHPRtfLite_Exception('Footer type ' . $this->_type . ' is not allowed, when using not odd even different!');
 
             case self::TYPE_RIGHT:
-                if ($rtf->isOddEvenDifferent()) {
+                if ($this->_rtf->isOddEvenDifferent()) {
                     return 'footerr';
                 }
 

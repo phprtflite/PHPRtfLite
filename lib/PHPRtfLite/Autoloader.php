@@ -32,14 +32,14 @@ class PHPRtfLite_Autoloader
      * base dir of the PHPRtfLite package
      * @var string
      */
-    static protected $_baseDir;
+    protected static $_baseDir;
 
 
     /**
      * Sets the base dir, where PHPRtfLite classes can be found
      * @param string $dir
      */
-    static public function setBaseDir($dir) {
+    public static function setBaseDir($dir) {
         self::$_baseDir = $dir;
     }
 
@@ -49,17 +49,12 @@ class PHPRtfLite_Autoloader
      * @param  string   $className
      * @return boolean  returns true, if class could be loaded
      */
-    static public function autoload($className) {
+    public static function autoload($className) {
         $classFile = self::$_baseDir . '/' . str_replace('_', '/', $className) . '.php';
 
         if (is_file($classFile)) {
             require $classFile;
-            return true;
         }
-
-        echo $classFile;
-
-        return false;
     }
 
 }
