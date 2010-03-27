@@ -40,7 +40,7 @@ class PHPRtfLite_DocHeadDefinition_Note
      * endnote type
      * @var integer
      */
-    protected $_endnoteNumberingType    = PHPRtfLite_Footnote::NUMTYPE_ROMAN_LC;
+    protected $_endnoteNumberingType    = PHPRtfLite_Endnote::NUMTYPE_ROMAN_LC;
 
     /**
      * flag for restarting footnote numbering on each page

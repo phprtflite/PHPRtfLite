@@ -47,7 +47,7 @@ $cell->addImage('sources/cats.jpg', null);
 $table->writeToCell(2, 1, '<br> Width is set.', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 //writing to cell and adding image from table object
 $table->writeToCell(2, 2, '<br>   ', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$table->addImageToCell(2, 2, 'sources/catsxx.jpg', null, 5);
+$table->addImageToCell(2, 2, 'sources/cats.jpg', null, 5);
 
 $table->writeToCell(3, 1, '<br> Height is set.', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 $table->writeToCell(3, 2, '<br>   ', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
