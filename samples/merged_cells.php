@@ -14,17 +14,17 @@ $table->addColumnsList(array(3, 3, 3, 3, 3));
 
 $table->mergeCellRange(1, 1, 3, 1);
 $table->writeToCell(1, 1, 'Vertical merged cells.', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$border = PHPRtfLite_Border::create(1, '#ff0000');
+$border = PHPRtfLite_Border::create($rtf, 1, '#ff0000');
 $table->setBorderForCellRange($border, 1, 1, 3, 1);
 
 $table->mergeCellRange(1, 3, 1, 5);
 $table->writeToCell(1, 3, 'Horizontal merged cells', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$border = PHPRtfLite_Border::create(1, '#0000ff');
+$border = PHPRtfLite_Border::create($rtf, 1, '#0000ff');
 $table->setBorderForCellRange($border, 1, 3, 1, 5);
 
 $table->mergeCellRange(3, 3, 5, 5);
 $table->writeToCell(3, 3, 'Horizontal and vertical merged cells', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$border = PHPRtfLite_Border::create(1, '#00ff00');
+$border = PHPRtfLite_Border::create($rtf, 1, '#00ff00');
 $table->setBorderForCellRange($border, 3, 3, 5, 5);
 
 // send to browser

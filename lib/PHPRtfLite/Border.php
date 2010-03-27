@@ -29,7 +29,12 @@
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Border
  */
-class PHPRtfLite_Border {
+class PHPRtfLite_Border
+{
+    /**
+     * @var PHPRtfLite
+     */
+    protected $_rtf;
 
     /**
      * @var PHPRtfLite_Border_Format
@@ -72,10 +77,10 @@ class PHPRtfLite_Border {
      *
      * @return  PHPRtfLite_Border
      */
-    static public function create($size = 0, $color = null, $type = null, $space = 0,
+    public static function create(PHPRtfLite $rtf, $size = 0, $color = null, $type = null, $space = 0,
                                   $left = true, $top = true, $right = true, $bottom = true)
     {
-        $border = new self();
+        $border = new self($rtf);
         $border->setBorders(new PHPRtfLite_Border_Format($size, $color, $type, $space), $left, $top, $right, $bottom);
 
         return $border;
@@ -83,16 +88,19 @@ class PHPRtfLite_Border {
 
     /**
      * Constructor
-     * @param PHPRtfLite_Border_Format $left
-     * @param PHPRtfLite_Border_Format $top
-     * @param PHPRtfLite_Border_Format $right
-     * @param PHPRtfLite_Border_Format $bottom
+     * @param PHPRtfLite                $rtf
+     * @param PHPRtfLite_Border_Format  $left
+     * @param PHPRtfLite_Border_Format  $top
+     * @param PHPRtfLite_Border_Format  $right
+     * @param PHPRtfLite_Border_Format  $bottom
      */
-    public function __construct(PHPRtfLite_Border_Format $left  = null,
+    public function __construct(PHPRtfLite $rtf,
+                                PHPRtfLite_Border_Format $left  = null,
                                 PHPRtfLite_Border_Format $top   = null,
                                 PHPRtfLite_Border_Format $right = null,
                                 PHPRtfLite_Border_Format $bottom = null)
     {
+        $this->_rtf             = $rtf;
         $this->_borderLeft      = $left;
         $this->_borderTop       = $top;
         $this->_borderRight     = $right;
@@ -111,6 +119,8 @@ class PHPRtfLite_Border {
     public function setBorders(PHPRtfLite_Border_Format $borderFormat,
                                $left = true, $top = true, $right = true, $bottom = true)
     {
+        $borderFormat->setColorTable($this->_rtf->getColorTable());
+        
         if ($left) {
             $this->_borderLeft  = $borderFormat;
         }
@@ -129,29 +139,12 @@ class PHPRtfLite_Border {
     }
 
     /**
-     * Sets different border formats
-     *
-     * @param PHPRtfLite_Border_Format $formatLeft
-     * @param PHPRtfLite_Border_Format $formatTop
-     * @param PHPRtfLite_Border_Format $formatRight
-     * @param PHPRtfLite_Border_Format $formatBottom
-     */
-    public function setBorderAll(PHPRtfLite_Border_Format $formatLeft,
-                                 PHPRtfLite_Border_Format $formatTop,
-                                 PHPRtfLite_Border_Format $formatRight,
-                                 PHPRtfLite_Border_Format $formatBottom)
-    {
-        $this->_borderLeft      = $formatLeft;
-        $this->_borderTop       = $formatTop;
-        $this->_borderRight     = $formatRight;
-        $this->_borderBottom    = $formatBottom;
-    }
-
-    /**
      * Sets border format for left border.
      * @param PHPRtfLite_Border_Format $borderFormat
      */
-    public function setBorderLeft(PHPRtfLite_Border_Format $borderFormat) {
+    public function setBorderLeft(PHPRtfLite_Border_Format $borderFormat)
+    {
+        $borderFormat->setColorTable($this->_rtf->getColorTable());
         $this->_borderLeft = $borderFormat;
     }
 
@@ -159,7 +152,8 @@ class PHPRtfLite_Border {
      * Gets border format of left border.
      * @return PHPRtfLite_Border_Format
      */
-    public function getBorderLeft() {
+    public function getBorderLeft()
+    {
         return $this->_borderLeft;
     }
 
@@ -167,7 +161,9 @@ class PHPRtfLite_Border {
      * Sets border format for right border.
      * @param PHPRtfLite_Border_Format $borderFormat
      */
-    public function setBorderRight(PHPRtfLite_Border_Format $borderFormat) {
+    public function setBorderRight(PHPRtfLite_Border_Format $borderFormat)
+    {
+        $borderFormat->setColorTable($this->_rtf->getColorTable());
         $this->_borderRight = $borderFormat;
     }
 
@@ -175,7 +171,8 @@ class PHPRtfLite_Border {
      * Gets border format of right border.
      * @return PHPRtfLite_Border_Format
      */
-    public function getBorderRight() {
+    public function getBorderRight()
+    {
         return $this->_borderRight;
     }
 
@@ -183,7 +180,9 @@ class PHPRtfLite_Border {
      * Sets border format for top border.
      * @param PHPRtfLite_Border_Format $borderFormat
      */
-    public function setBorderTop(PHPRtfLite_Border_Format $borderFormat) {
+    public function setBorderTop(PHPRtfLite_Border_Format $borderFormat)
+    {
+        $borderFormat->setColorTable($this->_rtf->getColorTable());
         $this->_borderTop = $borderFormat;
     }
 
@@ -191,7 +190,8 @@ class PHPRtfLite_Border {
      * Gets border format of top border.
      * @return PHPRtfLite_Border_Format
      */
-    public function getBorderTop() {
+    public function getBorderTop()
+    {
         return $this->_borderTop;
     }
 
@@ -199,7 +199,9 @@ class PHPRtfLite_Border {
      * Sets border format for bottom border.
      * @param PHPRtfLite_Border_Format $borderFormat
      */
-    public function setBorderBottom(PHPRtfLite_Border_Format $borderFormat) {
+    public function setBorderBottom(PHPRtfLite_Border_Format $borderFormat)
+    {
+        $borderFormat->setColorTable($this->_rtf->getColorTable());
         $this->_borderBottom = $borderFormat;
     }
 
@@ -207,53 +209,35 @@ class PHPRtfLite_Border {
      * Gets border format of bottom border.
      * @return PHPRtfLite_Border_Format
      */
-    public function getBorderBottom() {
+    public function getBorderBottom()
+    {
         return $this->_borderBottom;
     }
 
     /**
      * Gets rtf code of object.
-     * @param   PHPRtfLite  $rtf
      * @param   string $type rtf code part
      * 
      * @return  string rtf code
      */
-    public function getContent(PHPRtfLite $rtf, $type = '\\') {
+    public function getContent($type = '\\')
+    {
         $content = '';
 
         if ($this->_borderLeft && $this->_borderLeft->getSize() > 0) {
-            $content .= $type . 'brdrl' . $this->getBorderRtf($this->_borderLeft, $rtf);
+            $content .= $type . 'brdrl' . $this->_borderLeft->getContent();
         }
         if ($this->_borderRight && $this->_borderRight->getSize() > 0) {
-            $content .= $type . 'brdrr' . $this->getBorderRtf($this->_borderRight, $rtf);
+            $content .= $type . 'brdrr' . $this->_borderRight->getContent();
         }
         if ($this->_borderTop && $this->_borderTop->getSize() > 0) {
-            $content .= $type . 'brdrt' . $this->getBorderRtf($this->_borderTop, $rtf);
+            $content .= $type . 'brdrt' . $this->_borderTop->getContent();
         }
         if ($this->_borderBottom && $this->_borderBottom->getSize() > 0) {
-            $content .= $type . 'brdrb' . $this->getBorderRtf($this->_borderBottom, $rtf);
+            $content .= $type . 'brdrb' . $this->_borderBottom->getContent();
         }
 
         return $content;
-    }
-
-    /**
-     * Gets rtf code for border
-     * @param PHPRtfLite_Border_Format  $borderFormat
-     * @param PHPRtfLite                $rtf
-     *
-     * @return string rtf code
-     */
-    private function getBorderRtf(PHPRtfLite_Border_Format $borderFormat, PHPRtfLite $rtf) {
-        $borderRtf = $borderFormat->getNotColoredPartOfContent();
-        $color = $borderFormat->getColor();
-
-        if ($color) {
-            $rtf->addColor($color);
-            $borderRtf .= '\brdrcf' . $rtf->getColor($color);
-        }
-
-        return $borderRtf . ' ';
     }
 
 }

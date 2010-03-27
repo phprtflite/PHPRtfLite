@@ -21,14 +21,14 @@
 */
 
 /**
- * class for creating notes (footnotes and endnotes) in rtf documents.
+ * class for creating footnotes in rtf documents.
  * @version     1.0.0
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010 Steffen Zeidler
- * @package     PHPRtfLite_Note
+ * @package     PHPRtfLite_Footnote
  */
 
-class PHPRtfLite_Note
+class PHPRtfLite_Footnote
 {
 
     /**
@@ -97,12 +97,6 @@ class PHPRtfLite_Note
     protected $_parFormat;
 
     /**
-     * flag, true using footnote instead of footnote
-     * @var boolean
-     */
-    protected $_isFootnote = true;
-
-    /**
      * rtf document
      * @var PHPRtfLite
      */
@@ -140,28 +134,12 @@ class PHPRtfLite_Note
     }
 
     /**
-     * sets that note is a footnote, instead of a footnote
-     * @param boolean $isFootnote
-     */
-    public function setIsFootnote($isFootnote = true) {
-        $this->_isFootnote = $isFootnote;
-    }
-
-    /**
-     * check if note is a footnote
-     *
-     * @return boolean  true, if note is a footnote
-     */
-    public function isFootnote() {
-        return $this->_isFootnote;
-    }
-
-    /**
      * sets default font for notes
      *
      * @param PHPRtfLite_Font $font
      */
-    public static function setDefaultFont(PHPRtfLite_Font $font) {
+    public static function setDefaultFont(PHPRtfLite_Font $font)
+    {
         self::$_defaultFont = $font;
     }
 
@@ -170,88 +148,9 @@ class PHPRtfLite_Note
      *
      * @return PHPRtfLite_Font
      */
-    public static function getDefaultFont() {
+    public static function getDefaultFont()
+    {
         return self::$_defaultFont;
-    }
-
-    /**
-     * gets footnote numbering type
-     *
-     * @param  integer $numbering
-     *
-     * @return string
-     */
-    public static function getFootnoteNumberingTypeAsRtf($numbering) {
-        return self::getNumberingTypeAsRtf($numbering, true);
-    }
-
-    /**
-     * gets endnote numbering type
-     *
-     * @param  integer $numbering
-     *
-     * @return string
-     */
-    public static function getEndnoteNumberingTypeAsRtf($numbering) {
-        return self::getNumberingTypeAsRtf($numbering, false);
-    }
-
-    /**
-     * gets numbering type for notes
-     *
-     * @param  integer $numbering
-     * @param  boolean $isFootnote
-     *
-     * @return string
-     */
-    private static function getNumberingTypeAsRtf($numbering, $isFootnote) {
-        $prefix = '\\' . ($isFootnote ? 'ftnn' : 'aftnn');
-
-        switch ($numbering) {
-            default:
-                // const name NUMTYPE_ARABIC_NUMBERS
-                return $prefix . 'ar';
-            case self::NUMTYPE_ALPHABETH_LC:
-                return $prefix . 'alc';
-            case self::NUMTYPE_ALPHABETH_UC:
-                return $prefix . 'auc';
-            case self::NUMTYPE_ROMAN_LC:
-                return $prefix . 'rlc';
-            case self::NUMTYPE_ROMAN_UC:
-                return $prefix . 'ruc';
-            case self::NUMTYPE_CHICAGO;
-		return $prefix . 'chi';
-            case self::NUMTYPE_KOREAN_1:
-		return $prefix . 'chosung';
-            case self::NUMTYPE_KOREAN_2:
-		return $prefix . 'ganada';
-            case self::NUMTYPE_CIRCLE:
-		return $prefix . 'cnum';
-            case self::NUMTYPE_KANJI_1:
-		return $prefix . 'dbnum';
-            case self::NUMTYPE_KANJI_2:
-		return $prefix . 'dbnumd';
-            case self::NUMTYPE_KANJI_3:
-		return $prefix . 'dbnumt';
-            case self::NUMTYPE_KANJI_4:
-		return $prefix . 'dbnumk';
-            case self::NUMTYPE_DOUBLE_BYTE:
-		return $prefix . 'dbchar';
-            case self::NUMTYPE_CHINESE_1:
-		return $prefix . 'gbnum';
-            case self::NUMTYPE_CHINESE_2:
-		return $prefix . 'gbnumd';
-            case self::NUMTYPE_CHINESE_3:
-		return $prefix . 'gbnuml';
-            case self::NUMTYPE_CHINESE_4:
-		return $prefix . 'gbnumk';
-            case self::NUMTYPE_CHINESE_ZODIAC_1:
-		return $prefix . 'zodiac';
-            case self::NUMTYPE_CHINESE_ZODIAC_2:
-		return $prefix . 'zodiacd';
-            case self::NUMTYPE_CHINESE_ZODIAC_3:
-		return $prefix . 'zodiacl';
-        }
     }
 
     /**
@@ -259,8 +158,11 @@ class PHPRtfLite_Note
      *
      * @param PHPRtfLite_Font $font
      */
-    public function setFont(PHPRtfLite_Font $font) {
+    public function setFont(PHPRtfLite_Font $font)
+    {
         $this->_font = $font;
+        $font->setColorTable($this->_rtf->getColorTable());
+        $font->setFontTable($this->_rtf->getFontTable());
     }
 
     /**
@@ -268,7 +170,8 @@ class PHPRtfLite_Note
      *
      * @return PHPRtfLite_Font
      */
-    public function getFont() {
+    public function getFont()
+    {
         return $this->_font;
     }
 
@@ -277,8 +180,10 @@ class PHPRtfLite_Note
      *
      * @param PHPRtfLite_ParFormat $parFormat
      */
-    public function setParFormat(PHPRtfLite_ParFormat $parFormat) {
+    public function setParFormat(PHPRtfLite_ParFormat $parFormat)
+    {
         $this->_parFormat = $parFormat;
+        $parFormat->setColorTable($this->_rtf->getColorTable());
     }
 
     /**
@@ -286,31 +191,40 @@ class PHPRtfLite_Note
      *
      * @return PHPRtfLite_ParFormat
      */
-    public function getParFormat() {
+    public function getParFormat()
+    {
         return $this->_parFormat;
     }
 
     /**
-     * renders footnote/endnote
+     * gets type as rtf code
      *
      * @return string
      */
-    public function getContent() {
-        $content = '\chftn '
-                 . '{\footnote'
-                 . ($this->isFootnote() ? '' : '\ftnalt')
-                 . '\pard\plain \lin283\fi-283 ';
+    protected function getTypeAsRtfCode()
+    {
+        return '\footnote';
+    }
+
+    /**
+     * renders footnote/endnote
+     */
+    public function output()
+    {
+        $stream = $this->_rtf->getStream();
+
+        $stream->write('\chftn '
+                    . '{' . $this->getTypeAsRtfCode()
+                    . '\pard\plain \lin283\fi-283 ');
 
         if ($this->_parFormat) {
-            $content .= $this->_parFormat->getContent($this->_rtf);
+            $stream->write($this->_parFormat->getContent());
         }
 
-        $content .= $this->_font->getContent($this->_rtf);
-        $content .= '{\up6\chftn}' . "\r\n"
-                 . PHPRtfLite::quoteRtfCode($this->_text)
-                 . '} ';
-
-        return $content;
+        $stream->write($this->_font->getContent());
+        $stream->write('{\up6\chftn}' . "\r\n"
+                     . PHPRtfLite::quoteRtfCode($this->_text)
+                     . '} ');
     }
 
 }

@@ -5,17 +5,17 @@ require '../lib/PHPRtfLite.php';
 // register PHPRtfLite class loader
 PHPRtfLite::registerAutoloader();
 
+// rtf document
+$rtf = new PHPRtfLite();
+
 //paragraph formats
 $parFormat = new PHPRtfLite_ParFormat();
 
 $parGreyLeft = new PHPRtfLite_ParFormat();
 $parGreyLeft->setShading(10);
 
-$parGreyCenter = new PHPRtfLite_ParFormat('center');
+$parGreyCenter = new PHPRtfLite_ParFormat(PHPRtfLite_ParFormat::TEXT_ALIGN_CENTER);
 $parGreyCenter->setShading(10);
-
-// rtf document
-$rtf = new PHPRtfLite();
 
 // header
 $header = $rtf->addHeader('first');
@@ -47,7 +47,7 @@ $cell->addImage('sources/cats.jpg', null);
 $table->writeToCell(2, 1, '<br> Width is set.', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 //writing to cell and adding image from table object
 $table->writeToCell(2, 2, '<br>   ', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$table->addImageToCell(2, 2, 'sources/catsxx.jpg', null, 5);
+$table->addImageToCell(2, 2, 'sources/cats.jpg', null, 5);
 
 $table->writeToCell(3, 1, '<br> Height is set.', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 $table->writeToCell(3, 2, '<br>   ', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
@@ -67,7 +67,7 @@ $table->writeToCell(1, 1, '<br> Sample borders', new PHPRtfLite_Font(), new PHPR
 $cell = $table->getCell(1, 2);
 $cell->writeText('<br>   ', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 $img = $cell->addImage('sources/cats.jpg', null);
-$border = PHPRtfLite_Border::create(3, '#000000');
+$border = PHPRtfLite_Border::create($rtf, 3, '#000000');
 $img->setBorder($border);
 
 $table->writeToCell(2, 1, '<br> Borders with space', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
@@ -77,7 +77,7 @@ $img = $cell->addImage('sources/cats.jpg', null);
 
 $borderFormatBlue = new PHPRtfLite_Border_Format(2, '#0000ff', 'simple', 0.5);
 $borderFormatRed = new PHPRtfLite_Border_Format(2, '#ff0000', 'simple', 0.5);
-$border = new PHPRtfLite_Border();
+$border = new PHPRtfLite_Border($rtf);
 $border->setBorderLeft($borderFormatRed);
 $border->setBorderTop($borderFormatBlue);
 $border->setBorderRight($borderFormatRed);

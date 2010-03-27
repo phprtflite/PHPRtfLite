@@ -26,7 +26,7 @@ $parSimple->setIndentRight(0.5);
 
 $parPhp = new PHPRtfLite_ParFormat();
 $parPhp->setShading(5);
-$border = PHPRtfLite_Border::create(1, '#000000', 'dash', 0.3);
+$border = PHPRtfLite_Border::create($rtf, 1, '#000000', 'dash', 0.3);
 $parPhp->setBorder($border);
 $parPhp->setIndentLeft(5);
 $parPhp->setIndentRight(0.5);
@@ -63,7 +63,7 @@ $par = new PHPRtfLite_ParFormat('right');
 $par->setIndentLeft(5);
 $par->setIndentRight(5);
 $par->setBackgroundColor('#ffcc99');
-$border = PHPRtfLite_Border::create(1, '#ff0000');
+$border = PHPRtfLite_Border::create($rtf, 1, '#ff0000');
 $par->setBorder($border);
 
 $sect->writeText('', new PHPRtfLite_Font, new PHPRtfLite_ParFormat());

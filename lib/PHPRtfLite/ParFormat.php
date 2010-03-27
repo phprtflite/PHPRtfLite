@@ -28,7 +28,8 @@
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
  * @package     PHPRtfLite
  */
-class PHPRtfLite_ParFormat {
+class PHPRtfLite_ParFormat
+{
 
     /**
      * constants for text align
@@ -37,6 +38,12 @@ class PHPRtfLite_ParFormat {
     const TEXT_ALIGN_CENTER = 'center';
     const TEXT_ALIGN_RIGHT  = 'right';
     const TEXT_ALIGN_JUSTIFY = 'justify';
+
+    /**
+     * rtf color table
+     * @var PHPRtfLite_DocHeadDefinition_ColorTable
+     */
+    protected $_colorTable;
 
     /**
      * text alignment
@@ -101,7 +108,7 @@ class PHPRtfLite_ParFormat {
 
     /**
      * Constructor
-     * 
+     *
      * @param   string  $alignment  represented by class constants TEXT_ALIGN_*<br>
      *   Possible values:<br>
      *     TEXT_ALIGN_LEFT      => 'left'    - left alignment<br>
@@ -109,7 +116,8 @@ class PHPRtfLite_ParFormat {
      *     TEXT_ALIGN_CENTER    => 'center'  - center alignment<br>
      *     TEXT_ALIGN_JUSTIFY   => 'justify' - justify alignment
      */
-    public function __construct($alignment = self::TEXT_ALIGN_LEFT) {
+    public function __construct($alignment = self::TEXT_ALIGN_LEFT)
+    {
         $this->_alignment = $alignment;
     }
 
@@ -123,7 +131,8 @@ class PHPRtfLite_ParFormat {
      *     TEXT_ALIGN_CENTER    => 'center'  - center alignment<br>
      *     TEXT_ALIGN_JUSTIFY   => 'justify' - justify alignment
      */
-    public function setTextAlignment($alignment) {
+    public function setTextAlignment($alignment)
+    {
         $this->_alignment = $alignment;
     }
 
@@ -132,7 +141,8 @@ class PHPRtfLite_ParFormat {
      *
      * @return string
      */
-    public function getTextAlignment() {
+    public function getTextAlignment()
+    {
         return $this->_alignment;
     }
 
@@ -141,7 +151,8 @@ class PHPRtfLite_ParFormat {
      *
      * @param   float   $indentFirst
      */
-    public function setIndentFirstLine($indentFirst) {
+    public function setIndentFirstLine($indentFirst)
+    {
         $this->_indentFirstLine = round($indentFirst * PHPRtfLite::TWIPS_IN_CM);
     }
 
@@ -150,7 +161,8 @@ class PHPRtfLite_ParFormat {
      * 
      * @return float
      */
-    public function getIndentFirstLine() {
+    public function getIndentFirstLine()
+    {
         return $this->_indentFirstLine;
     }
 
@@ -159,7 +171,8 @@ class PHPRtfLite_ParFormat {
      *
      * @param   float   $indentLeft
      */
-    public function setIndentLeft($indentLeft) {
+    public function setIndentLeft($indentLeft)
+    {
         $this->_indentLeft = round($indentLeft * PHPRtfLite::TWIPS_IN_CM);
     }
 
@@ -168,7 +181,8 @@ class PHPRtfLite_ParFormat {
      *
      * @return float
      */
-    public function getIndentLeft() {
+    public function getIndentLeft()
+    {
         return $this->_indentLeft;
     }
 
@@ -177,7 +191,8 @@ class PHPRtfLite_ParFormat {
      *
      * @param   float   $indentRight
      */
-    public function setIndentRight($indentRight) {
+    public function setIndentRight($indentRight)
+    {
         $this->_indentRight = round($indentRight * PHPRtfLite::TWIPS_IN_CM);
     }
 
@@ -186,7 +201,8 @@ class PHPRtfLite_ParFormat {
      *
      * @return float
      */
-    public function getIndentRight() {
+    public function getIndentRight()
+    {
         return $this->_indentRight;
     }
 
@@ -195,7 +211,8 @@ class PHPRtfLite_ParFormat {
      *
      * @param   integer $spaceBefore space before
      */
-    public function setSpaceBefore($spaceBefore) {
+    public function setSpaceBefore($spaceBefore)
+    {
         $this->_spaceBefore = round($spaceBefore * PHPRtfLite::SPACE_IN_POINTS);
     }
 
@@ -204,7 +221,8 @@ class PHPRtfLite_ParFormat {
      *
      * @return  integer
      */
-    public function getSpaceBefore() {
+    public function getSpaceBefore()
+    {
         return $this->_spaceBefore;
     }
     
@@ -213,7 +231,8 @@ class PHPRtfLite_ParFormat {
      *
      * @param integer $spaceAfter space after
      */
-    public function setSpaceAfter($spaceAfter) {
+    public function setSpaceAfter($spaceAfter)
+    {
         $this->_spaceAfter = round($spaceAfter * PHPRtfLite::SPACE_IN_POINTS);
     }
 
@@ -222,7 +241,8 @@ class PHPRtfLite_ParFormat {
      *
      * @return integer
      */
-    public function getSpaceAfter() {
+    public function getSpaceAfter()
+    {
         return $this->_spaceAfter;
     }
 
@@ -231,7 +251,8 @@ class PHPRtfLite_ParFormat {
      *
      * @param   integer     $spaceBetweenLines  space between lines
      */
-    public function setSpaceBetweenLines($spaceBetweenLines) {
+    public function setSpaceBetweenLines($spaceBetweenLines)
+    {
         $this->_spaceBetweenLines = round($spaceBetweenLines * PHPRtfLite::SPACE_IN_LINES);
     }
 
@@ -240,7 +261,8 @@ class PHPRtfLite_ParFormat {
      *
      * @return  integer
      */
-    public function getSpaceBetweenLines() {
+    public function getSpaceBetweenLines()
+    {
         return $this->_spaceBetweenLines;
     }
 
@@ -249,7 +271,8 @@ class PHPRtfLite_ParFormat {
      *
      * @param   integer $shading shading in percents (from 0 till 100)
      */
-    public function setShading($shading) {
+    public function setShading($shading)
+    {
         $this->_shading = $shading * 100;
     }
 
@@ -258,8 +281,22 @@ class PHPRtfLite_ParFormat {
      *
      * @return  integer
      */
-    public function getShading() {
+    public function getShading()
+    {
         return $this->_shading;
+    }
+
+    /**
+     * sets rtf color table
+     * 
+     * @param PHPRtfLite_DocHeadDefinition_ColorTable $colorTable
+     */
+    public function setColorTable(PHPRtfLite_DocHeadDefinition_ColorTable $colorTable)
+    {
+        if ($this->_backgroundColor) {
+            $colorTable->add($this->_backgroundColor);
+        }
+        $this->_colorTable = $colorTable;
     }
 
     /**
@@ -267,8 +304,12 @@ class PHPRtfLite_ParFormat {
      *
      * @param   string  $backgroundColor
      */
-    public function setBackgroundColor($backgroundColor) {
-        $this->_backgroundColor = PHPRtfLite::convertHexColorToRtf($backgroundColor);
+    public function setBackgroundColor($backgroundColor)
+    {
+        $this->_backgroundColor = $backgroundColor;
+        if ($this->_backgroundColor && $this->_colorTable) {
+            $this->_colorTable->add($this->_backgroundColor);
+        }
     }
 
     /**
@@ -276,7 +317,8 @@ class PHPRtfLite_ParFormat {
      *
      * @return  string
      */
-    public function getBackgroundColor() {
+    public function getBackgroundColor()
+    {
         return $this->_backgroundColor;
     }
 
@@ -285,7 +327,8 @@ class PHPRtfLite_ParFormat {
      *
      * @param PHPRtfLite_Border $border
      */
-    public function setBorder(PHPRtfLite_Border $border) {
+    public function setBorder(PHPRtfLite_Border $border)
+    {
         $this->_border = $border;
     }
 
@@ -294,18 +337,18 @@ class PHPRtfLite_ParFormat {
      *
      * @return PHPRtfLite_Border
      */
-    public function getBorder() {
+    public function getBorder()
+    {
         return $this->_border;
     }
 
     /**
      * Gets rtf code of paragraph
      *
-     * @param   PHPRtfLite  $rtf
-     *
      * @return  string  rtf code
      */
-    public function getContent(PHPRtfLite $rtf) {
+    public function getContent()
+    {
         $content = '';
 
         switch ($this->_alignment) {
@@ -351,84 +394,20 @@ class PHPRtfLite_ParFormat {
         }
 
         if ($this->_border) {
-            $content .= $this->_border->getContent($rtf, '\\');
+            $content .= $this->_border->getContent('\\');
         }
 
         if ($this->_shading > 0) {
             $content .= '\shading' . $this->_shading . ' ';
         }
 
-        if ($this->_backgroundColor) {
-            $rtf->addColor($this->_backgroundColor);
-            $content .= '\cbpat' . $rtf->getColor($this->_backgroundColor) . ' ';
+        if ($this->_backgroundColor && $this->_colorTable) {
+            $colorIndex = $this->_colorTable->getColorIndex($this->_backgroundColor);
+            if ($colorIndex !== false) {
+                $content .= '\cbpat' . $colorIndex . ' ';
+            }
         }
 
         return $content;
     }
-
-
-    //// DEPRECATED FUNCTIONS FOLLOWS HERE ////
-
-    /**
-     * @deprecated use setIndentFirstLine() instead
-     * @see PHPRtfLite/PHPRtfLite_ParFormat#setIndentFirstLine()
-     *
-     * Sets first line indent (default 0)
-     * 
-     * @param float $indentFirst
-     */
-    public function setIndentFirst($indentFirst) {
-        $this->setIndentFirstLine($indentFirst);
-    }
-
-    /**
-     * @deprecated use setBackgroundColor() instead
-     * @see PHPRtfLite/PHPRtfLite_ParFormat#setBackgroundColor()
-     *
-     * Sets background color
-     *
-     * @param string $backgroundColor
-     */
-    public function setBackColor($backgroundColor) {
-        $this->setBackgroundColor($backgroundColor);
-    }
-
-    /**
-     * @deprecated use setBorder() instead
-     * @see PHPRtfLite/PHPRtfLite_ParFormat#setBorder()
-     *
-     * Sets border
-     *
-     * @param PHPRtfLite_Border_Format  $borderFormat
-     * @param boolean                   $left           if false, left border is not set (default true)
-     * @param boolean                   $top            if false, top border is not set (default true)
-     * @param boolean                   $right          if false, right border is not set (default true)
-     * @param boolean                   $bottom         if false, bottom border is not set (default true)
-     * @access public
-     */
-    public function setBorders(PHPRtfLite_Border_Format $borderFormat,
-                               $left = true, $top = true,
-                               $right = true, $bottom = true)
-    {
-        if (!$this->_border) {
-            $this->_border = new PHPRtfLite_Border();
-        }
-
-        if ($left) {
-            $this->_border->setBorderLeft($borderFormat);
-        }
-
-        if ($top) {
-            $this->_border->setBorderTop($borderFormat);
-        }
-
-        if ($right) {
-            $this->_border->setBorderRight($borderFormat);
-        }
-
-        if ($bottom) {
-            $this->_border->setBorderBottom($borderFormat);
-        }
-    }
-
 }

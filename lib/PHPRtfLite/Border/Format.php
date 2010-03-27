@@ -55,6 +55,12 @@ class PHPRtfLite_Border_Format {
     protected $_color;
 
     /**
+     * rtf color table
+     * @var PHPRtfLite_DocHeadDefinition_ColorTable
+     */
+    protected $_colorTable;
+
+    /**
      * @var integer
      */
     protected $_space;
@@ -71,25 +77,12 @@ class PHPRtfLite_Border_Format {
      *     TYPE_DOTDASH  = 'dotdash'<br>
      * @param   float       $space  space between borders and the paragraph
      */
-    public function __construct($size = 0, $color = null, $type = null, $space = 0) {
-        $this->_size = $size * PHPRtfLite::SPACE_IN_POINTS;
-        $this->_type = $type;
-
-        if ($color) {
-            $this->_color = PHPRtfLite::convertHexColorToRtf($color);
-        }
-
-        $this->_space = round($space * PHPRtfLite::TWIPS_IN_CM);
-    }
-
-    /**
-     * Gets rtf code of not colored part of border fotmat.
-     * @return string rtf code
-     */
-    public function getNotColoredPartOfContent() {
-          return $this->getTypeAsRtfCode()
-               . '\brdrw' . $this->_size
-               . '\brsp' . $this->_space;
+    public function __construct($size = 0, $color = null, $type = null, $space = 0)
+    {
+        $this->_size    = $size * PHPRtfLite::SPACE_IN_POINTS;
+        $this->_type    = $type;
+        $this->_color   = $color;
+        $this->_space   = round($space * PHPRtfLite::TWIPS_IN_CM);
     }
 
     /**
@@ -97,7 +90,8 @@ class PHPRtfLite_Border_Format {
      *
      * @return string rtf code
      */
-    public function getTypeAsRtfCode() {
+    private function getTypeAsRtfCode()
+    {
         switch ($this->_type) {
             case self::TYPE_DOT:
                 return '\brdrdot';
@@ -113,28 +107,14 @@ class PHPRtfLite_Border_Format {
         }
     }
 
-
     /**
      * Gets border format type
      * 
      * @return string
      */
-    public function getType() {
+    public function getType()
+    {
         return $this->_type;
-    }
-
-    /**
-     * Sets border format type
-     *
-     * @param   string      $type   represented by class constants PHPRtfLite_Border_Format::TYPE_*<br>
-     *   Possible values:<br>
-     *     TYPE_SINGLE  => 'single'<br>
-     *     TYPE_DOT      = 'dot'<br>
-     *     TYPE_DASH     = 'dash'<br>
-     *     TYPE_DOTDASH  = 'dotdash'<br>
-     */
-    public function setType($type) {
-        $this->_type = $type;
     }
 
     /**
@@ -142,35 +122,18 @@ class PHPRtfLite_Border_Format {
      *
      * @return string
      */
-    public function getColor() {
+    public function getColor() 
+    {
         return $this->_color;
     }
 
     /**
-     * Sets border color
-     *
-     * @param string $color
-     */
-    public function setColor($color) {
-        $this->_color = $color;
-    }
-
-    /**
-     * Gets border size
-     *
+     * gets size
      * @return integer
      */
-    public function getSize() {
+    public function getSize()
+    {
         return $this->_size;
-    }
-
-    /**
-     * Sets border size
-     *
-     * @param integer $size
-     */
-    public function setSize($size) {
-        $this->_size = $size;
     }
 
     /**
@@ -178,17 +141,42 @@ class PHPRtfLite_Border_Format {
      *
      * @return float
      */
-    public function getSpace() {
+    public function getSpace()
+    {
         return $this->_space;
     }
 
     /**
-     * Sets border space
+     * sets rtf color table
      *
-     * @param float $space
+     * @param PHPRtfLite_DocHeadDefinition_ColorTable $colorTable
      */
-    public function setSpace($space) {
-        $this->_space = $space;
+    public function setColorTable(PHPRtfLite_DocHeadDefinition_ColorTable $colorTable)
+    {
+        if ($this->_color) {
+            $colorTable->add($this->_color);
+        }
+        $this->_colorTable = $colorTable;
+    }
+
+    /**
+     * Gets rtf code
+     * @return string rtf code
+     */
+    public function getContent()
+    {
+        $content = $this->getTypeAsRtfCode()
+                 . '\brdrw' . $this->_size
+                 . '\brsp' . $this->_space;
+
+        if ($this->_color && $this->_colorTable) {
+            $colorIndex = $this->_colorTable->getColorIndex($this->_color);
+            if ($colorIndex !== false) {
+                $content .= '\brdrcf' . $colorIndex;
+            }
+        }
+
+        return $content . ' ';
     }
 
 }

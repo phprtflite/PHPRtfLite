@@ -28,13 +28,19 @@
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Table
  */
-class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
+class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
+{
 
     /**
      * constants for rotation directions
      */
     const ROTATE_RIGHT  = 'right';
     const ROTATE_LEFT   = 'left';
+
+    /**
+     * @var PHPRtfLite
+     */
+    protected $_rtf;
 
     /**
      * @var PHPRtfLite_Table
@@ -125,7 +131,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      * @param   integer             $rowIndex       row index for cell in table
      * @param   integer             $columnIndex    column index for cell in table
      */
-    public function __construct(PHPRtfLite_Table $table, $rowIndex, $columnIndex) {
+    public function __construct(PHPRtfLite_Table $table, $rowIndex, $columnIndex)
+    {
         $this->_table       = $table;
         $this->_rowIndex    = $rowIndex;
         $this->_columnIndex = $columnIndex;
@@ -133,10 +140,19 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
     }
 
     /**
+     * gets rtf
+     *
+     * @return PHPRtfLite
+     */
+    public function getRtf()
+    {
+        return $this->_rtf;
+    }
+
+    /**
      * Overriden. Does nothing. Nesting cells are not suported in current version.
      */
-    public function addTable($alignment = PHPRtfLite_Table::ALIGN_LEFT) {
-    }
+    public function addTable($alignment = PHPRtfLite_Table::ALIGN_LEFT) {}
 
     /**
      * Sets text alignment for cell. The method PHPRtfLite_Table->writeToCell() overrides it with alignment of an instance of PHPRtfLite_ParFormat.
@@ -147,7 +163,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *     TEXT_ALIGN_RIGHT     => 'right'      - right alignment<br>
      *     TEXT_ALIGN_JUSTIFY   => 'justify'    - justify alignment
      */
-    public function setTextAlignment($alignment = self::TEXT_ALIGN_LEFT) {
+    public function setTextAlignment($alignment = self::TEXT_ALIGN_LEFT)
+    {
         $this->_alignment = $alignment;
     }
 
@@ -156,7 +173,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @return string
      */
-    public function getTextAlignment() {
+    public function getTextAlignment()
+    {
         return $this->_alignment;
     }
 
@@ -165,8 +183,11 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      * 
      * @param   PHPRtfLite_Font $font
      */
-    public function setFont(PHPRtfLite_Font $font) {
+    public function setFont(PHPRtfLite_Font $font)
+    {
         $this->_font = $font;
+        $font->setColorTable($this->_rtf->getColorTable());
+        $font->setFontTable($this->_rtf->getFontTable());
     }
 
     /**
@@ -174,7 +195,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      * 
      * @return PHPRtfLite_Font
      */
-    public function getFont() {
+    public function getFont()
+    {
         return $this->_font;
     }
 
@@ -187,7 +209,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *     VERTICAL_ALIGN_CENTER    => 'center' - center alignment<br>
      *     VERTICAL_ALIGN_BOTTOM    => 'bottom' - bottom alignment
      */
-    public function setVerticalAlignment($verticalAlignment = self::VERTICAL_ALIGN_TOP) {
+    public function setVerticalAlignment($verticalAlignment = self::VERTICAL_ALIGN_TOP)
+    {
         $this->_verticalAlignment = $verticalAlignment;
     }
 
@@ -196,7 +219,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @return string
      */
-    public function getVerticalAlignment() {
+    public function getVerticalAlignment()
+    {
         return $this->_verticalAlignment;
     }
 
@@ -208,7 +232,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *     ROTATE_RIGHT => 'right'  - right<br>
      *     ROTATE_LEFT  => 'left'   - left
      */
-    public function rotateTo($rotateTo = self::ROTATE_RIGHT) {
+    public function rotateTo($rotateTo = self::ROTATE_RIGHT)
+    {
         $this->_rotateTo = $rotateTo;
     }
 
@@ -217,7 +242,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      * 
      * @return string
      */
-    public function getRotateTo() {
+    public function getRotateTo()
+    {
         return $this->_rotateTo;
     }
 
@@ -226,10 +252,10 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @param string $color background color
      */
-    public function setBackgroundColor($color) {
-        $color = PHPRtfLite::convertHexColorToRtf($color);
-        $this->_table->getRtf()->addColor($color);
+    public function setBackgroundColor($color)
+    {
         $this->_backgroundColor = $color;
+        $this->_rtf->getColorTable()->add($color);
     }
 
     /**
@@ -237,7 +263,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @return string
      */
-    public function getBackgroundColor() {
+    public function getBackgroundColor()
+    {
         return $this->_backgroundColor;
     }
 
@@ -246,7 +273,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @param boolean $merged
      */
-    public function setHorizontalMerged($merged = true) {
+    public function setHorizontalMerged($merged = true)
+    {
         $this->_horizontalMerged = $merged;
     }
 
@@ -255,7 +283,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @return boolean
      */
-    public function isHorizontalMerged() {
+    public function isHorizontalMerged()
+    {
         return $this->_horizontalMerged;
     }
 
@@ -264,7 +293,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @param boolean $merged
      */
-    public function setVerticalMerged($merged = true) {
+    public function setVerticalMerged($merged = true)
+    {
         $this->_verticalMerged = $merged;
     }
 
@@ -273,7 +303,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @return boolean
      */
-    public function isVerticalMerged() {
+    public function isVerticalMerged()
+    {
         return $this->_verticalMerged;
     }
 
@@ -282,7 +313,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @param float $width
      */
-    public function setWidth($width) {
+    public function setWidth($width)
+    {
         $this->_width = $width;
     }
 
@@ -291,7 +323,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @return float
      */
-    public function getWidth() {
+    public function getWidth()
+    {
         return $this->_width;
     }
 
@@ -300,14 +333,15 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @param PHPRtfLite_Border $border
      */
-    public function setBorder(PHPRtfLite_Border $border) {
+    public function setBorder(PHPRtfLite_Border $border)
+    {
         $borderFormatTop    = $border->getBorderTop();
         $borderFormatBottom = $border->getBorderBottom();
         $borderFormatLeft   = $border->getBorderLeft();
         $borderFormatRight  = $border->getBorderRight();
 
         if (!$this->_border) {
-            $this->_border = new PHPRtfLite_Border();
+            $this->_border = new PHPRtfLite_Border($this->_rtf);
         }
         if ($borderFormatLeft) {
             $this->_border->setBorderLeft($borderFormatLeft);
@@ -327,7 +361,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
             $borderBottom = $cell->getBorder();
 
             if ($borderBottom == null) {
-                $borderBottom = new PHPRtfLite_Border();
+                $borderBottom = new PHPRtfLite_Border($this->_rtf);
             }
 
             $borderBottom->setBorderBottom($borderFormatTop);
@@ -339,7 +373,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
             $borderTop = $cell->getBorder();
 
             if ($borderTop == null) {
-                $borderTop = new PHPRtfLite_Border();
+                $borderTop = new PHPRtfLite_Border($this->_rtf);
             }
 
             $borderTop->setBorderTop($borderFormatBottom);
@@ -351,7 +385,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
             $borderRight = $cell->getBorder();
 
             if ($borderRight == null) {
-                $borderRight = new PHPRtfLite_Border();
+                $borderRight = new PHPRtfLite_Border($this->_rtf);
             }
             $borderRight->setBorderRight($borderFormatLeft);
             $cell->setCellBorder($borderRight);
@@ -362,7 +396,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
             $borderLeft = $cell->getBorder();
 
             if ($borderLeft == null) {
-                $borderLeft = new PHPRtfLite_Border();
+                $borderLeft = new PHPRtfLite_Border($this->_rtf);
             }
             $borderLeft->setBorderLeft($borderFormatRight);
             $cell->setCellBorder($borderLeft);
@@ -374,7 +408,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      * 
      * @param PHPRtfLite_Border $border 
      */
-    protected function setCellBorder(PHPRtfLite_Border $border) {
+    protected function setCellBorder(PHPRtfLite_Border $border)
+    {
         $this->_border = $border;
     }
 
@@ -383,7 +418,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @return PHPRtfLite_Border
      */
-    public function getBorder() {
+    public function getBorder()
+    {
         return $this->_border;
     }
 
@@ -392,7 +428,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @return integer
      */
-    public function getRowIndex() {
+    public function getRowIndex()
+    {
         return $this->_rowIndex;
     }
 
@@ -401,7 +438,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @return integer
      */
-    public function getColumnIndex() {
+    public function getColumnIndex()
+    {
         return $this->_columnIndex;
     }
 
@@ -410,114 +448,35 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container {
      *
      * @return string rtf code
      */
-    public function getContent() {
-        $content  = '{';
+    public function output()
+    {
+        $stream = $this->_rtf->getStream();
+        $stream->write('{');
 
         switch ($this->_alignment) {
             case self::TEXT_ALIGN_LEFT:
-                $content .= '\ql';
+                $stream->write('\ql');
                 break;
 
             case self::TEXT_ALIGN_CENTER:
-                $content .= '\qc';
+                $stream->write('\qc');
                 break;
 
             case self::TEXT_ALIGN_RIGHT:
-                $content .= '\qr';
+                $stream->write('\qr');
                 break;
 
             case self::TEXT_ALIGN_JUSTIFY:
-                $content .= '\qj';
+                $stream->write('\qj');
                 break;
         }
 
         if ($this->_font) {
-            $content .= $this->_font->getContent($this->_table->getRtf());
+            $stream->write($this->_font->getContent());
         }
 
-        $content .= parent::getContent() . '\cell \pard }' . "\r\n";
-        
-        return $content;
-    }
+        parent::output();
 
-
-    //// DEPRECATED FUNCTIONS FOLLOWS HERE ////
-
-    /**
-     * @deprecated use setTextAlignment() instead
-     * @see PHPRtfLite/PHPRtfLite_Cell#setTextAlignment()
-     *
-     * Sets text alignment to cell. The method writeToCell overrides it with ParFormat alignment.
-     * 
-     * @param string $alignment alignment of cell.<br>
-     *   Possible values:<br>
-     *     TEXT_AlIGN_LEFT      => 'left'       - left alignment<br>
-     *     TEXT_AlIGN_CENTER    => 'center'     - center alignment<br>
-     *     TEXT_AlIGN_RIGHT     => 'right'      - right alignment<br>
-     *     TEXT_AlIGN_JUSTIFY   => 'justify'    - justify alignment
-     */
-    public function setDefaultAlignment($alignment = self::TEXT_AlIGN_LEFT) {
-        $this->setTextAlignment($alignment);
-    }
-
-    /**
-     * @deprecated use setFont() instead
-     * @see PHPRtfLite/PHPRtfLite_Cell#setFont()
-     *
-     * Sets font to cell. The method writeToCell overrides it with another Font.
-     *
-     * @param  PHPRtfLite_Font $font
-     */
-    public function setDefaultFont(PHPRtfLite_Font $font) {
-        $this->setFont($font);
-    }
-
-    /**
-     * @deprecated use rotateTo() instead
-     * @see PHPRtfLite/PHPRtfLite_Cell#rotateTo()
-     *
-     * Rotates cell.
-     *
-     * @param $direction direction of rotation.<br>
-     *   Possible values: <br>
-     *     ROTATE_RIGHT => 'right'  - right<br>
-     *     ROTATE_LEFT  => 'left'   - left
-     */
-    public function rotate($direction = 'right') {
-        $this->rotateTo($direction);
-    }
-
-    /**
-     * @deprecated use setBackgroundColor() instead
-     * @see PHPRtfLite/PHPRtfLite_Cell#setBackgroundColor()
-     *
-     * Sets background color to cell
-     *
-     * @param string $color background color
-     */
-    public function setBackGround($color) {
-        $this->setBackgroundColor($color);
-    }
-
-    /**
-     * @deprecated use setBorder() instead
-     * @see PHPRtfLite/PHPRtfLite_Cell#setBorder()
-     *
-     * Sets border to cell
-     *
-     * @param PHPRtfLite_BorderFormat   $borderFormat
-     * @param boolean                   $left           if false, left border is not set (default true)
-     * @param boolean                   $top            if false, top border is not set (default true)
-     * @param boolean                   $right          if false, right border is not set (default true)
-     * @param boolean                   $bottom         if false, bottom border is not set (default true)
-     */
-    public function setBorders(PHPRtfLite_Border_Format $borderFormat,
-                               $left = true, $top = true,
-                               $right = true, $bottom = true)
-    {
-        $border = new PHPRtfLite_Border();
-        $border->setBorders($borderFormat, $left, $top, $right, $bottom);
-        
-        $this->setBorder($border);
+        $stream->write('\cell \pard}' . "\r\n");
     }
 }

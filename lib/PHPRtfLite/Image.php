@@ -28,7 +28,8 @@
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
  * @package     PHPRtfLite
  */
-class PHPRtfLite_Image {
+class PHPRtfLite_Image
+{
 
     /**
      * @var PHPRtfLite
@@ -123,8 +124,10 @@ class PHPRtfLite_Image {
      *
      * @param PHPRtfLite_ParFormat $parFormat
      */
-    public function setParFormat(PHPRtfLite_ParFormat $parFormat) {
+    public function setParFormat(PHPRtfLite_ParFormat $parFormat)
+    {
         $this->_parFormat = $parFormat;
+        $parFormat->setColorTable($this->_rtf->getColorTable());
     }
 
     /**
@@ -132,7 +135,8 @@ class PHPRtfLite_Image {
      * 
      * @return PHPRtfLite_ParFormat
      */
-    public function getParFormat() {
+    public function getParFormat()
+    {
         return $this->_parFormat;
     }
 
@@ -141,7 +145,8 @@ class PHPRtfLite_Image {
      *
      * @param   float   $width  if not defined image is displayed by it's height.
      */
-    public function setWidth($width) {
+    public function setWidth($width)
+    {
         $this->_width = $width;
     }
 
@@ -150,7 +155,8 @@ class PHPRtfLite_Image {
      * 
      * @return float
      */
-    public function getWidth() {
+    public function getWidth()
+    {
         return $this->_width;
     }
 
@@ -159,7 +165,8 @@ class PHPRtfLite_Image {
      *
      * @param   float   $height if not defined image is displayed by it's width.
      */
-    public function setHeight($height) {
+    public function setHeight($height)
+    {
         $this->_height = $height;
     }
 
@@ -168,7 +175,8 @@ class PHPRtfLite_Image {
      * 
      * @return float
      */
-    public function getHeight() {
+    public function getHeight()
+    {
         return $this->_height;
     }
 
@@ -177,7 +185,8 @@ class PHPRtfLite_Image {
      *
      * @param PHPRtfLite_Border $border
      */
-    public function setBorder(PHPRtfLite_Border $border) {
+    public function setBorder(PHPRtfLite_Border $border)
+    {
         $this->_border = $border;
     }
 
@@ -186,7 +195,8 @@ class PHPRtfLite_Image {
      *
      * @return PHPRtfLite_Border
      */
-    public function getBorder() {
+    public function getBorder()
+    {
         return $this->_border;
     }
 
@@ -195,7 +205,8 @@ class PHPRtfLite_Image {
      * 
      * @return integer
      */
-    private function getImageWidth() {
+    private function getImageWidth()
+    {
         if ($this->_width > 0) {
             $width = $this->_width;
         }
@@ -214,7 +225,8 @@ class PHPRtfLite_Image {
      *
      * @return integer
      */
-    private function getImageHeight() {
+    private function getImageHeight()
+    {
         if ($this->_height > 0) {
             $height = $this->_height;
         }
@@ -228,33 +240,52 @@ class PHPRtfLite_Image {
         return round($height * PHPRtfLite::TWIPS_IN_CM);
     }
 
+    private function addMissingFileToStream()
+    {
+        $stream = $this->_rtf->getStream();
+        $stream->write('89504e470d0a1a0a0000000d494844520000001400000014080200000002eb8a5a00000001735247');
+        $stream->write('4200aece1ce9000000097048597300000b1300000b1301009a9c180000000774494d4507d80c1a0a');
+        $stream->write('1a1a8835e86f0000001974455874436f6d6d656e74004372656174656420776974682047494d5057');
+        $stream->write('810e170000007d4944415438cbad93b10dc0200c049d17127364ff79523347ba74c809fe3782b8c4');
+        $stream->write('3e3d70705cb65ec5ccce7b856cd5b011ece056add53ccdcf606c0b9226f793877c5ff417f44a667c');
+        $stream->write('4806db1e794606f08717640c8fa3ec21fce4595861fea0ad687f487d0a1e333e198f94143cb424dd');
+        $stream->write('2a33189bd9f25cf437d4f500102731b5b67102460000000049454e44ae426082');
+    }
+
     /**
      * Gets file as hex encoded
      *
      * @return string hex code
      */
-    private function getFileAsHex() {
+    private function addImageAsHexToStream()
+    {
         // if file does not exist, show missing image
         if ($this->_file === null) {
-            return '89504e470d0a1a0a0000000d494844520000001400000014080200000002eb8a5a000000017352474200aece1ce9000000097048597300000b1300000b1301009a9c180000000774494d4507d80c1a0a1a1a8835e86f0000001974455874436f6d6d656e74004372656174656420776974682047494d5057810e170000007d4944415438cbad93b10dc0200c049d17127364ff79523347ba74c809fe3782b8c43e3d70705cb65ec5ccce7b856cd5b011ece056add53ccdcf606c0b9226f793877c5ff417f44a667c4806db1e794606f08717640c8fa3ec21fce4595861fea0ad687f487d0a1e333e198f94143cb424dd2a33189bd9f25cf437d4f500102731b5b67102460000000049454e44ae426082';
+            $this->addMissingFileToStream();
         }
 
-        $imageData = file_get_contents($this->_file);
-        $size = filesize($this->_file);
+        $fh = @fopen($this->_file, 'rb');
+        if (!$fh) {
+            $this->addMissingFileToStream();
+        }
+        else {
+            $stream = $this->_rtf->getStream();
 
-        $hexString = '';
-
-        for ($i = 0; $i < $size; $i++) {
-            $hex = dechex(ord($imageData{$i}));
-
-            if (strlen($hex) == 1) {
-                $hex = '0' . $hex;
+            while (!feof($fh)) {
+                $stringBuffer = fread($fh, 1024);
+                $stringHex = '';
+                for ($i = 0; $i < strlen($stringBuffer); $i++) {
+                    $hex = dechex(ord($stringBuffer[$i]));
+                    if (strlen($hex) == 1) {
+                        $hex = '0' . $hex;
+                    }
+                    $stringHex .= $hex;
+                }
+                $stream->write($stringHex);
             }
 
-            $hexString .= $hex;
+            fclose($fh);
         }
-
-        return $hexString;
     }
 
     /**
@@ -262,72 +293,33 @@ class PHPRtfLite_Image {
      *
      * @return string rtf code
      */
-    public function getContent() {
-        $content = '{\pict';
+    public function output()
+    {
+        $stream = $this->_rtf->getStream();
+
+        $stream->write('{\pict');
 
         if ($this->_border) {
-            $content .= $this->_border->getContent($this->_rtf);
+            $stream->write($this->_border->getContent());
         }
 
-        $content .= '\picwgoal' . $this->getImageWidth();
-        $content .= '\pichgoal' . $this->getImageHeight();
+        $stream->write('\picwgoal' . $this->getImageWidth());
+        $stream->write('\pichgoal' . $this->getImageHeight());
 
         switch ($this->_extension) {
             case 'jpeg':
             case 'jpg':
-                $content .= '\jpegblip ';
+                $stream->write('\jpegblip ');
                 break;
 
             case 'png':
-                $content .= '\pngblip ';
+                $stream->write('\pngblip ');
                 break;
         }
 
-        $content .= $this->getFileAsHex();
-        $content .= '}';
-        
-        return $content;
+        $this->addImageAsHexToStream();
+
+        $stream->write('}');
     }
 
-    
-    //// DEPRECATED FUNCTIONS FOLLOWS HERE ////
-
-    /**
-     * @deprecated use setBorder() instead
-     * @see PHPRtfLite/PHPRtfLite_Image#setBorder()
-     *
-     * Sets border
-     *
-     * @param PHPRtfLite_Border_Format  $borderFormat
-     * @param boolean                   $left           if false, left border is not set (default true)
-     * @param boolean                   $top            if false, top border is not set (default true)
-     * @param boolean                   $right          if false, right border is not set (default true)
-     * @param boolean                   $bottom         if false, bottom border is not set (default true)
-     * @access public
-     */
-    public function setBorders(PHPRtfLite_Border_Format $borderFormat,
-                               $left = true, $top = true,
-                               $right = true, $bottom = true)
-    {
-        if (!$this->_border) {
-            $this->_border = new PHPRtfLite_Border();
-        }
-
-        if ($left) {
-            $this->_border->setBorderLeft($borderFormat);
-        }
-
-        if ($top) {
-            $this->_border->setBorderTop($borderFormat);
-        }
-
-        if ($right) {
-            $this->_border->setBorderRight($borderFormat);
-        }
-
-        if ($bottom) {
-            $this->_border->setBorderBottom($borderFormat);
-        }
-    }
-    
 }

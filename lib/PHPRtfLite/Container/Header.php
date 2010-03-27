@@ -61,7 +61,8 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
      * @param PHPRtfLite    $rtf
      * @param string        $type
      */
-    public function __construct(PHPRtfLite $rtf, $type) {
+    public function __construct(PHPRtfLite $rtf, $type)
+    {
         $this->_rtf = $rtf;
         $this->_type = $type;
 
@@ -75,7 +76,8 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
      *
      * @param   float   $height
      */
-    public function setPosition($height) {
+    public function setPosition($height)
+    {
         $this->_offsetHeight = $height;
     }
 
@@ -86,7 +88,8 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
      * @throws PHPRtfLite_Exception, if type is not allowed,
      *   because of the rtf document specific settings.
      */
-    protected function getTypeAsRtfCode() {
+    protected function getTypeAsRtfCode()
+    {
         switch ($this->_type) {
             case self::TYPE_ALL:
                 if (!$this->_rtf->isOddEvenDifferent()) {
@@ -130,7 +133,8 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
      *
      * @throws PHPRtfLite_Exception, footnote/endnote is not supported by footers
      */
-    public function addFootnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null) {
+    public function addFootnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
+    {
         throw new PHPRtfLite_Exception('Headers does not support footnotes!');
     }
 
@@ -143,7 +147,8 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
      *
      * @throws PHPRtfLite_Exception, footnote/endnote is not supported by footers
      */
-    public function addEndnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null) {
+    public function addEndnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
+    {
         throw new PHPRtfLite_Exception('Headers does not support endnotes!');
     }
 
@@ -152,17 +157,19 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
      * 
      * @return string rtf code
      */
-    public function getContent() {
-        $content = isset($this->_offsetHeight)
-                   ? '\headery' . round(PHPRtfLite::TWIPS_IN_CM * $this->_offsetHeight) . ' '
-                   : '';
+    public function output()
+    {
+        $stream = $this->_rtf->getStream();
+        
+        if (isset($this->_offsetHeight)) {
+            $stream->write('\headery' . round(PHPRtfLite::TWIPS_IN_CM * $this->_offsetHeight) . ' ');
+        }
 
-        $content .= '{\\' . $this->getTypeAsRtfCode() . ' '
-                 .    parent::getContent()
-                 .    '\par '
-                 .  '}';
+        $stream->write('{\\' . $this->getTypeAsRtfCode() . ' ');
+        parent::output();
+        $stream->write('\par}');
 
-        return $content . "\r\n";
+        return $stream->write("\r\n");
     }
 
 }

@@ -50,7 +50,7 @@ for ($i = 1; $i <= count($chessPlayers); $i ++) {
 $table->addColumn(2);
 
 //borders
-$border = PHPRtfLite_Border::create(1, '#555555');
+$border = PHPRtfLite_Border::create($rtf, 1, '#555555');
 $table->setBorderForCellRange($border, 1, 1, $countRows, $countCols);
 
 //top row
@@ -61,7 +61,7 @@ $i = 2;
 foreach ($chessPlayers as $player) {
   	$table->writeToCell(1, $i, $player, $font1, null);
   	$table->writeToCell($i, 1, $player, $font1, new PHPRtfLite_ParFormat(), false);
-        $border = PHPRtfLite_Border::create(1, '#0000ff');
+        $border = PHPRtfLite_Border::create($rtf, 1, '#0000ff');
   	$table->setBorderForCellRange($border, $i, $i);
   	$table->setBackgroundForCellRange('#dddddd', $i, $i);
   	$i++;
@@ -92,10 +92,10 @@ $table->setFontForCellRange($fontBold, 2, $countCols, $countRows);
 
 $table->writeToCell(1, $countCols, 'TOTAL', $font1, new PHPRtfLite_ParFormat('center'));
 
-$border = PHPRtfLite_Border::create(1.5, '#000000');
+$border = PHPRtfLite_Border::create($rtf, 1.5, '#000000');
 $table->setBorderForCellRange($border, 1, $countCols, $countRows, $countCols);
 $borderFormat = new PHPRtfLite_Border_Format(1, '#0000ff', 'dash');
-$border = new PHPRtfLite_Border(null, null, null, $borderFormat);
+$border = new PHPRtfLite_Border($rtf, null, null, null, $borderFormat);
 //Registry::$debug = true;
 $table->setBorderForCellRange($border, 2, $countCols, $countRows - 1, $countCols);
 
@@ -115,18 +115,18 @@ $table->setTextAlignmentForCellRange('center', 1, 1, 16, 11);
 $table->setFontForCellRange(new PHPRtfLite_Font(11, 'Times new Roman', '#7A2900'), 1, 1, 16, 11);
 
 
-$table->setBorderForCellRange(PHPRtfLite_Border::create(1), 2, 1, 3, 3);
-$table->setBorderForCellRange(PHPRtfLite_Border::create(1), 6, 1, 7, 3);
-$table->setBorderForCellRange(PHPRtfLite_Border::create(1), 10, 1, 11, 3);
-$table->setBorderForCellRange(PHPRtfLite_Border::create(1), 14, 1, 15, 3);
+$table->setBorderForCellRange(PHPRtfLite_Border::create($rtf, 1), 2, 1, 3, 3);
+$table->setBorderForCellRange(PHPRtfLite_Border::create($rtf, 1), 6, 1, 7, 3);
+$table->setBorderForCellRange(PHPRtfLite_Border::create($rtf, 1), 10, 1, 11, 3);
+$table->setBorderForCellRange(PHPRtfLite_Border::create($rtf, 1), 14, 1, 15, 3);
 
-$table->setBorderForCellRange(PHPRtfLite_Border::create(1), 4, 5, 5, 7);
-$table->setBorderForCellRange(PHPRtfLite_Border::create(1), 12, 5, 13, 7);
+$table->setBorderForCellRange(PHPRtfLite_Border::create($rtf, 1), 4, 5, 5, 7);
+$table->setBorderForCellRange(PHPRtfLite_Border::create($rtf, 1), 12, 5, 13, 7);
 
-$table->setBorderForCellRange(PHPRtfLite_Border::create(1), 8, 9, 9, 11);
-$table->setBorderForCellRange(PHPRtfLite_Border::create(1), 14, 9, 15, 11);
+$table->setBorderForCellRange(PHPRtfLite_Border::create($rtf, 1), 8, 9, 9, 11);
+$table->setBorderForCellRange(PHPRtfLite_Border::create($rtf, 1), 14, 9, 15, 11);
 
-$table->setBorderForCellRange(PHPRtfLite_Border::create(1), 1, 10, 3, 11);
+$table->setBorderForCellRange(PHPRtfLite_Border::create($rtf, 1), 1, 10, 3, 11);
 
 $table->writeToCell(2, 1, 'P1', $font1, null);
 $table->writeToCell(3, 1, 'P8', $font1, null);

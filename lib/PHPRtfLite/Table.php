@@ -29,7 +29,8 @@
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Table
  */
-class PHPRtfLite_Table {
+class PHPRtfLite_Table
+{
 
     /**
      * constants table alignment
@@ -533,7 +534,7 @@ class PHPRtfLite_Table {
                                            $right = true,
                                            $bottom = true)
     {
-        $border = new PHPRtfLite_Border();
+        $border = new PHPRtfLite_Border($this->getRtf());
         $border->setBorders($borderFormat, $left, $top, $right, $bottom);
 
         $this->setBorderForCellRange($border, $startRow, $startColumn, $endRow, $endColumn);
@@ -669,50 +670,52 @@ class PHPRtfLite_Table {
      *
      * @return string rtf code
      */
-    public function getContent() {
+    public function output() {
         if (empty($this->_rows) || empty($this->_columns)) {
-            return '';
+            return;
         }
 
-        $content = '\pard ';
+        $stream = $this->getRtf()->getStream();
+
+        $stream->write('\pard ');
         $rowIndex = 1;
 
         foreach ($this->_rows as $row) {
-            $content .= '\trowd ' . "\r\n";
+            $stream->write('\trowd ' . "\r\n");
 
             if ($this->_alignment) {
                 switch ($this->_alignment) {
                     case 'center':
-                        $content .= '\trqc ' . "\r\n";
+                        $stream->write('\trqc ' . "\r\n");
                         break;
 
                     case 'right':
-                        $content .= '\trqr ' . "\r\n";
+                        $stream->write('\trqr ' . "\r\n");
                         break;
 
                     default:
-                        $content .= '\trql ' . "\r\n";
+                        $stream->write('\trql ' . "\r\n");
                         break;
                 }
             }
 
             if ($row->getHeight()) {
-                $content .= '\trrh' . round($row->getHeight() * PHPRtfLite::TWIPS_IN_CM);
+                $stream->write('\trrh' . round($row->getHeight() * PHPRtfLite::TWIPS_IN_CM));
             }
 
             if ($this->isPreventPageBreak()) {
-                $content .= '\trkeep ';
+                $stream->write('\trkeep ');
             }
 
             if ($this->isFirstRowHeader() && $rowIndex == 1) {
-                $content .= '\trhdr ';
+                $stream->write('\trhdr ');
             }
 
             if (!empty($this->_leftPosition)) {
-                $content .= '\trleft' . round($this->_leftPosition * PHPRtfLite::TWIPS_IN_CM) . ' ';
+                $stream->write('\trleft' . round($this->_leftPosition * PHPRtfLite::TWIPS_IN_CM) . ' ');
             }
 
-            $content .= "\r\n";
+            $stream->write("\r\n");
             $width = 0;
             $columnIndex = 1;
 
@@ -725,283 +728,72 @@ class PHPRtfLite_Table {
 
                     if ($cell->isVerticalMerged()) {
                         if ($rowIndex == 1 || ($rowIndex > 1 && !$this->getCell($rowIndex - 1, $columnIndex)->isVerticalMerged())) {
-                            $content .= '\clvmgf' . "\r\n";
+                            $stream->write('\clvmgf' . "\r\n");
                         }
                         else {
-                            $content .= '\clvmrg' . "\r\n";
+                            $stream->write('\clvmrg' . "\r\n");
                         }
                     }
 
                     $backgroundColor = $cell->getBackgroundColor();
                     if ($backgroundColor) {
-                        $content .= '\clcbpat' . $this->getRtf()->getColor($backgroundColor) . " \r\n";
+                        $stream->write('\clcbpat' . $this->getRtf()->getColorTableIndex($backgroundColor) . " \r\n");
                     }
 
                     switch ($cell->getVerticalAlignment()) {
                         case PHPRtfLite_Table_Cell::VERTICAL_ALIGN_TOP:
-                            $content .= '\clvertalt ' . " \r\n";
+                            $stream->write('\clvertalt ' . " \r\n");
                             break;
 
                         case PHPRtfLite_Table_Cell::VERTICAL_ALIGN_CENTER:
-                            $content .= '\clvertalc ' . " \r\n";
+                            $stream->write('\clvertalc ' . " \r\n");
                             break;
 
                         case PHPRtfLite_Table_Cell::VERTICAL_ALIGN_BOTTOM:
-                            $content .= '\clvertalb ' . " \r\n";
+                            $stream->write('\clvertalb ' . " \r\n");
                             break;
                     }
 
                     switch ($cell->getRotateTo()) {
                         case PHPRtfLite_Table_Cell::ROTATE_RIGHT:
-                            $content .= '\cltxtbrl ' . " \r\n";
+                            $stream->write('\cltxtbrl ' . " \r\n");
                             break;
 
                         case PHPRtfLite_Table_Cell::ROTATE_LEFT:
-                            $content .= '\cltxbtlr ' . " \r\n";
+                            $stream->write('\cltxbtlr ' . " \r\n");
                             break;
                     }
 
                     $border = $cell->getBorder();
 
                     if ($border) {
-                        $content .= $border->getContent($this->getRtf(), '\\cl');
+                        $stream->write($border->getContent('\\cl'));
                     }
 
-                    $content .= '\cellx' . $width . " \r\n";
+                    $stream->write('\cellx' . $width . " \r\n");
                 }
                 
                 $columnIndex++;
             }
 
             //@since version 2.0
-            $content .= '\pard \intbl '."\r\n";
+            $stream->write('\pard \intbl' . "\r\n");
 
             $columnIndex = 1;
 
             foreach ($this->_columns as $column) {
                 $cell = $this->getCell($rowIndex, $columnIndex);
                 if (!$cell->isHorizontalMerged()) {
-                    $content .= $cell->getContent();
+                    $cell->output();
                 }
                 $columnIndex++;
             }
 
-            $content .= '\pard \intbl \row ' . "\r\n";
+            $stream->write('\pard \intbl \row ' . "\r\n");
             $rowIndex++;
         }
 
-        $content .= '\pard' . "\r\n";
-
-        return $content;
-    }
-
-
-    //// DEPRECATED FUNCTIONS FOLLOWS HERE ////
-
-    /**
-     * @deprecated use setPreventPageBreak() instead
-     * @see PHPRtfLite/PHPRtfLite_Table#setPreventPageBreak()
-     *
-     * Sets that table won't be splited by a page break. By default page break splits table.
-     */
-    public function setRowsKeepTogether() {
-        $this->setPreventPageBreak();
-    }
-
-    /**
-     * @deprecated use setVerticalAlignmentForCellRange() instead
-     * @see PHPRtfLite/PHPRtfLite_Table#setVerticalAlignmentForCellRange()
-     *
-     * Sets vertical alignment of cells.
-     *
-     * @param   string  $verticalAlignment  vertical alignment of cell (default top).<br>
-     *   Possible values:<br>
-     *     'top' => top alignment<br>
-     *     'center' => center alignment<br>
-     *     'bottom' => bottom alignment
-     *
-     * @param   integer $startRow           start row
-     * @param   integer $startColumn        start column
-     * @param   integer $endRow             end row, if 0, then vertical alignment is set just for one row cells.
-     * @param   integer $endColumn          end column, if 0, then vertical alignment is set just for one column cells.
-     */
-    public function setVerticalAlignmentOfCells($verticalAlignment, $startRow, $startColumn, $endRow = 0, $endColumn = 0) {
-        if ($endRow == 0) {
-            $endRow = null;
-        }
-        if ($endColumn == 0) {
-            $endColumn = null;
-        }
-        $this->setVerticalAlignmentForCellRange($verticalAlignment, $startRow, $startColumn, $endRow, $endColumn);
-    }
-
-    /**
-     * @deprecated use setTextAlignmentForCellRange() instead
-     * @see PHPRtfLite/PHPRtfLite_Table#setTextAlignmentForCellRange()
-     *
-     * Sets alignments of empty cells.
-     *
-     * @param   string  $alignment Alignment of cell (default top). The method Cell::writeToCell overrides it with ParFormat alignment.<br>
-     *   Possible values:<br>
-     *     'left'       => left alignment<br>
-     *     'center'     => center alignment<br>
-     *     'right'      => right alignment<br>
-     *     'justify'    => justify alignment
-     *
-     * @param   integer $startRow       start row
-     * @param   integer $startColumn    start column
-     * @param   integer $endRow         end row, if 0, then default alignment is set just for one row cells.
-     * @param   integer $endColumn      end column, if 0, then default alignment is set just for one column cells.
-     */
-    public function setDefaultAlignmentOfCells($alignment, $startRow, $startColumn, $endRow = 0, $endColumn = 0) {
-        if ($endRow == 0) {
-            $endRow = null;
-        }
-        if ($endColumn == 0) {
-            $endColumn = null;
-        }
-        $this->setTextAlignmentForCellRange($alignment, $startRow, $startColumn, $endRow, $endColumn);
-    }
-
-    /**
-     * @deprecated use setDefaultFontForCellRange() instead
-     * @see PHPRtfLite/PHPRtfLite_Table#setDefaultFontForCellRange()
-     *
-     * Sets default font of empty cells.
-     *
-     * @param PHPRtfLite_Font   $font           font for empty cells. The method Cell::writeToCell overrides it with another Font.
-     * @param integer           $startRow       start row
-     * @param integer           $startColumn    start column
-     * @param integer           $endRow         end row, if 0, default font is set just for one row cells.
-     * @param integer           $endColumn      end column, if 0, default font is set just for one column cells.
-     */
-    public function setDefaultFontOfCells(PHPRtfLite_Font $font, $startRow, $startColumn, $endRow = 0, $endColumn = 0) {
-        if ($endRow == 0) {
-            $endRow = null;
-        }
-        if ($endColumn == 0) {
-            $endColumn = null;
-        }
-        $this->setFontForCellRange($font, $startRow, $startColumn, $endRow, $endColumn);
-    }
-
-    /**
-     * @deprecated use rotateCellRange() instead
-     * @see PHPRtfLite/PHPRtfLite_Table#rotateCellRange()
-     *
-     * Rotates cells.
-     *
-     * @param   string  $direction      direction of rotation.<br>
-     *   Possible values:<br>
-     *     'right'  => right<br>
-     *     'left'   => left
-     *
-     * @param   integer $startRow       start row
-     * @param   integer $startColumn    start column
-     * @param   integer $endRow         end row, if 0, then cells of just one row are rotated.
-     * @param   integer $endColumn      end column, if 0, then cells of just on column are rotated.
-     */
-    public function rotateCells($direction, $startRow, $startColumn, $endRow = 0, $endColumn = 0) {
-        if ($endRow == 0) {
-            $endRow = null;
-        }
-        if ($endColumn == 0) {
-            $endColumn = null;
-        }
-        $this->rotateCellRange($direction, $startRow, $startColumn, $endRow, $endColumn);
-    }
-
-    /**
-     * @deprecated use setBackgroundForCellRange() instead
-     * @see PHPRtfLite/PHPRtfLite_Table#setBackgroundForCellRange()
-     *
-     * Sets background color of cells.
-     *
-     * @param   string  $backgroundColor    color of background
-     * @param   integer $startRow           start row
-     * @param   integer $startColumn        start column
-     * @param   integer $endRow             end row, if 0, then background color is set just for one row cells.
-     * @param   integer $endColumn          end column, if 0, then background color is set just for one column cells.
-     */
-    public function setBackGroundOfCells($backgroundColor, $startRow, $startColumn, $endRow = 0, $endColumn = 0) {
-        if ($endRow == 0) {
-            $endRow = null;
-        }
-        if ($endColumn == 0) {
-            $endColumn = null;
-        }
-        $this->setBackgroundForCellRange($backgroundColor, $startRow, $startColumn, $endRow, $endColumn);
-    }
-
-    /**
-     * @deprecated use setBordersForCellRange() instead
-     * @see PHPRtfLite/PHPRtfLite_Table#setBordersForCellRange()
-     *
-     * Sets borders of cells.
-     *
-     * @param   PHPRtfLite_Border_Format    $borderFormat   border format
-     * @param   integer                     $startRow       start row
-     * @param   integer                     $startColumn    start column
-     * @param   integer                     $endRow         end row, if 0, then border format is set just for one row cells.
-     * @param   integer                     $endColumn      end column, if 0, then border format is set just for one column cells.
-     * @param   boolean                     $left           if false, left border is not set (default true)
-     * @param   boolean                     $top            if false, top border is not set (default true)
-     * @param   boolean                     $right          if false, right border is not set (default true)
-     * @param   boolean                     $bottom         if false, bottom border is not set (default true)
-     */
-    public function setBordersOfCells(PHPRtfLite_Border_Format $borderFormat,
-                                      $startRow,
-                                      $startColumn,
-                                      $endRow = 0,
-                                      $endColumn = 0,
-                                      $left = true,
-                                      $top = true,
-                                      $right = true,
-                                      $bottom = true)
-    {
-        if ($endRow == 0) {
-            $endRow = null;
-        }
-        if ($endColumn == 0) {
-            $endColumn = null;
-        }
-        $this->setBordersForCellRange($borderFormat, $startRow, $startColumn, $endRow, $endColumn, $left, $top, $right, $bottom);
-    }
-
-    /**
-     * @deprecated use mergeCellRange() instead
-     * @see PHPRtfLite/PHPRtfLite_Table#mergeCellRange()
-     *
-     * Merges cells of table
-     * 
-     * @param integer $startRow     start row
-     * @param integer $startColumn  start column
-     * @param integer $endRow       end row
-     * @param integer $endColumn    end column
-     */
-    public function mergeCells($startRow, $startColumn, $endRow, $endColumn) {
-        $this->mergeCellRange($startRow, $startColumn, $endRow, $endColumn);
-    }
-
-    /**
-     * @deprecated use addRowList() instead
-     * @see PHPRtfLite/PHPRtfLite_Table#addRowList()
-     *
-     * Adds list of rows to a table
-     *
-     * @param   array   heights of rows. When height is 0, the height is sufficient for all
-     *   the text in the line; when positive, the height is guaranteed to be at least
-     *   the specified height; when negative, the absolute value of the height is used,
-     *   regardless of the height of the text in the line.
-     */
-    public function addRowsList($heights) {
-        foreach ($heights as $key => $height) {
-            if ($height === 0) {
-                $heights[$key] = null;
-            }
-        }
-
-        $this->addRowList($heights);
+        $stream->write('\pard' . "\r\n");
     }
 
 }

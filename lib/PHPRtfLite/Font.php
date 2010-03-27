@@ -28,7 +28,8 @@
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
  * @package     PHPRtfLite
  */
-class PHPRtfLite_Font {
+class PHPRtfLite_Font
+{
 
     /**
      * constants for types of animated text
@@ -39,6 +40,16 @@ class PHPRtfLite_Font {
     const ANIMATE_MARCHING_BLACK_ANTS  = 4;
     const ANIMATE_MARCHING_RED_ANTS    = 5;
     const ANIMATE_SHIMMER              = 6;
+
+    /**
+     * @var PHPRtfLite_DocHeadDefinition_ColorTable
+     */
+    protected $_colorTable;
+
+    /**
+     * @var PHPRtfLite_DocHeadDefinition_FontTable
+     */
+    protected $_fontTable;
 
     /**
      * font size
@@ -99,7 +110,7 @@ class PHPRtfLite_Font {
      * @var string
      */
     protected $_animation;
-        
+
     /**
      * Constructor
      *
@@ -108,17 +119,41 @@ class PHPRtfLite_Font {
      * @param   string  $color              font color
      * @param   string  $backgroundColor    background color of font
      */
-    public function __construct($size = 10, $fontFamily = '', $color = '', $backgroundColor = '') {
-        $this->_size = $size;
-        $this->_fontFamily = $fontFamily;
+    public function __construct($size = 10, $fontFamily = null, $color = null, $backgroundColor = null)
+    {
+        $this->_size            = $size;
+        $this->_fontFamily      = $fontFamily;
+        $this->_color           = $color;
+        $this->_backgroundColor = $backgroundColor;
+    }
 
-        if ($color) {
-            $this->_color = PHPRtfLite::convertHexColorToRtf($color);
+    /**
+     * sets rtf color table
+     * 
+     * @param PHPRtfLite_DocHeadDefinition_ColorTable $colorTable
+     */
+    public function setColorTable(PHPRtfLite_DocHeadDefinition_ColorTable $colorTable)
+    {
+        if (!empty($this->_color)) {
+            $colorTable->add($this->_color);
         }
+        if (!empty($this->_backgroundColor)) {
+            $colorTable->add($this->_backgroundColors);
+        }
+        $this->_colorTable = $colorTable;
+    }
 
-        if ($backgroundColor) {
-            $this->_backgroundColor = PHPRtfLite::convertHexColorToRtf($backgroundColor);
+    /**
+     * sets rtf font table
+     * 
+     * @param PHPRtfLite_DocHeadDefinition_FontTable $fontTable
+     */
+    public function setFontTable(PHPRtfLite_DocHeadDefinition_FontTable $fontTable)
+    {
+        if (!empty($this->_fontFamily)) {
+            $fontTable->add($this->_fontFamily);
         }
+        $this->_fontTable = $fontTable;
     }
 
     /**
@@ -126,7 +161,8 @@ class PHPRtfLite_Font {
      *
      * @param boolean $bold
      */
-    public function setBold($bold = true) {
+    public function setBold($bold = true)
+    {
         $this->_isBold = $bold;
     }
 
@@ -135,7 +171,8 @@ class PHPRtfLite_Font {
      *
      * @return boolean
      */
-    public function isBold() {
+    public function isBold()
+    {
         return $this->_isBold;
     }
 
@@ -144,7 +181,8 @@ class PHPRtfLite_Font {
      *
      * @param boolean $italic
      */
-    public function setItalic($italic = true) {
+    public function setItalic($italic = true)
+    {
         $this->_isItalic = $italic;
     }
 
@@ -153,7 +191,8 @@ class PHPRtfLite_Font {
      *
      * @return boolean
      */
-    public function isItalic() {
+    public function isItalic()
+    {
         return $this->_isItalic;
     }
 
@@ -162,7 +201,8 @@ class PHPRtfLite_Font {
      *
      * @param boolean $underlined
      */
-    public function setUnderline($underlined = true) {
+    public function setUnderline($underlined = true)
+    {
         $this->_isUnderlined = $underlined;
     }
 
@@ -171,7 +211,8 @@ class PHPRtfLite_Font {
      *
      * @return boolean
      */
-    public function isUnderlined() {
+    public function isUnderlined()
+    {
         return $this->_isUnderlined;
     }
 
@@ -180,7 +221,8 @@ class PHPRtfLite_Font {
      *
      * @param boolean $strike
      */
-    public function setStriked($striked = true) {
+    public function setStriked($striked = true)
+    {
         $this->_isStriked = $striked;
 
         if ($striked) {
@@ -193,7 +235,8 @@ class PHPRtfLite_Font {
      *
      * @return  boolean
      */
-    public function isStriked() {
+    public function isStriked()
+    {
         return $this->_isStriked;
     }
 
@@ -202,7 +245,8 @@ class PHPRtfLite_Font {
      *
      * @param boolean $strike
      */
-    public function setDoubleStriked($striked = true) {
+    public function setDoubleStriked($striked = true)
+    {
         $this->_isDoubleStriked = $striked;
 
         if ($striked) {
@@ -215,7 +259,8 @@ class PHPRtfLite_Font {
      *
      * @return boolean
      */
-    public function isDoubleStriked($striked = true) {
+    public function isDoubleStriked($striked = true)
+    {
         return $this->_isDoubleStriked;
     }
 
@@ -232,89 +277,60 @@ class PHPRtfLite_Font {
      *     ANIMATE_MARCHING_RED_ANTS    => 5    - marching red ants
      *     ANIMATE_SHIMMER              => 6    - shimmer
      */ 
-    public function setAnimation($animation) {
+    public function setAnimation($animation)
+    {
           $this->_animation = $animation;
     }
 
     /**
      * Gets rtf code of font
      *
-     * @param  PHPRtfLite   $rtf
-     *
      * @return string rtf code
      */
-    public function getContent(PHPRtfLite $rtf) {
+    public function getContent()
+    {
         $content = $this->_size > 0 ? '\fs' . ($this->_size * 2) . ' ' : '';
 
-        if (!empty($this->_fontFamily)) {
-            $rtf->addFont($this->_fontFamily);
-            $content .= $rtf->getFont($this->_fontFamily).' ';
+        if ($this->_fontFamily && $this->_fontTable) {
+            $fontIndex = $this->_fontTable->getFontIndex($this->_fontFamily);
+            if ($fontIndex !== false) {
+                $content .= '\f' . $fontIndex . ' ';
+            }
         }
 
-        if ($this->_color) {
-            $rtf->addColor($this->_color);
-            $content .= $rtf->getFontColor($this->_color).' ';
+        if ($this->_color && $this->_colorTable) {
+            $colorIndex = $this->_colorTable->getColorIndex($this->_color);
+            if ($colorIndex !== false) {
+                $content .= '\cf' . $colorIndex . ' ';
+            }
         }
 
-        if ($this->_backgroundColor) {
-            $rtf->addColor($this->_backgroundColor);
-            $content .= $rtf->getBackgroundColor($this->_backgroundColor).' ';
+        if ($this->_backgroundColor && $this->_colorTable) {
+            $colorIndex = $this->_colorTable->getColorIndex($this->_backgroundColor);
+            if ($colorIndex !== false) {
+                $content .= '\chcbpat' . $colorIndex . ' ';
+            }
         }
 
-        $content .= $this->_isBold          ? '\b '                             : '';
-        $content .= $this->_isItalic        ? '\i '                             : '';
-        $content .= $this->_isUnderlined    ? '\ul '                            : '';
-        $content .= $this->_animation       ? '\animtext' . $this->_animation   : '';
-        $content .= $this->_isStriked       ? '\strike ' . $this->_animation    : '';
-        $content .= $this->_isDoubleStriked ? '\striked1 ' . $this->_animation  : '';
+        if ($this->_isBold) {
+            $content .= '\b ';
+        }
+        if ($this->_isItalic) {
+            $content .= '\i ';
+        }
+        if ($this->_isUnderlined) {
+            $content .= '\ul ';
+        }
+        if ($this->_animation) {
+            $content .= '\animtext' . $this->_animation;
+        }
+        if ($this->_isStriked) {
+            $content .= '\strike ' . $this->_animation;
+        }
+        if ($this->_isDoubleStriked) {
+            $content .= '\striked1 ' . $this->_animation;
+        }
 
         return $content;
     }
-
-
-    //// DEPRECATED FUNCTIONS FOLLOWS HERE ////
-
-    /**
-     * @deprecated use setStriked() or setDoubleStriked() instead
-     * @see PHPRtfLite/PHPRtfLite_Font#setStriked()
-     * @see PHPRtfLite/PHPRtfLite_Font#setDoubleStriked()
-     *
-     * Sets striked text
-     *
-     * @param $strike If 1 then single, if 2 then double
-     */
-    public function setStrike($strike = 1) {
-        switch ($strike) {
-            case 0:
-                $this->setStriked(false);
-                $this->setDoubleStriked(false);
-                break;
-            case 1:
-                $this->setStriked();
-                break;
-            case 2:
-                $this->setDoubleStriked();
-                break;
-        }
-    }
-
-    /**
-     * @deprecated use setAnimation() instead
-     * @see PHPRtfLite/PHPRtfLite_Font#setAnimation()
-     *
-     * Sets animation to text
-     *
-     * @param integer $animatedText animated text<br>
-     *   Possible values: <br>
-     *     '1' => Las Vegas Lights,  <br>
-     *     '2' => Blinking background, <br>
-     *     '3' => Sparkle text, <br>
-     *     '4' => Marching black ants, <br>
-     *     '5' => Marching red ants, <br>
-     *     '6' => Shimmer
-     */
-    public function setAnimatedText($animatedText) {
-        $this->setAnimation($animation);
-    }
-
 }

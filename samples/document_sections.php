@@ -63,7 +63,7 @@ $rtf = new PHPRtfLite();
 //borders
 $borderFormatBlue = new PHPRtfLite_Border_Format(1, '#0000ff');
 $borderFormatRed = new PHPRtfLite_Border_Format(2, '#ff0000');
-$border = new PHPRtfLite_Border($borderFormatBlue, $borderFormatRed, $borderFormatBlue, $borderFormatRed);
+$border = new PHPRtfLite_Border($rtf, $borderFormatBlue, $borderFormatRed, $borderFormatBlue, $borderFormatRed);
 $rtf->setBorder($border);
 
 //headers
@@ -81,7 +81,7 @@ $sect->setPaperHeight(16);
 $sect->setPaperWidth(25);
 
 //Borders overriden: No Borders
-$border = PHPRtfLite_Border::create(0);
+$border = PHPRtfLite_Border::create($rtf, 0);
 $sect->setBorder($border);
 $sect->setSpaceBetweenColumns(1);
 $sect->setColumnsCount(2);
@@ -97,7 +97,7 @@ $header->writeText("PhpRtf class library. Overriden right section header", $time
 $header = $sect->addHeader(PHPRtfLite_Container_Header::TYPE_LEFT);
 $header->writeText("PhpRtf class library. Overriden left section header", $times12, $parFormat);
 //Borders overriden: Green border
-$border = PHPRtfLite_Border::create(1, '#00ff00', 'dash', 1);
+$border = PHPRtfLite_Border::create($rtf, 1, '#00ff00', 'dash', 1);
 $sect->setBorder($border);
 
 writeSectionText($sect, $arial14, $times12, $text, $text2, $text3);

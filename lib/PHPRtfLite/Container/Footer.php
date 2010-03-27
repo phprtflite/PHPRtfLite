@@ -29,7 +29,8 @@
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Container
  */
-class PHPRtfLite_Container_Footer extends PHPRtfLite_Container {
+class PHPRtfLite_Container_Footer extends PHPRtfLite_Container
+{
 
     /**
      * constants defining header types
@@ -60,7 +61,8 @@ class PHPRtfLite_Container_Footer extends PHPRtfLite_Container {
      * @param PHPRtfLite    $rtf
      * @param string        $type
      */
-    public function __construct(PHPRtfLite $rtf, $type) {
+    public function __construct(PHPRtfLite $rtf, $type)
+    {
         $this->_rtf = $rtf;
         $this->_type = $type;
 
@@ -74,7 +76,8 @@ class PHPRtfLite_Container_Footer extends PHPRtfLite_Container {
      *
      * @param   float   $height
      */
-    public function setPosition($height) {
+    public function setPosition($height)
+    {
         $this->_offsetHeight = $height;
     }
 
@@ -85,24 +88,25 @@ class PHPRtfLite_Container_Footer extends PHPRtfLite_Container {
      * @throws PHPRtfLite_Exception, if type is not allowed,
      *   because of the rtf document specific settings.
      */
-    protected function getTypeAsRtfCode() {
+    protected function getTypeAsRtfCode()
+    {
         switch ($this->_type) {
             case self::TYPE_ALL:
-                if (!$rtf->isOddEvenDifferent()) {
+                if (!$this->_rtf->isOddEvenDifferent()) {
                     return 'footer';
                 }
 
                 throw new PHPRtfLite_Exception('Footer type ' . $this->_type . ' is not allowed, when using odd even different!');
 
             case self::TYPE_LEFT:
-                if ($rtf->isOddEvenDifferent()) {
+                if ($this->_rtf->isOddEvenDifferent()) {
                     return 'footerl';
                 }
 
                 throw new PHPRtfLite_Exception('Footer type ' . $this->_type . ' is not allowed, when using not odd even different!');
 
             case self::TYPE_RIGHT:
-                if ($rtf->isOddEvenDifferent()) {
+                if ($this->_rtf->isOddEvenDifferent()) {
                     return 'footerr';
                 }
 
@@ -129,7 +133,8 @@ class PHPRtfLite_Container_Footer extends PHPRtfLite_Container {
      *
      * @throws PHPRtfLite_Exception, footnote/endnote is not supported by footers
      */
-    public function addFootnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null) {
+    public function addFootnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
+    {
         throw new PHPRtfLite_Exception('Footers does not support footnotes!');
     }
 
@@ -142,7 +147,8 @@ class PHPRtfLite_Container_Footer extends PHPRtfLite_Container {
      *
      * @throws PHPRtfLite_Exception, footnote/endnote is not supported by footers
      */
-    public function addEndnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null) {
+    public function addEndnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
+    {
         throw new PHPRtfLite_Exception('Footers does not support endnotes!');
     }
 
@@ -151,17 +157,19 @@ class PHPRtfLite_Container_Footer extends PHPRtfLite_Container {
      *
      * @return string rtf code
      */
-    public function getContent() {
-        $content = isset($this->_offsetHeight)
-                   ? '\footery' . round(PHPRtfLite::TWIPS_IN_CM * $this->_offsetHeight) . ' '
-                   : '';
-                   
-        $content .= '{\\' . $this->getTypeAsRtfCode() . ' '
-                 .    parent::getContent()
-                 .    '\par '
-                 .  '}';
+    public function output()
+    {
+        $stream = $this->_rtf->getStream();
+        
+        if (isset($this->_offsetHeight)) {
+            $stream->write('\footery' . round(PHPRtfLite::TWIPS_IN_CM * $this->_offsetHeight) . ' ');
+        }
 
-        return $content . "\r\n";
+        $stream->write('{\\' . $this->getTypeAsRtfCode() . ' ');
+        parent::output();
+        $stream->write('\par}');
+
+        return $stream->write("\r\n");
     }
     
 }

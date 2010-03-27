@@ -24,10 +24,11 @@
  * Class for creating rtf documents.
  * @version     1.0.0
  * @author      Denis Slaveckij <info@phprtf.com>, Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2009 Steffen Zeidler
+ * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
  * @package     PHPRtfLite
  */
-class PHPRtfLite {
+class PHPRtfLite
+{
 
     const SPACE_IN_POINTS           = 20;
     const SPACE_IN_LINES            = 240;
@@ -119,16 +120,16 @@ class PHPRtfLite {
     protected $_content;
 
     /**
-     * rtf fonts
-     * @var array
+     * font table instance
+     * @var PHPRtfLite_DocHeadDefinition_FontTable
      */
-    protected $_fonts           = array();
+    protected $_fontTable;
 
     /**
-     * rtf colors
-     * @var array
+     * color table instance
+     * @var PHPRtfLite_DocHeadDefinition_ColorTable 
      */
-    protected $_colors          = array('\red0\green0\blue0' => 1);
+    protected $_colorTable;
 
     /**
      * rtf properties
@@ -202,18 +203,18 @@ class PHPRtfLite {
      */
     private $_noteDocHeadDefinition = null;
 
-
     /**
-     * Constructor
+     * output stream
+     * @var PHPRtfLite_OutputStream
      */
-    public function __construct() {
-        $this->addFont('Times new Roman');
-    }
+    private $_stream;
+
 
     /**
      * Registers autoloader for PHPRtfLite classes
      */
-    static public function registerAutoloader() {
+    public static function registerAutoloader()
+    {
         $baseClassDir = dirname(__FILE__);
         require $baseClassDir . '/PHPRtfLite/Autoloader.php';
         PHPRtfLite_Autoloader::setBaseDir($baseClassDir);
@@ -238,7 +239,8 @@ class PHPRtfLite {
      *   'printim' => last print time (value int) <br>
      * @param mixed $value Value
      */
-    public function setProperty($name, $value) {
+    public function setProperty($name, $value)
+    {
         switch ($name) {
             case 'creatim':
             case 'revtim':
@@ -265,11 +267,25 @@ class PHPRtfLite {
     }
 
     /**
+     * Gets rtf property
+     *
+     * @param   string $name
+     * @return  string
+     */
+    public function getProperty($name)
+    {
+        return isset($this->_property[$name])
+               ? $this->_property[$name]
+               : null;
+    }
+
+    /**
      * gets document head definition for notes
      *
      * @return PHPRtfLite_DocHeadDefinition_Note
      */
-    public function getNoteDocHeadDefinition() {
+    public function getNoteDocHeadDefinition()
+    {
         if ($this->_noteDocHeadDefinition === null) {
             $this->_noteDocHeadDefinition = new PHPRtfLite_DocHeadDefinition_Note();
         }
@@ -278,23 +294,12 @@ class PHPRtfLite {
     }
 
     /**
-     * Gets rtf property
-     *
-     * @param   string $name
-     * @return  string
-     */
-    public function getProperty($name) {
-        return isset($this->_property[$name])
-               ? $this->_property[$name]
-               : null;
-    }
-
-    /**
      * sets footnote numbering type
      *
      * @param integer $numberingType
      */
-    public function setFootnoteNumberingType($numberingType) {
+    public function setFootnoteNumberingType($numberingType)
+    {
         $this->getNoteDocHeadDefinition()->setFootnoteNumberingType($numberingType);
     }
 
@@ -303,7 +308,8 @@ class PHPRtfLite {
      *
      * @return integer
      */
-    public function getFootnoteNumberingType() {
+    public function getFootnoteNumberingType()
+    {
         return $this->getNoteDocHeadDefinition()->getFootnoteNumberingType();
     }
 
@@ -312,7 +318,8 @@ class PHPRtfLite {
      *
      * @param integer $numberingType
      */
-    public function setEndnoteNumberingType($numberingType) {
+    public function setEndnoteNumberingType($numberingType)
+    {
         $this->getNoteDocHeadDefinition()->setEndnoteNumberingType($numberingType);
     }
 
@@ -321,7 +328,8 @@ class PHPRtfLite {
      *
      * @return integer
      */
-    public function getEndnoteNumberingType() {
+    public function getEndnoteNumberingType()
+    {
         return $this->getNoteDocHeadDefinition()->getEndnoteNumberingType();
     }
 
@@ -330,7 +338,8 @@ class PHPRtfLite {
      *
      * @param integer $startNumber
      */
-    public function setFootnoteStartNumber($startNumber) {
+    public function setFootnoteStartNumber($startNumber)
+    {
         $this->getNoteDocHeadDefinition()->setFootnoteStartNumber($startNumber);
     }
 
@@ -339,7 +348,8 @@ class PHPRtfLite {
      *
      * @return integer
      */
-    public function getFootnoteStartNumber() {
+    public function getFootnoteStartNumber()
+    {
         return $this->getNoteDocHeadDefinition()->getFootnoteStartNumber();
     }
 
@@ -348,7 +358,8 @@ class PHPRtfLite {
      *
      * @param integer $startNumber
      */
-    public function setEndnoteStartNumber($startNumber) {
+    public function setEndnoteStartNumber($startNumber)
+    {
         $this->getNoteDocHeadDefinition()->setEndnoteStartNumber($startNumber);
     }
 
@@ -357,14 +368,16 @@ class PHPRtfLite {
      *
      * @return integer
      */
-    public function getEndnoteStartNumber() {
+    public function getEndnoteStartNumber()
+    {
         return $this->getNoteDocHeadDefinition()->getEndnoteStartNumber();
     }
 
     /**
      * sets restart footnote number on each page
      */
-    public function setRestartFootnoteNumberEachPage() {
+    public function setRestartFootnoteNumberEachPage()
+    {
         $this->getNoteDocHeadDefinition()->setRestartFootnoteNumberEachPage();
     }
 
@@ -373,14 +386,16 @@ class PHPRtfLite {
      *
      * @return boolean
      */
-    public function setRestartEndnoteNumberEachPage() {
+    public function setRestartEndnoteNumberEachPage()
+    {
         $this->getNoteDocHeadDefinition()->setRestartEndnoteNumberEachPage();
     }
 
     /**
      * sets restart endnote number on each page
      */
-    public function isRestartFootnoteNumberEachPage() {
+    public function isRestartFootnoteNumberEachPage()
+    {
         return $this->getNoteDocHeadDefinition()->isRestartFootnoteNumberEachPage();
     }
 
@@ -389,7 +404,8 @@ class PHPRtfLite {
      *
      * @return boolean
      */
-    public function isRestartEndnoteNumberEachPage() {
+    public function isRestartEndnoteNumberEachPage()
+    {
         return $this->getNoteDocHeadDefinition()->isRestartEndnoteNumberEachPage();
     }
 
@@ -398,8 +414,9 @@ class PHPRtfLite {
      *
      * @param PHPRtfLite_Font $font
      */
-    public function setDefaultFontForNotes(PHPRtfLite_Font $font) {
-        PHPRtfLite_Note::setDefaultFont($font);
+    public function setDefaultFontForNotes(PHPRtfLite_Font $font)
+    {
+        PHPRtfLite_Footnote::setDefaultFont($font);
     }
 
     /**
@@ -407,8 +424,9 @@ class PHPRtfLite {
      *
      * @return PHPRtfLite_Font
      */
-    public function getDefaultFontForNotes() {
-        return PHPRtfLite_Note::getDefaultFont($font);
+    public function getDefaultFontForNotes()
+    {
+        return PHPRtfLite_Footnote::getDefaultFont($font);
     }
 
     /**
@@ -416,7 +434,8 @@ class PHPRtfLite {
      *
      * @return PHPRtfLite_Container_Section
      */
-    public function addSection() {
+    public function addSection()
+    {
         $section = new PHPRtfLite_Container_Section($this);
 
         if (count($this->_sections) == 0) {
@@ -432,7 +451,8 @@ class PHPRtfLite {
      * Sets default tab width of the document.
      * @param float $defaultTabWidth Default tab width
      */
-    public function setDefaultTabWidth($defaultTabWidth) {
+    public function setDefaultTabWidth($defaultTabWidth)
+    {
         $this->_defaultTabWidth = $defaultTabWidth;
     }
 
@@ -440,7 +460,8 @@ class PHPRtfLite {
      * Gets default tab width of the document.
      * @return float $defaultTabWidth Default tab width
      */
-    public function getDefaultTabWidth() {
+    public function getDefaultTabWidth()
+    {
         return $this->_defaultTabWidth;
     }
 
@@ -448,7 +469,8 @@ class PHPRtfLite {
      * Sets the paper width of document.
      * @param float $width pager width
      */
-    public function setPaperWidth($width) {
+    public function setPaperWidth($width)
+    {
         $this->_paperWidth = $width;
     }
 
@@ -456,7 +478,8 @@ class PHPRtfLite {
      * gets the paper width of document.
      * @return float $paperWidth paper width
      */
-    public function getPaperWidth() {
+    public function getPaperWidth()
+    {
         return $this->_paperWidth;
     }
 
@@ -464,7 +487,8 @@ class PHPRtfLite {
      * Sets the paper height of document.
      * @param float $height paper height
      */
-    public function setPaperHeight($height) {
+    public function setPaperHeight($height)
+    {
         $this->_paperHeight = $height;
     }
 
@@ -472,7 +496,8 @@ class PHPRtfLite {
      * gets the paper height of document.
      * @return float $paperHeight paper height
      */
-    public function getPaperHeight() {
+    public function getPaperHeight()
+    {
         return $this->_paperHeight;
     }
 
@@ -483,7 +508,8 @@ class PHPRtfLite {
      * @param float $marginRight    Margin right (default 3 cm)
      * @param float $marginBottom   Margin bottom (default 2 cm)
      */
-    public function setMargins($marginLeft, $marginTop, $marginRight, $marginBottom) {
+    public function setMargins($marginLeft, $marginTop, $marginRight, $marginBottom)
+    {
         $this->_marginLeft      = $marginLeft;
         $this->_marginTop       = $marginTop;
         $this->_marginRight     = $marginRight;
@@ -494,7 +520,8 @@ class PHPRtfLite {
      * Sets the left margin of document pages.
      * @param float $margin
      */
-    public function setMarginLeft($margin) {
+    public function setMarginLeft($margin)
+    {
         $this->_marginLeft = $margin;
     }
 
@@ -502,7 +529,8 @@ class PHPRtfLite {
      * Gets the left margin of document pages.
      * @return float $margin
      */
-    public function getMarginLeft() {
+    public function getMarginLeft()
+    {
         return $this->_marginLeft;
     }
 
@@ -510,7 +538,8 @@ class PHPRtfLite {
      * Sets the right margin of document pages.
      * @param float $margin
      */
-    public function setMarginRight($margin) {
+    public function setMarginRight($margin)
+    {
         $this->_marginRight = $margin;
     }
 
@@ -518,7 +547,8 @@ class PHPRtfLite {
      * Gets the right margin of document pages.
      * @return float $margin
      */
-    public function getMarginRight() {
+    public function getMarginRight()
+    {
         return $this->_marginRight;
     }
 
@@ -526,7 +556,8 @@ class PHPRtfLite {
      * Sets the top margin of document pages.
      * @param float $margin
      */
-    public function setMarginTop($margin) {
+    public function setMarginTop($margin)
+    {
         $this->_marginTop = $margin;
     }
 
@@ -534,7 +565,8 @@ class PHPRtfLite {
      * Gets the top margin of document pages.
      * @return float $margin
      */
-    public function getMarginTop() {
+    public function getMarginTop()
+    {
         return $this->_marginTop;
     }
 
@@ -542,7 +574,8 @@ class PHPRtfLite {
      * Sets the bottom margin of document pages.
      * @param float $margin
      */
-    public function setMarginBottom($margin) {
+    public function setMarginBottom($margin)
+    {
         $this->_marginBottom = $margin;
     }
 
@@ -550,7 +583,8 @@ class PHPRtfLite {
      * Gets the bottom margin of document pages.
      * @return float $margin
      */
-    public function getMarginBottom() {
+    public function getMarginBottom()
+    {
         return $this->_marginBottom;
     }
 
@@ -558,7 +592,8 @@ class PHPRtfLite {
      * Sets the margin definitions on left and right pages. <br>
      * NOTICE: Does not work with OpenOffice.
      */
-    public function setMirrorMargins() {
+    public function setMirrorMargins()
+    {
         $this->_useMirrorMargins = true;
     }
 
@@ -566,7 +601,8 @@ class PHPRtfLite {
      * Returns true, if use mirror margins should be used
      * @return boolean
      */
-    public function isMirrorMargins() {
+    public function isMirrorMargins()
+    {
         return $this->_useMirrorMargins;
     }
 
@@ -575,7 +611,8 @@ class PHPRtfLite {
      * NOTICE: Does not work with OpenOffice.
      * @param float $gutter gutter width
      */
-    public function setGutter($gutter) {
+    public function setGutter($gutter)
+    {
         $this->_gutter = $gutter;
     }
 
@@ -583,7 +620,8 @@ class PHPRtfLite {
      * Gets the gutter width
      * @return float $gutter gutter width
      */
-    public function getGutter() {
+    public function getGutter()
+    {
         return $this->_gutter;
     }
 
@@ -591,7 +629,8 @@ class PHPRtfLite {
      * Sets the beginning page number.
      * @param integer $startPage Beginning page number (if not defined, Word uses 1)
      */
-    public function setPageNumberStart($pageNumber) {
+    public function setPageNumberStart($pageNumber)
+    {
         $this->_pageNumberStart = $pageNumber;
     }
 
@@ -599,7 +638,8 @@ class PHPRtfLite {
      * Gets the beginning page number.
      * @return integer
      */
-    public function getPageNumberStart() {
+    public function getPageNumberStart()
+    {
         return $this->_pageNumberStart;
     }
 
@@ -614,7 +654,8 @@ class PHPRtfLite {
      *     VIEW_MODE_NORMAL         => 4 - Normal view <br>
      *     VIEW_MODE_ONLINE_LAYOUT  => 5 - Online Layout view
      */
-    public function setViewMode($viewMode) {
+    public function setViewMode($viewMode)
+    {
         $this->_viewMode = $viewMode;
     }
 
@@ -622,7 +663,8 @@ class PHPRtfLite {
      * Gets the view mode of the document.
      * @return integer view mode represented as class constants VIEW_MODE_*
      */
-    public function getViewMode() {
+    public function getViewMode()
+    {
         return $this->_viewMode;
     }
 
@@ -631,7 +673,8 @@ class PHPRtfLite {
      * NOTICE: if zoom mode is defined, zoom level is not used.
      * @param integer $zoom zoom level
      */
-    public function setZoomLevel($zoom) {
+    public function setZoomLevel($zoom)
+    {
         $this->_zoomLevel = $zoom;
     }
 
@@ -639,7 +682,8 @@ class PHPRtfLite {
      * Gets the zoom level (in percents) of the document.
      * @return integer $zoom zoom level
      */
-    public function getZoomLevel() {
+    public function getZoomLevel()
+    {
         return $this->_zoomLevel;
     }
 
@@ -651,7 +695,8 @@ class PHPRtfLite {
      *     ZOOM_MODE_FULL_PAGE  => 1 - Full Page <br>
      *     ZOOM_MODE_BEST_FIT   => 2 - Best Fit
      */
-    public function setZoomMode($zoomMode) {
+    public function setZoomMode($zoomMode)
+    {
         $this->_zoomMode = $zoomMode;
     }
 
@@ -659,14 +704,16 @@ class PHPRtfLite {
      * Gets the zoom mode of the document.
      * @return integer
      */
-    public function getZoomMode() {
+    public function getZoomMode()
+    {
         return $this->_zoomMode;
     }
 
     /**
      * Sets landscape orientation of paper.
      */
-    public function setLandscape() {
+    public function setLandscape()
+    {
         $this->_isLandscape = true;
     }
 
@@ -674,45 +721,17 @@ class PHPRtfLite {
      * Returns true, if landscape layout should be used
      * @return boolean
      */
-    public function isLandscape() {
+    public function isLandscape()
+    {
         return $this->_isLandscape;
     }
-
-    /**
-     * Formats color code.
-     * @static
-     * @param string $color Color
-     *
-     * @return string rtf color
-     * @throws PHPRtfLite_Exception, if color is not a 3or 6 digit hex number
-     */
-    static public function convertHexColorToRtf($color) {
-        $color = ltrim($color, '#');
-
-        if (strlen($color) == 3) {
-            $red    = hexdec(str_repeat(substr($color, 0, 1), 2));
-            $green  = hexdec(str_repeat(substr($color, 1, 1), 2));
-            $blue   = hexdec(str_repeat(substr($color, 2, 1), 2));
-
-            return '\red' . $red . '\green' . $green . '\blue' . $blue;
-        }
-        elseif (strlen($color) == 6) {
-            $red    = hexdec(substr($color, 0, 2));
-            $green  = hexdec(substr($color, 2, 2));
-            $blue   = hexdec(substr($color, 4, 2));
-
-            return '\red' . $red . '\green' . $green . '\blue' . $blue;
-        }
-
-        throw new PHPRtfLite_Exception('Color must be a hex number of length 3 or 6 digits! You gave me: #' . $color);
-    }
-
 
     /**
      * Sets border to rtf document. Sections may override this border.
      * @param PHPRtfLite_Border $border
      */
-    public function setBorder(PHPRtfLite_Border $border) {
+    public function setBorder(PHPRtfLite_Border $border)
+    {
         $this->_border = $border;
     }
 
@@ -721,7 +740,8 @@ class PHPRtfLite {
      * 
      * @return PHPRtfLite_Border
      */
-    public function getBorder() {
+    public function getBorder()
+    {
         return $this->_border;
     }
 
@@ -739,7 +759,7 @@ class PHPRtfLite {
                                $right = true, $bottom = true)
     {
         if ($this->_border === null) {
-            $this->_border = new PHPRtfLite_Border();
+            $this->_border = new PHPRtfLite_Border($this);
         }
 
         if ($left) {
@@ -762,7 +782,8 @@ class PHPRtfLite {
     /**
      * Sets if odd and even headers/footers are different
      */
-    public function setOddEvenDifferent($different = true) {
+    public function setOddEvenDifferent($different = true)
+    {
          $this->_useOddEvenDifferent = $different;
     }
 
@@ -771,7 +792,8 @@ class PHPRtfLite {
      * 
      * @return boolean
      */
-    public function isOddEvenDifferent() {
+    public function isOddEvenDifferent()
+    {
         return $this->_useOddEvenDifferent;
     }
 
@@ -786,7 +808,8 @@ class PHPRtfLite {
      *
      * @return PHPRtfLite_Container_Header
      */
-    public function addHeader($type = PHPRtfLite_Container_Header::TYPE_ALL) {
+    public function addHeader($type = PHPRtfLite_Container_Header::TYPE_ALL)
+    {
         $header = new PHPRtfLite_Container_Header($this, $type);
         $this->_headers[$type] = $header;
 
@@ -797,7 +820,8 @@ class PHPRtfLite {
      * Gets defined headers for document pages.
      * @return array contains PHPRtfLite_Container_Header objects
      */
-    public function getHeaders() {
+    public function getHeaders()
+    {
         return $this->_headers;
     }
 
@@ -811,7 +835,8 @@ class PHPRtfLite {
      *
      * @return PHPRtfLite_Container_Footer
      */
-    public function addFooter($type = PHPRtfLite_Container_Footer::TYPE_ALL) {
+    public function addFooter($type = PHPRtfLite_Container_Footer::TYPE_ALL)
+    {
         $footer = new PHPRtfLite_Container_Footer($this, $type);
         $this->_footers[$type] = $footer;
 
@@ -822,161 +847,100 @@ class PHPRtfLite {
      * Gets defined footers for document pages.
      * @return array contains PHPRtfLite_Container_FOOTER objects
      */
-    public function getFooters() {
+    public function getFooters()
+    {
         return $this->_footers;
+    }
+
+    /**
+     * gets color table
+     * @return PHPRtfLite_DocHeadDefinition_ColorTable
+     */
+    public function getColorTable()
+    {
+        if ($this->_colorTable === null) {
+            $this->_colorTable = new PHPRtfLite_DocHeadDefinition_ColorTable();
+        }
+        return $this->_colorTable;
+    }
+
+    /**
+     * gets font table
+     * @return PHPRtfLite_DocHeadDefinition_FontTable
+     */
+    public function getFontTable()
+    {
+        if ($this->_fontTable === null) {
+            $this->_fontTable = new PHPRtfLite_DocHeadDefinition_FontTable();
+        }
+        return $this->_fontTable;
     }
 
     /**
      * Saves rtf document to file.
      * @param string Name of file
      */
-    public function save($file) {
+    public function save($file)
+    {
+        $this->_stream = new PHPRtfLite_StreamOutput($file);
         $this->prepare();
-        file_put_contents($file, $this->_content);
+        $this->_stream->close();
     }
 
     /**
      * Sends rtf content as file attachment.
-     * @param string $file Name of file
+     * @param string $filename
      */
-    public function sendRtf($file = 'simple') {
-        $this->prepare();
-
-        $pathInfo = pathinfo($file);
+    public function sendRtf($filename = 'simple')
+    {
+        $pathInfo = pathinfo($filename);
 
         if (empty($pathInfo['extension'])) {
-            $file .= '.rtf';
+            $filename .= '.rtf';
         }
+
+        $file = sys_get_temp_dir() . '/' . $filename;
+        $this->save($file);
 
         if (false !== strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 5.5')) {
-            header('Content-Disposition: filename="' . $file . '"');
+            header('Content-Disposition: filename="' . $filename . '"');
         }
         else {
-            header('Content-Disposition: attachment; filename="' . $file . '"');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
         }
         header('Content-type: application/msword');
-        header("Expires: 0");
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Pragma: public");
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
 
-        echo $this->_content;
+        $this->printTempFileContent($file);
     }
 
-
     /**
-     * Adds font to rtf document.
-     * @param string $font font name
+     * prints content of the temporary stream file
+     * @param string $file
      */
-    public function addFont($font) {
-        if (!empty($font)) {
-            if (!isset($this->_fonts[$font])) {
-                $count = count($this->_fonts);
-                $this->_fonts[$font] = '\f' . $count;
-            }
+    private function printTempFileContent($file)
+    {
+        $fh = fopen($file, 'rb');
+        if (!$fh) {
+            throw new PHPRtfLite_Exception('Could not send file to browser. File could not read: ' . $file);
         }
-    }
-
-    /**
-     * Adds color to rtf document.
-     * @param string $color color
-     */
-    public function addColor($color) {
-        if (!empty($color)) {
-            if (!isset($this->_colors[$color])) {
-                $count = count($this->_colors);
-                $this->_colors[$color] = ($count + 1);
-            }
+        while (!feof($fh)) {
+            echo fread($fh, 1024);
         }
-    }
-
-    /**
-     * Gets rtf code of font.
-     * @param string $font font name
-     * @return string
-     */
-    public function getFont($font) {
-          return isset($this->_fonts[$font])
-                 ? $this->_fonts[$font]
-                 : '';
-    }
-
-    /**
-     * Gets rtf code of color.
-     * @param string $color color
-     * @return string
-     */
-    public function getColor($color) {
-        return isset($this->_colors[$color])
-               ? $this->_colors[$color]
-               : '';
-    }
-
-    /**
-     * Gets rtf code of font color.
-     * @param string color
-     * @return string
-     */
-    public function getFontColor($fontColor) {
-        if (isset($this->_colors[$fontColor])) {
-            return '\cf' . $this->_colors[$fontColor];
-        }
-
-        return '';
-    }
-
-    /**
-     * Gets rtf code of background color.
-     * @param  string color hex code
-     * @return string
-     */
-    public function getBackgroundColor($backgroundColor) {
-        if (isset($this->_colors[$backgroundColor])) {
-            return '\chcbpat' . $this->_colors[$backgroundColor];
-        }
-
-        return '';
-    }
-
-    /**
-     * Gets rtf font table
-     * @return string
-     */
-    protected function getFontTable() {
-        $part = '{\fonttbl';
-
-        foreach ($this->_fonts as $key => $value) {
-            $part .= '{' . $value . ' ' . $key . ';}';
-        }
-        
-        $part .= '}' . "\r\n";
-
-        return $part;
-    }
-
-    /**
-     * Gets rtf color table
-     * @return string
-     */
-    protected function getColorTable() {
-        $part = '{\colortbl;';
-        
-        foreach ($this->_colors as $key => $value) {
-            $part .= $key . ';';
-        }
-        
-        $part .= '}' . "\r\n";
-
-        return $part;
+        fclose($fh);
     }
 
     /**
      * Gets rtf info part
      * @return string
+     * @TODO rtf escapes?
      */
-    protected function getInfoPart() {
+    protected function getInfoPart()
+    {
         $part = '{\info'."\r\n";
 
-        //@TODO rtf escapes?
         foreach ($this->_properties as $key => $value) {
             $part .= '{\\' . $key . ' ' . $value . '}'."\r\n";
         }
@@ -990,7 +954,8 @@ class PHPRtfLite {
      * Sets that first page has a special layout
      * @param boolean $specialLayout
      */
-    public function setFirstPageHasSpecialLayout($specialLayout = true) {
+    public function setFirstPageHasSpecialLayout($specialLayout = true)
+    {
         $this->_titlepg = $specialLayout;
     }
 
@@ -998,18 +963,18 @@ class PHPRtfLite {
      * Returns true, if first page has special layout
      * @return boolean
      */
-    public function getFirstPageHasSpecialLayout() {
+    public function getFirstPageHasSpecialLayout()
+    {
         return $this->_titlepg;
     }
 
     /**
      * quotes rtf code
-     *
      * @param  string $text
-     *
      * @return string
      */
-    public static function quoteRtfCode($text) {
+    public static function quoteRtfCode($text)
+    {
         // escape backslashes
         $text = str_replace('\\', '\\\\', $text);
         // convert breaks into rtf break
@@ -1019,145 +984,92 @@ class PHPRtfLite {
     }
 
     /**
+     * gets output stream
+     * @return PHPRtfLite_Stream
+     */
+    public function getStream()
+    {
+        return $this->_stream;
+    }
+
+    /**
      * prepares rtf contents
      */
-    protected function prepare() {
-        $part = $this->getInfoPart();
+    protected function prepare()
+    {
+        $this->_stream->write('{\rtf\ansi\deff0 \r\n');
+        $this->_stream->write($this->getFontTable()->getContent());
+        $this->_stream->write($this->getColorTable()->getContent());
+
+        $this->_stream->write($this->getInfoPart());
 
         //page properties
-        $part .= $this->_isLandscape ? '\landscape ' : '';
-        $part .= '\deftab' . round(self::TWIPS_IN_CM * $this->_defaultTabWidth) . ' ';
-        $part .= '\paperw' . round(self::TWIPS_IN_CM * $this->_paperWidth)  .' ';
-        $part .= '\paperh' . round(self::TWIPS_IN_CM * $this->_paperHeight) . ' ';
-        $part .= '\margl' . round(self::TWIPS_IN_CM * $this->_marginLeft) . ' ';
-        $part .= '\margr' . round(self::TWIPS_IN_CM * $this->_marginRight) . ' ';
-        $part .= '\margt' . round(self::TWIPS_IN_CM * $this->_marginTop) . ' ';
-        $part .= '\margb' . round(self::TWIPS_IN_CM * $this->_marginBottom) . ' ';
+        if ($this->_isLandscape) {
+            $this->_stream->write('\landscape ');
+        }
+        $this->_stream->write('\deftab' . round(self::TWIPS_IN_CM * $this->_defaultTabWidth) . ' ');
+        $this->_stream->write('\paperw' . round(self::TWIPS_IN_CM * $this->_paperWidth)  .' ');
+        $this->_stream->write('\paperh' . round(self::TWIPS_IN_CM * $this->_paperHeight) . ' ');
+        $this->_stream->write('\margl' . round(self::TWIPS_IN_CM * $this->_marginLeft) . ' ');
+        $this->_stream->write('\margr' . round(self::TWIPS_IN_CM * $this->_marginRight) . ' ');
+        $this->_stream->write('\margt' . round(self::TWIPS_IN_CM * $this->_marginTop) . ' ');
+        $this->_stream->write('\margb' . round(self::TWIPS_IN_CM * $this->_marginBottom) . ' ');
 
         if (null !== $this->_gutter) {
-            $part .= '\gutter' . round($this->_gutter * self::TWIPS_IN_CM) . ' ';
+            $this->_stream->write('\gutter' . round($this->_gutter * self::TWIPS_IN_CM) . ' ');
         }
 
         if (true == $this->_useMirrorMargins) {
-            $part .= '\margmirror ';
+            $this->_stream->write('\margmirror ');
         }
 
         if (null !== $this->_viewMode) {
-            $part .= '\viewkind' . $this->_viewMode . ' ';
+            $this->_stream->write('\viewkind' . $this->_viewMode . ' ');
         }
 
         if (null !== $this->_zoomMode) {
-            $part .= '\viewzk' . $this->_zoomMode . ' ';
+            $this->_stream->write('\viewzk' . $this->_zoomMode . ' ');
         }
 
         if (null !== $this->_zoomLevel) {
-            $part .= '\viewscale' . $this->_zoomLevel . ' ';
+            $this->_stream->write('\viewscale' . $this->_zoomLevel . ' ');
         }
 
         if ($this->_sections[0] && $this->_sections[0]->getBorder()) {
-            $part .= $this->_sections[0]->getBorder()->getContent($this, '\pg');
+            $this->_stream->write($this->_sections[0]->getBorder()->getContent('\pg'));
         }
         elseif ($this->_border) {
-            $part .= $this->_border->getContent($this, '\pg');
+            $this->_stream->write($this->_border->getContent('\pg'));
         }
 
         //headers and footers properties
         if ($this->_useOddEvenDifferent) {
-            $part .= '\facingp ';
+            $this->_stream->write('\facingp ');
         }
         if ($this->_titlepg) {
-            $part .= '\titlepg ';
+            $this->_stream->write('\titlepg ');
         }
 
-        // document header definiton for footnotes and endnotes
-        $part .= $this->getNoteDocHeadDefinition()->getContent();
+        // document header definition for footnotes and endnotes
+        $this->_stream->write($this->getNoteDocHeadDefinition()->getContent());
 
         //headers and footers if there are no sections
         if (count($this->_sections) == 0) {
             foreach ($this->_headers as $header) {
-                $part .= $header->getContent();
+                $header->output();
             }
 
             foreach ($this->_footers as $footer) {
-                $part .= $footer->getContent();
+                $footer->output();
             }
         }
 
         //sections
         foreach ($this->_sections as $key => $section) {
-            $part .= $section->getContent();
+            $section->output();
         }
 
-        $this->_content = '{\rtf\ansi\deff0 \r\n';
-        $this->_content .= $this->getFontTable();
-        $this->_content .= $this->getColorTable();
-        $this->_content .= $part.'}';
-    }
-
-
-    //// DEPRECATED FUNCTIONS FOLLOWS HERE ////
-
-    /**
-     * @deprecated use setProperty() instead
-     * @see PHPRtfLite/PHPRtfLite#setProperty()
-     *
-     * Sets property of info part of rtf document
-     *
-     * @param string    $name
-     * @param mixed     $value
-     */
-    public function setInfo($name, $value) {
-        $this->setProperty($name, $value);
-    }
-
-    /**
-     * @deprecated use setPageNumberStart() instead
-     * @see PHPRtfLite/PHPRtfLite#setPageNumberStart()
-     *
-     * Sets the beginning page for the rtf document
-     *
-     * @param integer $pageNumber
-     */
-    public function setStartPage($pageNumber) {
-        $this->setPageNumberStart($pageNumber);
-    }
-
-    /**
-     * @deprecated use setZoomLevel() instead
-     * @see PHPRtfLite/PHPRtfLite#setZoomLevel()
-     *
-     * Sets the zoom level for the rtf document, will be ignored when using zoom mode
-     *
-     * @param integer $zoom
-     */
-    public function setZoom($zoom) {
-        $this->setZoomLevel($zoom);
-    }
-
-    /**
-     * @deprecated use setZoomMode() instead
-     * @see PHPRtfLite/PHPRtfLite#setZoomMode()
-     *
-     * Sets the zoom mode for the rtf document
-     *
-     * @param integer $zoomKind 
-     */
-    public function setZoomKind($zoomKind) {
-        $this->setZoomMode($zoomKind);
-    }
-
-    /**
-     * @deprecated use setBackgroundColor() instead
-     * @see PHPRtfLite/PHPRtfLite#setBackgroundColor()
-     *
-     * Sets background color of the rtf document
-     *
-     * @param  string color (hex code)
-     * 
-     * @return string rtf background color
-     */
-    public function getBackColor($color) {
-        return $this->getBackgroundColor($color);
+        $this->_stream->write('}');
     }
 
 }

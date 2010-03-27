@@ -32,34 +32,43 @@ class PHPRtfLite_Autoloader
      * base dir of the PHPRtfLite package
      * @var string
      */
-    static protected $_baseDir;
+    protected static $_baseDir;
 
 
     /**
      * Sets the base dir, where PHPRtfLite classes can be found
      * @param string $dir
      */
-    static public function setBaseDir($dir) {
+    public static function setBaseDir($dir)
+    {
         self::$_baseDir = $dir;
     }
 
     /**
-     * loads PHPRtfLite class
+     * loads PHPRtfLite classes
      *
      * @param  string   $className
      * @return boolean  returns true, if class could be loaded
      */
-    static public function autoload($className) {
-        $classFile = self::$_baseDir . '/' . str_replace('_', '/', $className) . '.php';
-
-        if (is_file($classFile)) {
-            require $classFile;
-            return true;
+    public static function autoload($className)
+    {
+        // validate classname
+        if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/m', $className)) {
+            throw new Exception("Class name '$className' is invalid");
         }
 
-        echo $classFile;
+        $classFile = self::$_baseDir . '/' . str_replace('_', '/', $className) . '.php';
 
-        return false;
+        // check if file exists
+        if (!file_exists($classFile)) {
+            throw new Exception("File $classFile does not exist!");
+        }
+
+        require $classFile;
+
+        if (!class_exists($className)) {
+            throw new Exception("Class $className could not be found!");
+        }
     }
 
 }
