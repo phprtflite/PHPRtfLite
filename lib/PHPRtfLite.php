@@ -399,7 +399,7 @@ class PHPRtfLite {
      * @param PHPRtfLite_Font $font
      */
     public function setDefaultFontForNotes(PHPRtfLite_Font $font) {
-        PHPRtfLite_Note::setDefaultFont($font);
+        PHPRtfLite_Footnote::setDefaultFont($font);
     }
 
     /**
@@ -408,7 +408,7 @@ class PHPRtfLite {
      * @return PHPRtfLite_Font
      */
     public function getDefaultFontForNotes() {
-        return PHPRtfLite_Note::getDefaultFont($font);
+        return PHPRtfLite_Footnote::getDefaultFont($font);
     }
 
     /**

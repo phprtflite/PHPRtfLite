@@ -275,7 +275,7 @@ abstract class PHPRtfLite_Container {
      * @return PHPRtfLite_Note
      */
     public function addFootnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null) {
-        $footnote = new PHPRtfLite_Note($this->_rtf, $noteText, $font, $parFormat);
+        $footnote = new PHPRtfLite_Footnote($this->_rtf, $noteText, $font, $parFormat);
         $this->_elements[] = $footnote;
         return $footnote;
     }
@@ -290,8 +290,7 @@ abstract class PHPRtfLite_Container {
      * @return PHPRtfLite_Note
      */
     public function addEndnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null) {
-        $endnote = new PHPRtfLite_Note($this->_rtf, $noteText, $font, $parFormat);
-        $endnote->setIsFootnote(false);
+        $endnote = new PHPRtfLite_Endnote($this->_rtf, $noteText, $font, $parFormat);
         $this->_elements[] = $endnote;
         return $endnote;
     }

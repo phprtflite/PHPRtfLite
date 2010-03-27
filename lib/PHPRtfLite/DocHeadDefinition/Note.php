@@ -34,13 +34,13 @@ class PHPRtfLite_DocHeadDefinition_Note
      * footnote type
      * @var integer
      */
-    protected $_footnoteNumberingType   = PHPRtfLite_Note::NUMTYPE_ARABIC_NUMBERS;
+    protected $_footnoteNumberingType   = PHPRtfLite_Footnote::NUMTYPE_ARABIC_NUMBERS;
 
     /**
      * endnote type
      * @var integer
      */
-    protected $_endnoteNumberingType    = PHPRtfLite_Note::NUMTYPE_ROMAN_LC;
+    protected $_endnoteNumberingType    = PHPRtfLite_Footnote::NUMTYPE_ROMAN_LC;
 
     /**
      * flag for restarting footnote numbering on each page
@@ -172,22 +172,78 @@ class PHPRtfLite_DocHeadDefinition_Note
     }
 
     /**
+     * gets numbering type for notes
+     *
+     * @param  integer $numbering
+     * @param  string  $prefix
+     *
+     * @return string
+     */
+    public static function getNumberingTypeAsRtf($numbering, $prefix = '\ftnn') {
+        switch ($numbering) {
+            default:
+                // const name NUMTYPE_ARABIC_NUMBERS
+                return $prefix . 'ar';
+            case PHPRtfLite_Footnote::NUMTYPE_ALPHABETH_LC:
+                return $prefix . 'alc';
+            case PHPRtfLite_Footnote::NUMTYPE_ALPHABETH_UC:
+                return $prefix . 'auc';
+            case PHPRtfLite_Footnote::NUMTYPE_ROMAN_LC:
+                return $prefix . 'rlc';
+            case PHPRtfLite_Footnote::NUMTYPE_ROMAN_UC:
+                return $prefix . 'ruc';
+            case PHPRtfLite_Footnote::NUMTYPE_CHICAGO;
+		return $prefix . 'chi';
+            case PHPRtfLite_Footnote::NUMTYPE_KOREAN_1:
+		return $prefix . 'chosung';
+            case PHPRtfLite_Footnote::NUMTYPE_KOREAN_2:
+		return $prefix . 'ganada';
+            case PHPRtfLite_Footnote::NUMTYPE_CIRCLE:
+		return $prefix . 'cnum';
+            case PHPRtfLite_Footnote::NUMTYPE_KANJI_1:
+		return $prefix . 'dbnum';
+            case PHPRtfLite_Footnote::NUMTYPE_KANJI_2:
+		return $prefix . 'dbnumd';
+            case PHPRtfLite_Footnote::NUMTYPE_KANJI_3:
+		return $prefix . 'dbnumt';
+            case PHPRtfLite_Footnote::NUMTYPE_KANJI_4:
+		return $prefix . 'dbnumk';
+            case PHPRtfLite_Footnote::NUMTYPE_DOUBLE_BYTE:
+		return $prefix . 'dbchar';
+            case PHPRtfLite_Footnote::NUMTYPE_CHINESE_1:
+		return $prefix . 'gbnum';
+            case PHPRtfLite_Footnote::NUMTYPE_CHINESE_2:
+		return $prefix . 'gbnumd';
+            case PHPRtfLite_Footnote::NUMTYPE_CHINESE_3:
+		return $prefix . 'gbnuml';
+            case PHPRtfLite_Footnote::NUMTYPE_CHINESE_4:
+		return $prefix . 'gbnumk';
+            case PHPRtfLite_Footnote::NUMTYPE_CHINESE_ZODIAC_1:
+		return $prefix . 'zodiac';
+            case PHPRtfLite_Footnote::NUMTYPE_CHINESE_ZODIAC_2:
+		return $prefix . 'zodiacd';
+            case PHPRtfLite_Footnote::NUMTYPE_CHINESE_ZODIAC_3:
+		return $prefix . 'zodiacl';
+        }
+    }
+
+    /**
      * renders document definition head for footnotes/endnotes
      *
      * @return string
      */
     public function getContent() {
         $content  = '';
-        $content .= PHPRtfLite_Note::getFootnoteNumberingTypeAsRtf($this->_footnoteNumberingType) . ' ';
-        $content .= PHPRtfLite_Note::getEndnoteNumberingTypeAsRtf($this->_endnoteNumberingType) . ' ';
-        $content .= '\\ftnstart' . $this->_footnoteStartNumber . ' ';
-        $content .= '\\aftnstart' . $this->_endnoteStartNumber . ' ';
+        $content .= self::getNumberingTypeAsRtf($this->_footnoteNumberingType) . ' ';
+        $content .= self::getNumberingTypeAsRtf($this->_endnoteNumberingType, '\aftnn') . ' ';
+        $content .= '\ftnstart' . $this->_footnoteStartNumber . ' ';
+        $content .= '\aftnstart' . $this->_endnoteStartNumber . ' ';
 
         if ($this->_footnoteRestartEachPage) {
-            $content .= '\\ftnrstpg ';
+            $content .= '\ftnrstpg ';
         }
         if ($this->_endnoteRestartEachPage) {
-            $content .= '\\aftnrstpg ';
+            $content .= '\aftnrstpg ';
         }
 
         return $content;
