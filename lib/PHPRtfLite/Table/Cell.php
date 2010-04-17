@@ -63,13 +63,13 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
      * horizontal alignment
      * @var string
      */
-    protected $_alignment;
+    protected $_alignment           = self::TEXT_ALIGN_LEFT;
 
     /**
      * vertical alignment
      * @var string
      */
-    protected $_verticalAlignment;
+    protected $_verticalAlignment   = self::VERTICAL_ALIGN_TOP;
 
     /**
      * font used for the cell
@@ -150,9 +150,13 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
     }
 
     /**
-     * Overriden. Does nothing. Nesting cells are not suported in current version.
+     * Nesting tables are not suported in current version.
+     * @throws PHPRtfLite_Exception
      */
-    public function addTable($alignment = PHPRtfLite_Table::ALIGN_LEFT) {}
+    public function addTable($alignment = PHPRtfLite_Table::ALIGN_LEFT)
+    {
+        throw new PHPRtfLite_Exception('Nested table are not supported in the current version!');
+    }
 
     /**
      * Sets text alignment for cell. The method PHPRtfLite_Table->writeToCell() overrides it with alignment of an instance of PHPRtfLite_ParFormat.
@@ -185,9 +189,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
      */
     public function setFont(PHPRtfLite_Font $font)
     {
+        $this->_rtf->registerFont($font);
         $this->_font = $font;
-        $font->setColorTable($this->_rtf->getColorTable());
-        $font->setFontTable($this->_rtf->getFontTable());
     }
 
     /**
@@ -329,6 +332,24 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
     }
 
     /**
+     * gets border for specific cell
+     * @param   integer     $rowIndex
+     * @param   integer     $columnIndex
+     * @return  PHPRtfLite_Border
+     */
+    protected function getBorderForCell($rowIndex, $columnIndex)
+    {
+        $cell = $this->_table->getCell($rowIndex, $columnIndex);
+        $border = $cell->getBorder();
+        if ($border === null) {
+            $border = new PHPRtfLite_Border($this->_rtf);
+            $cell->setCellBorder($border);
+        }
+
+        return $border;
+    }
+
+    /**
      * Sets border to a cell
      *
      * @param PHPRtfLite_Border $border
@@ -340,7 +361,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
         $borderFormatLeft   = $border->getBorderLeft();
         $borderFormatRight  = $border->getBorderRight();
 
-        if (!$this->_border) {
+        if ($this->_border === null) {
             $this->_border = new PHPRtfLite_Border($this->_rtf);
         }
         if ($borderFormatLeft) {
@@ -357,49 +378,19 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
         }
 
         if ($borderFormatTop && $this->_table->checkIfCellExists($this->_rowIndex - 1, $this->_columnIndex)) {
-            $cell = $this->_table->getCell($this->_rowIndex - 1, $this->_columnIndex);
-            $borderBottom = $cell->getBorder();
-
-            if ($borderBottom == null) {
-                $borderBottom = new PHPRtfLite_Border($this->_rtf);
-            }
-
-            $borderBottom->setBorderBottom($borderFormatTop);
-            $cell->setCellBorder($borderBottom);
+            $this->getBorderForCell($this->_rowIndex - 1, $this->_columnIndex)->setBorderBottom($borderFormatTop);
         }
 
         if ($borderFormatBottom && $this->_table->checkIfCellExists($this->_rowIndex + 1, $this->_columnIndex)) {
-            $cell = $this->_table->getCell($this->_rowIndex + 1, $this->_columnIndex);
-            $borderTop = $cell->getBorder();
-
-            if ($borderTop == null) {
-                $borderTop = new PHPRtfLite_Border($this->_rtf);
-            }
-
-            $borderTop->setBorderTop($borderFormatBottom);
-            $cell->setCellBorder($borderTop);
+            $this->getBorderForCell($this->_rowIndex + 1, $this->_columnIndex)->setBorderTop($borderFormatBottom);
         }
 
         if ($borderFormatLeft && $this->_table->checkIfCellExists($this->_rowIndex, $this->_columnIndex - 1)) {
-            $cell = $this->_table->getCell($this->_rowIndex, $this->_columnIndex - 1);
-            $borderRight = $cell->getBorder();
-
-            if ($borderRight == null) {
-                $borderRight = new PHPRtfLite_Border($this->_rtf);
-            }
-            $borderRight->setBorderRight($borderFormatLeft);
-            $cell->setCellBorder($borderRight);
+            $this->getBorderForCell($this->_rowIndex, $this->_columnIndex - 1)->setBorderRight($borderFormatLeft);
         }
 
         if ($borderFormatRight && $this->_table->checkIfCellExists($this->_rowIndex, $this->_columnIndex + 1)) {
-            $cell = $this->_table->getCell($this->_rowIndex, $this->_columnIndex + 1);
-            $borderLeft = $cell->getBorder();
-
-            if ($borderLeft == null) {
-                $borderLeft = new PHPRtfLite_Border($this->_rtf);
-            }
-            $borderLeft->setBorderLeft($borderFormatRight);
-            $cell->setCellBorder($borderLeft);
+            $this->getBorderForCell($this->_rowIndex, $this->_columnIndex + 1)->setBorderLeft($borderFormatRight);
         }
     }
 

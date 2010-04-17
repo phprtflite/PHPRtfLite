@@ -138,7 +138,7 @@ class PHPRtfLite_Font
             $colorTable->add($this->_color);
         }
         if (!empty($this->_backgroundColor)) {
-            $colorTable->add($this->_backgroundColors);
+            $colorTable->add($this->_backgroundColor);
         }
         $this->_colorTable = $colorTable;
     }

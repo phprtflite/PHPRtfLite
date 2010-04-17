@@ -22,14 +22,15 @@
 
 /**
  * Class for creating headers within the rtf document or section.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Container
  */
-class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
+class PHPRtfLite_Container_Header extends PHPRtfLite_Container
+{
 
     /**
      * constants defining header types
@@ -54,6 +55,11 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
      */
     protected $_offsetHeight;
 
+    /**
+     * @var string
+     */
+    protected $_rtfType = 'header';
+
 
     /**
      * Constructor
@@ -61,13 +67,13 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
      * @param PHPRtfLite    $rtf
      * @param string        $type
      */
-    public function __construct(PHPRtfLite $rtf, $type)
+    public function __construct(PHPRtfLite $rtf, $type = self::TYPE_ALL)
     {
         $this->_rtf = $rtf;
         $this->_type = $type;
 
         if ($this->_type == self::TYPE_FIRST) {
-            $rtf->setFirstPageHasSpecialLayout(true);
+            $rtf->setSpecialLayoutForFirstPage(true);
         }
     }
 
@@ -90,37 +96,43 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
      */
     protected function getTypeAsRtfCode()
     {
+        $rtfType = $this->getRtfType();
+
         switch ($this->_type) {
             case self::TYPE_ALL:
                 if (!$this->_rtf->isOddEvenDifferent()) {
-                    return 'header';
+                    return $rtfType;
                 }
 
-                throw new PHPRtfLite_Exception('Header type ' . $this->_type . ' is not allowed, when using odd even different!');
+                throw new PHPRtfLite_Exception('Header/Footer type ' . $this->_type . ' is not allowed, '
+                                             . 'when using odd even different!');
 
             case self::TYPE_LEFT:
                 if ($this->_rtf->isOddEvenDifferent()) {
-                    return 'headerl';
+                    return $rtfType . 'l';
                 }
 
-                throw new PHPRtfLite_Exception('Header type ' . $this->_type . ' is not allowed, when using not odd even different!');
+                throw new PHPRtfLite_Exception('Header/Footer type ' . $this->_type . ' is not allowed, '
+                                             . 'when using not odd even different!');
 
             case self::TYPE_RIGHT:
                 if ($this->_rtf->isOddEvenDifferent()) {
-                    return 'headerr';
+                    return $rtfType . 'r';
                 }
 
-                throw new PHPRtfLite_Exception('Header type ' . $this->_type . ' is not allowed, when using not odd even different!');
+                throw new PHPRtfLite_Exception('Header/Footer type ' . $this->_type . ' is not allowed, '
+                                             . 'when using not odd even different!');
 
             case self::TYPE_FIRST:
-                if ($this->_rtf->getFirstPageHasSpecialLayout()) {
-                    return 'headerf';
+                if ($this->_rtf->hasSpecialLayoutForFirstPage()) {
+                    return $rtfType . 'f';
                 }
 
-                throw new PHPRtfLite_Exception('Header type ' . $this->_type . ' is not allowed, when using not special layout for first page!');
+                throw new PHPRtfLite_Exception('Header/Footer type ' . $this->_type . ' is not allowed, '
+                                             . 'when using not special layout for first page!');
 
             default:
-                throw new PHPRtfLite_Exception('Header type is not defined! You gave me: ', $this->_type);
+                throw new PHPRtfLite_Exception('Header/Footer type is not defined! You gave me: ', $this->_type);
         }
     }
 
@@ -135,7 +147,7 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
      */
     public function addFootnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
     {
-        throw new PHPRtfLite_Exception('Headers does not support footnotes!');
+        throw new PHPRtfLite_Exception('Header/Footer does not support footnotes!');
     }
 
     /**
@@ -149,12 +161,20 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
      */
     public function addEndnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
     {
-        throw new PHPRtfLite_Exception('Headers does not support endnotes!');
+        throw new PHPRtfLite_Exception('Header/Footer does not support endnotes!');
     }
 
     /**
-     * Gets rtf code of header
-     * 
+     * gets rtf type
+     * @return string
+     */
+    protected function getRtfType()
+    {
+        return $this->_rtfType;
+    }
+
+    /**
+     * streams rtf code for header/footer
      * @return string rtf code
      */
     public function output()
@@ -162,14 +182,12 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container {
         $stream = $this->_rtf->getStream();
         
         if (isset($this->_offsetHeight)) {
-            $stream->write('\headery' . round(PHPRtfLite::TWIPS_IN_CM * $this->_offsetHeight) . ' ');
+            $stream->write('\\' . $this->getRtfType() . 'y' . round(PHPRtfLite::TWIPS_IN_CM * $this->_offsetHeight));
         }
 
         $stream->write('{\\' . $this->getTypeAsRtfCode() . ' ');
         parent::output();
-        $stream->write('\par}');
-
-        return $stream->write("\r\n");
+        $stream->write('\par}' . "\r\n");
     }
 
 }

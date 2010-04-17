@@ -22,8 +22,9 @@
 
 /**
  * Class for creating rtf documents.
- * @version     1.0.0
- * @author      Denis Slaveckij <info@phprtf.com>, Steffen Zeidler <sigma_z@web.de>
+ * @version     1.1.0
+ * @author      Denis Slaveckij <info@phprtf.com>
+ * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
  * @package     PHPRtfLite
  */
@@ -211,14 +212,37 @@ class PHPRtfLite
 
 
     /**
-     * Registers autoloader for PHPRtfLite classes
+     * constructor
+     * @param PHPRtfLite_StreamOutput $stream
+     */
+    public function __construct(PHPRtfLite_StreamOutput $stream = null)
+    {
+        if ($stream === null) {
+            $stream = new PHPRtfLite_StreamOutput();
+        }
+        $this->_stream = $stream;
+    }
+
+    /**
+     * registers autoloader for PHPRtfLite classes
+     * @return  boolean
      */
     public static function registerAutoloader()
     {
         $baseClassDir = dirname(__FILE__);
-        require $baseClassDir . '/PHPRtfLite/Autoloader.php';
+        require_once $baseClassDir . '/PHPRtfLite/Autoloader.php';
         PHPRtfLite_Autoloader::setBaseDir($baseClassDir);
-        spl_autoload_register(array('PHPRtfLite_Autoloader', 'autoload'));
+        
+        return spl_autoload_register(array('PHPRtfLite_Autoloader', 'autoload'));
+    }
+
+    /**
+     * unregisters autoloader for PHPRtfLite classes
+     * @return  boolean
+     */
+    public static function unregisterAutoloader()
+    {
+        return spl_autoload_unregister(array('PHPRtfLite_Autoloader', 'autoload'));
     }
 
     /**
@@ -249,7 +273,6 @@ class PHPRtfLite
                 $year       = date('Y', $value);
                 $month      = date('m', $value);
                 $day        = date('d', $value);
-                $month      = date('m', $value);
                 $hours      = date('H', $value);
                 $minutes    = date('i', $value);
 
@@ -260,7 +283,7 @@ class PHPRtfLite
                        . '\min' . $minutes;
                 break;
             default:
-                $value = str_replace('\\', '\\\\', $value);
+                $value = self::quoteRtfCode($value);
         }
 
         $this->_properties[$name] = $value;
@@ -274,8 +297,8 @@ class PHPRtfLite
      */
     public function getProperty($name)
     {
-        return isset($this->_property[$name])
-               ? $this->_property[$name]
+        return isset($this->_properties[$name])
+               ? $this->_properties[$name]
                : null;
     }
 
@@ -426,26 +449,34 @@ class PHPRtfLite
      */
     public function getDefaultFontForNotes()
     {
-        return PHPRtfLite_Footnote::getDefaultFont($font);
+        return PHPRtfLite_Footnote::getDefaultFont();
     }
 
     /**
      * Adds section to rtf document.
-     *
+     * @param  PHPRtfLite_Container_Section $section
      * @return PHPRtfLite_Container_Section
      */
-    public function addSection()
+    public function addSection(PHPRtfLite_Container_Section $section = null)
     {
-        $section = new PHPRtfLite_Container_Section($this);
-
-        if (count($this->_sections) == 0) {
-            $section->setFirst(true);
+        if ($section === null) {
+            $section = new PHPRtfLite_Container_Section($this);
         }
 
         $this->_sections[] = $section;
 
         return $section;
     }
+
+    /**
+     * gets sections
+     * @return array
+     */
+    public function getSections()
+    {
+        return $this->_sections;
+    }
+
 
     /**
      * Sets default tab width of the document.
@@ -761,22 +792,7 @@ class PHPRtfLite
         if ($this->_border === null) {
             $this->_border = new PHPRtfLite_Border($this);
         }
-
-        if ($left) {
-            $this->_border->setBorderLeft($borderFormat);
-        }
-
-        if ($top) {
-            $this->_border->setBorderTop($borderFormat);
-        }
-
-        if ($right) {
-            $this->_border->setBorderRight($borderFormat);
-        }
-
-        if ($bottom) {
-            $this->_border->setBorderBottom($borderFormat);
-        }
+        $this->_border->setBorders($borderFormat, $left, $top, $right, $bottom);
     }
 
     /**
@@ -799,18 +815,26 @@ class PHPRtfLite
 
     /**
      * Creates header for the document.
-     * @param string $type Represented by class constants PHPRtfLite_Container_Header::TYPE_*
+     * @param   string                      $type
+     * Represented by class constants PHPRtfLite_Container_Header::TYPE_* <br>
      * Possible values: <br>
-     *   PHPRtfLite_Container_Header::TYPE_ALL      => 'all' - all pages (different odd and even headers/footers must be not set) <br>
-     *   PHPRtfLite_Container_Header::TYPE_LEFT     => 'left' - left pages (different odd and even headers/footers must be set) <br>
-     *   PHPRtfLite_Container_Header::TYPE_RIGHT    => 'right' - right pages (different odd and even headers/footers must be set) <br>
-     *   PHPRtfLite_Container_Header::TYPE_FIRST    => 'first' - first page
+     *   PHPRtfLite_Container_Header::TYPE_ALL
+     *     all pages (different odd and even headers/footers must be not set) <br>
+     *   PHPRtfLite_Container_Header::TYPE_LEFT
+     *     left pages (different odd and even headers/footers must be set) <br>
+     *   PHPRtfLite_Container_Header::TYPE_RIGHT
+     *     right pages (different odd and even headers/footers must be set <br>
+     *   PHPRtfLite_Container_Header::TYPE_FIRST
+     *     first page
+     * @param   PHPRtfLite_Container_Header $header
      *
-     * @return PHPRtfLite_Container_Header
+     * @return  PHPRtfLite_Container_Header
      */
-    public function addHeader($type = PHPRtfLite_Container_Header::TYPE_ALL)
+    public function addHeader($type = PHPRtfLite_Container_Header::TYPE_ALL, PHPRtfLite_Container_Header $header = null)
     {
-        $header = new PHPRtfLite_Container_Header($this, $type);
+        if ($header === null) {
+            $header = new PHPRtfLite_Container_Header($this, $type);
+        }
         $this->_headers[$type] = $header;
 
         return $header;
@@ -827,17 +851,26 @@ class PHPRtfLite
 
     /**
      * Creates footer for the document.
-     * @param string $type Represented by class constants PHPRtfLite_Container_Footer::TYPE_*
-     *   PHPRtfLite_Container_Footer::TYPE_ALL      => 'all' - all pages (different odd and even headers/footers must be not set) <br>
-     *   PHPRtfLite_Container_Footer::TYPE_LEFT     => 'left' - left pages (different odd and even headers/footers must be set) <br>
-     *   PHPRtfLite_Container_Footer::TYPE_RIGHT    => 'right' - right pages (different odd and even headers/footers must be set)     <br>
-     *   PHPRtfLite_Container_Footer::TYPE_FIRST    => 'first' - first page
+     * @param   string                      $type
+     * Represented by class constants PHPRtfLite_Container_Footer::TYPE_* <br>
+     * Possible values: <br>
+     *   PHPRtfLite_Container_Footer::TYPE_ALL
+     *     all pages (different odd and even headers/footers must be not set) <br>
+     *   PHPRtfLite_Container_Footer::TYPE_LEFT
+     *     left pages (different odd and even headers/footers must be set) <br>
+     *   PHPRtfLite_Container_Footer::TYPE_RIGHT
+     *     right pages (different odd and even headers/footers must be set) <br>
+     *   PHPRtfLite_Container_Footer::TYPE_FIRST
+     *     first page
+     * @param   PHPRtfLite_Container_Footer $footer
      *
-     * @return PHPRtfLite_Container_Footer
+     * @return  PHPRtfLite_Container_Footer
      */
-    public function addFooter($type = PHPRtfLite_Container_Footer::TYPE_ALL)
+    public function addFooter($type = PHPRtfLite_Container_Footer::TYPE_ALL, PHPRtfLite_Container_Footer $footer = null)
     {
-        $footer = new PHPRtfLite_Container_Footer($this, $type);
+        if ($footer === null) {
+            $footer = new PHPRtfLite_Container_Footer($this, $type);
+        }
         $this->_footers[$type] = $footer;
 
         return $footer;
@@ -877,12 +910,49 @@ class PHPRtfLite
     }
 
     /**
+     * registers the font in color table and font table
+     * @param PHPRtfLite_Font $font 
+     */
+    public function registerFont(PHPRtfLite_Font $font)
+    {
+        $font->setColorTable($this->getColorTable());
+        $font->setFontTable($this->getFontTable());
+    }
+
+    /**
+     * registers the par format in color table
+     * @param PHPRtfLite_ParFormat $parFormat
+     */
+    public function registerParFormat(PHPRtfLite_ParFormat $parFormat)
+    {
+        $parFormat->setColorTable($this->getColorTable());
+    }
+
+    public function getContent()
+    {
+        $file = sys_get_temp_dir() . '/' . md5(microtime(true));
+        $this->save($file);
+        $content = '';
+
+        $fh = fopen($file, 'rb');
+        if (!$fh) {
+            throw new PHPRtfLite_Exception('Could not send file to browser. File could not read: ' . $file);
+        }
+        while (!feof($fh)) {
+            $content .= fread($fh, 1024);
+        }
+        fclose($fh);
+
+        return $content;
+    }
+
+    /**
      * Saves rtf document to file.
      * @param string Name of file
      */
     public function save($file)
     {
-        $this->_stream = new PHPRtfLite_StreamOutput($file);
+        $this->_stream->open($file);
         $this->prepare();
         $this->_stream->close();
     }
@@ -954,7 +1024,7 @@ class PHPRtfLite
      * Sets that first page has a special layout
      * @param boolean $specialLayout
      */
-    public function setFirstPageHasSpecialLayout($specialLayout = true)
+    public function setSpecialLayoutForFirstPage($specialLayout = true)
     {
         $this->_titlepg = $specialLayout;
     }
@@ -963,7 +1033,7 @@ class PHPRtfLite
      * Returns true, if first page has special layout
      * @return boolean
      */
-    public function getFirstPageHasSpecialLayout()
+    public function hasSpecialLayoutForFirstPage()
     {
         return $this->_titlepg;
     }
@@ -1035,7 +1105,7 @@ class PHPRtfLite
             $this->_stream->write('\viewscale' . $this->_zoomLevel . ' ');
         }
 
-        if ($this->_sections[0] && $this->_sections[0]->getBorder()) {
+        if (isset($this->_sections[0]) && $this->_sections[0]->getBorder()) {
             $this->_stream->write($this->_sections[0]->getBorder()->getContent('\pg'));
         }
         elseif ($this->_border) {
@@ -1066,6 +1136,9 @@ class PHPRtfLite
 
         //sections
         foreach ($this->_sections as $key => $section) {
+            if ($key != 0) {
+                $this->_stream->write('\sect \sectd ');
+            }
             $section->output();
         }
 

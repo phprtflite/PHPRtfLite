@@ -60,8 +60,7 @@ class PHPRtfLite_DocHeadDefinition_FontTable
      */
     public function getFontIndex($fontFamily)
     {
-        $index = array_search($fontFamily, $this->_fontFamilies);
-        return $index !== false ? $index + 1 : false;
+        return array_search($fontFamily, $this->_fontFamilies);
     }
 
     /**

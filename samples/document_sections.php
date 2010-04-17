@@ -1,5 +1,6 @@
 <?php
-require '../lib/PHPRtfLite.php';
+$dir = dirname(__FILE__);
+require_once $dir . '/../lib/PHPRtfLite.php';
 
 // register PHPRtfLite class loader
 PHPRtfLite::registerAutoloader();
@@ -84,11 +85,11 @@ $sect->setPaperWidth(25);
 $border = PHPRtfLite_Border::create($rtf, 0);
 $sect->setBorder($border);
 $sect->setSpaceBetweenColumns(1);
-$sect->setColumnsCount(2);
+$sect->setNumberOfColumns(2);
 $sect->setLineBetweenColumns();
 
 writeSectionText($sect, $arial14, $times12, $text, $text2, $text3);
-  	
+
 //section 2
 $sect = $rtf->addSection();
 //Header overriden
@@ -110,5 +111,5 @@ $sect->setColumnWidths(array(3, 3, 8));
 
 writeSectionText($sect, $arial14, $times12, $text, $text2, $text3);
 
-// send to browser
-$rtf->sendRtf('document_sections.rtf');
+// save rtf document
+$rtf->save($dir . '/generated/document_sections.rtf');

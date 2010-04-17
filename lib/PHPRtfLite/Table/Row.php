@@ -62,7 +62,8 @@ class PHPRtfLite_Table_Row
      * @param integer           $rowIndex
      * @param float             $height
      */
-    public function __construct(PHPRtfLite_Table $table, $rowIndex, $height = null) {
+    public function __construct(PHPRtfLite_Table $table, $rowIndex, $height = null)
+    {
         $this->_table       = $table;
         $this->_rowIndex    = $rowIndex;
         $this->_height      = $height;
@@ -73,7 +74,8 @@ class PHPRtfLite_Table_Row
      *
      * @param float $height
      */
-    public function setHeight($height) {
+    public function setHeight($height)
+    {
         $this->_height = $height;
     }
 
@@ -82,7 +84,8 @@ class PHPRtfLite_Table_Row
      *
      * @return float
      */
-    public function getHeight() {
+    public function getHeight()
+    {
         return $this->_height;
     }
 
@@ -93,7 +96,8 @@ class PHPRtfLite_Table_Row
      *
      * @return  PHPRtfLite_Table_Cell
      */
-    public function getCellByIndex($columnIndex) {
+    public function getCellByIndex($columnIndex)
+    {
         if (!isset($this->_cells[$columnIndex - 1])) {
             $this->_cells[$columnIndex - 1] = new PHPRtfLite_Table_Cell($this->_table, $this->_rowIndex, $columnIndex);
         }

@@ -22,7 +22,7 @@
 
 /**
  * Abstract class for creating containers like sections, footers and headers.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
@@ -62,18 +62,6 @@ abstract class PHPRtfLite_Container
      */
     protected $_pard = '\pard ';
 
-    /**
-     * flag, if true the paragraph is empty
-     * @var boolean
-     */
-    protected $_emptyPar = false;
-
-    /**
-     * flag, true if a container contains notes
-     * @var boolean
-     */
-    protected $_hasNotes = false;
-
 
     /**
      * Constructor
@@ -94,33 +82,37 @@ abstract class PHPRtfLite_Container
     }
 
     /**
-     * Writes rtf code directly to rtf container.
+     * counts rtf elements
+     * @return integer
+     */
+    public function countElements()
+    {
+        return count($this->_elements);
+    }
+
+    /**
+     * adds element with rtf code directly (no converting will be made by PHPRtfLite)
      * @param string $text
      */
     public function writeRtfCode($text)
     {
-        $this->_elements[] = $text;
+        $element = new PHPRtfLite_Element($this->_rtf);
+        $element->writeRtfCode($text);
+        $this->_elements[] = $element;
     }
 
     /**
      * Adds empty paragraph to container.
-     * @param PHPRtfLite_Font       $font       font of text.
-     * @param PHPRtfLite_ParFormat  $parFormat  paragraph format.
-     * @todo  rename this method
+     * @param PHPRtfLite_Font       $font      
+     * @param PHPRtfLite_ParFormat  $parFormat 
      */
-    public function emptyParagraph(PHPRtfLite_Font $font, PHPRtfLite_ParFormat $parFormat)
+    public function addEmptyParagraph(PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
     {
-        if ($parFormat && $font) {
-            $content  = (count($this->_elements) != 0 && !$this->_emptyPar)
-                        ? '\par '
-                        : '';
-                        
-            $content .= $this->_pard . $parFormat->getContent();
-            $content .= '{' . $font->getContent() .' \par}' . "\r\n";
-
-            $this->_elements[] = $content;
-            $this->_emptyPar = true;
+        if ($parFormat === null) {
+            $parFormat = new PHPRtfLite_ParFormat();
         }
+        $element = new PHPRtfLite_Element($this->_rtf, '', $font, $parFormat);
+        $this->_elements[] = $element;
     }
 
     /**
@@ -142,96 +134,42 @@ abstract class PHPRtfLite_Container
      *   line - line break; <br>
      *   page - page break; <br>
      *   sect - section break; <br>
-     * @param PHPRtfLite_Font       $font           font of text
-     * @param PHPRtfLite_ParFormat  $parFormat      paragraph format, if null, text is written in the same paragraph.
-     * @param boolean               $replaceTags    if false, then html style tags are not replaced with rtf code
+     * @param PHPRtfLite_Font       $font               font of text
+     * @param PHPRtfLite_ParFormat  $parFormat          paragraph format, if null, text is written in the same paragraph.
+     * @param boolean               $convertTagsToRtf   if false, then html style tags are not replaced with rtf code
      * @todo  refactor this method
      */
     public function writeText($text,
                               PHPRtfLite_Font $font = null,
                               PHPRtfLite_ParFormat $parFormat = null,
-                              $replaceTags = true)
+                              $convertTagsToRtf = true)
     {
-        $text = PHPRtfLite::quoteRtfCode($text);
-
-        if ($replaceTags) {
-            //bold
-            $text = preg_replace('/<STRONG[ ]*>(.*?)<\/STRONG[ ]*>/smi', '\\b \\1\\b0 ', $text);
-            $text = preg_replace('/<B[ ]*>(.*?)<\/B[ ]*>/smi', '\\b \\1\\b0 ', $text);
-            //italic
-            $text = preg_replace('/<EM[ ]*>(.*?)<\/EM[ ]*>/smi', '\\i \\1\\i0 ', $text);
-            $text = preg_replace('/<I[ ]*>(.*?)<\/I[ ]*>/smi', '\\i \\1\\i0 ', $text);
-            //underline
-            $text = preg_replace('/<U[ ]*>(.*?)<\/U[ ]*>/smi', '\\ul \\1\\ul0 ', $text);
-            //break
-            $text = preg_replace('/<BR[ ]*(\/)?[ ]*>/smi', '\\line ', $text);
-            //horizontal rule
-            $text = preg_replace('/<HR[ ]*(\/)?[ ]*>/smi', '{\pard \brdrb \brdrs \brdrw10 \brsp20 \par}', $text);
-
-            $text = preg_replace('/<CHDATE[ ]*(\/)?[ ]*>/smi', '\\chdate ', $text);
-            $text = preg_replace('/<CHDPL[ ]*(\/)?[ ]*>/smi', '\\\chdpl ', $text);
-            $text = preg_replace('/<CHDPA[ ]*(\/)?[ ]*>/smi', '\\chdpa ', $text);
-            $text = preg_replace('/<CHTIME[ ]*(\/)?[ ]*>/smi', '\\chtime ', $text);
-            $text = preg_replace('/<CHPGN[ ]*(\/)?[ ]*>/smi', '\\chpgn ', $text);
-
-            $text = preg_replace('/<TAB[ ]*(\/)?[ ]*>/smi', '\\tab ', $text);
-            $text = preg_replace('/<BULLET[ ]*(\/)?[ ]*>/smi', '\\bullet ', $text);
-
-            $text = preg_replace('/<PAGENUM[ ]*(\/)?[ ]*>/smi', '\\chpgn ', $text);
-            $text = preg_replace('/<SECTNUM[ ]*(\/)?[ ]*>/smi', '\\sectnum ', $text);
-
-            $text = preg_replace('/<LINE[ ]*(\/)?[ ]*>/smi', '\\line ', $text);
-            //$text = preg_replace('/<PAGE[ ]*(\/)?[ ]*>/smi', '\\page ', $text);
-            //$text = preg_replace('/<SECT[ ]*(\/)?[ ]*>/smi', '\\sect', $text);
+        $element = new PHPRtfLite_Element($this->_rtf, $text, $font, $parFormat);
+        if ($convertTagsToRtf) {
+            $element->setConvertTagsToRtf();
         }
-
-        $text = PHPRtfLite_Utf8::getUnicodeEntities($text);
-
-        //content formating
-        $content  = ($parFormat && count($this->_elements) != 0 && !$this->_emptyPar)
-                    ? '\par '
-                    : '';
-
-        $this->_emptyPar = false;
-        
-        $content .= $parFormat
-                    ? $this->_pard . $parFormat->getContent()
-                    : '';
-                    
-        $content .= '{';
-
-        if ($font) {
-            $content .= $font->getContent();
-        }
-        
-        $content .= $text . '}' . "\r\n";
-
-        $this->_elements[] = $content;
+        $this->_elements[] = $element;
     }
 
     /**
      * Writes hyperlink to container.
      *
-     * @param string                $hyperlink  hyperlink url (etc. "http://www.phprtf.com")
-     * @param string                $text       hyperlinks text, if empty, hyperlink is written in previous paragraph format.
-     * @param PHPRtfLite_Font       $font       font
-     * @param PHPRtfLite_ParFormat  $parFormat  paragraph format, if null hyperlink is written in the same paragraph
+     * @param string                $hyperlink          hyperlink url (etc. "http://www.phprtf.com")
+     * @param string                $text               hyperlink text, if empty, hyperlink is written in previous paragraph format.
+     * @param PHPRtfLite_Font       $font       
+     * @param PHPRtfLite_ParFormat  $parFormat
+     * @param boolean               $convertTagsToRtf   if false, then html style tags are not replaced with rtf code
      */
-    public function writeHyperLink($hyperlink, $text, PHPRtfLite_Font $font, PHPRtfLite_ParFormat $parFormat = null)
+    public function writeHyperLink($hyperlink,
+                                   $text,
+                                   PHPRtfLite_Font $font = null,
+                                   PHPRtfLite_ParFormat $parFormat = null,
+                                   $convertTagsToRtf = true)
     {
-        $content = ($parFormat && count($this->_elements) != 0 && !$this->_emptyPar)
-                   ? '\par '
-                   : '';
-
-        $content .= $parFormat ? $this->_pard . $parFormat->getContent() : '';
-
-        $this->_emptyPar = false;
-
-        $this->_elements[] = $content . '{\field {\*\fldinst {HYPERLINK "' . $hyperlink . '"}}{\\fldrslt {';
-
-        $this->writeText($text, $font, null);
-
-        $this->_elements[] .= '}}}'."\r\n";
+        $element = new PHPRtfLite_Element_Hyperlink($this->_rtf, $text, $font, $parFormat);
+        $element->setHyperlink($hyperlink);
+        $element->setConvertTagsToRtf();
+        $this->_elements[] = $element;
     }
 
     /**
@@ -247,7 +185,6 @@ abstract class PHPRtfLite_Container
      */
     public function addTable($alignment = self::TEXT_ALIGN_LEFT)
     {
-        $this->_emptyPar = false;
         $table = new PHPRtfLite_Table($this, $alignment);
         $this->_elements[] = $table;
         
@@ -267,7 +204,6 @@ abstract class PHPRtfLite_Container
      */
     public function addImage($fileName, PHPRtfLite_ParFormat $parFormat = null, $width = null, $height = null)
     {
-        $this->_emptyPar = false;
         $image = new PHPRtfLite_Image($this->_rtf, $fileName, $parFormat, $width, $height);
         $this->_elements[] = $image;
         
@@ -315,30 +251,48 @@ abstract class PHPRtfLite_Container
     {
         $stream = $this->_rtf->getStream();
 
-        foreach($this->_elements as $key => $value) {
-            if (is_string($value)) {
-                $stream->write($value);
-            }
-            else {
-                if ($key != 0
-                    && $value instanceof PHPRtfLite_Table
-                    && !($this->_elements[$key - 1] instanceof PHPRtfLite_Table))
-                {
-                    $stream->write('\par');
-                }
-                elseif ($value instanceof PHPRtfLite_Image) {
-                    $parFormat = $value->getParFormat();
-                    if ($parFormat instanceof PHPRtfLite_ParFormat) {
-                        if ($key != 0) {
-                            $stream->write('\par');
-                        }
-                        $stream->write($this->_pard . $parFormat->getContent());
-                    }
-                }
+        foreach ($this->_elements as $key => $element) {
+            $addParagraph = false;
 
-                $value->output();
+            if ($key > 0) {
+                $prevElement = $this->_elements[$key - 1];
+
+                if ($prevElement instanceof PHPRtfLite_Table) {
+                    $addParagraph = !($element instanceof PHPRtfLit_Table);
+                }
+                elseif ($prevElement instanceof PHPRtfLite_Element) {
+                    $addParagraph = (!$prevElement->isEmptyParagraph()
+                                     && ($element instanceof PHPRtfLite_Table || $element->getParFormat()));
+                }
+                elseif ($prevElement instanceof PHPRtfLite_Image) {
+                    $addParagraph = ($element instanceof PHPRtfLite_Table || $element->getParFormat());
+                }
             }
+
+            if ($addParagraph) {
+                $stream->write('\par ');
+            }
+
+            if (!($element instanceof PHPRtfLite_Table)) {
+                $parFormat = $element->getParFormat();
+                if ($parFormat) {
+                    $stream->write($this->_pard . $parFormat->getContent());
+                }
+            }
+
+            $element->output();
         }
     }
 
+    /**
+     * @deprecated will be removed soon, use addEmptyParagraph instead
+     * @see     PHPRtfLite_Container::addEmptyParagraph
+     *
+     * @param   PHPRtfLite_Font         $font
+     * @param   PHPRtfLite_ParFormat    $parFormat
+     */
+    public function emptyParagraph(PHPRtfLite_Font $font, PHPRtfLite_ParFormat $parFormat)
+    {
+        $this->addEmptyParagraph($font, $parFormat);
+    }
 }

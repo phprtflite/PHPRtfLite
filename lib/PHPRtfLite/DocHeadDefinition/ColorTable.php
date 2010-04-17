@@ -48,7 +48,7 @@ class PHPRtfLite_DocHeadDefinition_ColorTable
                  . str_repeat(substr($color, 2, 1), 2);
         }
 
-        return $color;
+        return strtoupper($color);
     }
 
     /**

@@ -101,9 +101,24 @@ class PHPRtfLite_Border
                                 PHPRtfLite_Border_Format $bottom = null)
     {
         $this->_rtf             = $rtf;
+        if ($left) {
+            $left->setColorTable($rtf->getColorTable());
+        }
         $this->_borderLeft      = $left;
+
+        if ($top) {
+            $top->setColorTable($rtf->getColorTable());
+        }
         $this->_borderTop       = $top;
+
+        if ($right) {
+            $right->setColorTable($rtf->getColorTable());
+        }
         $this->_borderRight     = $right;
+
+        if ($bottom) {
+            $bottom->setColorTable($rtf->getColorTable());
+        }
         $this->_borderBottom    = $bottom;
     }
 

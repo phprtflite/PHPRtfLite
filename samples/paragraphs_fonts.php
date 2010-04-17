@@ -1,9 +1,13 @@
 <?php
 
-require '../lib/PHPRtfLite.php';
+$dir = dirname(__FILE__);
+require_once $dir . '/../lib/PHPRtfLite.php';
 
 // register PHPRtfLite class loader
 PHPRtfLite::registerAutoloader();
+
+//Rtf document
+$rtf = new PHPRtfLite();
 
 //Fonts
 $fontHead = new PHPRtfLite_Font(12, 'Arial');
@@ -31,15 +35,13 @@ $parPhp->setBorder($border);
 $parPhp->setIndentLeft(5);
 $parPhp->setIndentRight(0.5);
 
-//Rtf document
-$rtf = new PHPRtfLite();
 $rtf->setMargins(3, 1, 1 ,2);
 
 //Section
 $sect = $rtf->addSection();
 $sect->writeText('Paragraphs, fonts and other', new PHPRtfLite_Font(14, 'Arial'), $parHead);
 
-$sect->emptyParagraph($fontSmall, $parBlack);
+$sect->addEmptyParagraph($fontSmall, $parBlack);
 $sect->writeText('Various fonts', $fontHead, $parHead);
 
 $sect->writeText('Times new Roman, 9pt, Red', new PHPRtfLite_Font(9, 'Times New Roman', '#ff0000'), $parSimple);
@@ -47,7 +49,7 @@ $sect->writeText('Times new Roman, 10pt, Red, Pattern Yellow', new PHPRtfLite_Fo
 $sect->writeText('Tahoma, 10pt, Blue', new PHPRtfLite_Font(10, 'Tahoma', '#0000ff'), $parSimple);
 $sect->writeText('Verdana, 8pt, Green', new PHPRtfLite_Font(8, 'Verdana', '#00cc00'), $parSimple);
 
-$sect->emptyParagraph($fontSmall, $parBlack);
+$sect->addEmptyParagraph($fontSmall, $parBlack);
 $sect->writeText('Various paragraphs', $fontHead, $parHead);
 
 $par = new PHPRtfLite_ParFormat('center');
@@ -66,7 +68,7 @@ $par->setBackgroundColor('#ffcc99');
 $border = PHPRtfLite_Border::create($rtf, 1, '#ff0000');
 $par->setBorder($border);
 
-$sect->writeText('', new PHPRtfLite_Font, new PHPRtfLite_ParFormat());
+$sect->addEmptyParagraph(new PHPRtfLite_Font, new PHPRtfLite_ParFormat());
 
 $sect->writeText('Alignment: right
 Indent Left: 5
@@ -74,17 +76,17 @@ Indent Right: 10
 BackColor: #ffcc99
 Border: red', new PHPRtfLite_Font(8, 'Verdana'), $par);
 
-$sect->emptyParagraph($fontSmall, $parBlack);
+$sect->addEmptyParagraph($fontSmall, $parBlack);
 $sect->writeText('Using hyperlinks', $fontHead, $parHead);
 $sect->writeHyperlink('http://www.php.lt', 'Official phpRtf site.', $fontLink, $parSimple);
 
-$sect->emptyParagraph($fontSmall, $parBlack);
+$sect->addEmptyParagraph($fontSmall, $parBlack);
 $sect->writeText('Using tags', $fontHead, $parHead);
 
 $sect->writeText('<b>Bold text.</b><i>Italic<u>Underline text.</u></i><tab>.Current date- <chdate>. Bullet <bullet><br>', new PHPRtfLite_Font(), $parSimple);
 $sect->writeText('<b>Bold text.</b><i>Italic<u>Underline text.</u></i><tab>.Current date- <chdate>. Bullet <bullet>.<br>', new PHPRtfLite_Font(), $parSimple, false);
 
-$sect->emptyParagraph($fontSmall, $parBlack);
+$sect->addEmptyParagraph($fontSmall, $parBlack);
 $sect->writeText('PHP highlighting sample', $fontHead, $parHead);
 
 $sect->writeText('//sample php code<br/ >', new PHPRtfLite_Font(11, 'Courier New', '#ff8800'), $parPhp);
@@ -96,5 +98,5 @@ $sect->writeText('.$sum.', new PHPRtfLite_Font(11, 'Courier New', '#0000AA'), nu
 $sect->writeText('" ."', new PHPRtfLite_Font(11, 'Courier New', '#AA0000'), null);
 $sect->writeText(';', new PHPRtfLite_Font(11, 'Courier New', '#000000'), null);
 
-// send to browser
-$rtf->sendRtf('paragraph_fonts.rtf');
+// save rtf document
+$rtf->save($dir . '/generated/paragraphs_fonts.rtf');

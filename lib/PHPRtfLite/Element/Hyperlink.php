@@ -20,51 +20,47 @@
 */
 
 /**
- * Class for creating columns of table in rtf documents.
- * @version     1.0.0
+ * class for creating elements used in containers like sections, footers and headers.
+ * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2009 Steffen Zeidler
+ * @copyright   2010 Steffen Zeidler
  * @package     PHPRtfLite
- * @subpackage  PHPRtfLite_Table
+ * @subpackage  PHPRtfLite_Element
  */
-class PHPRtfLite_Table_Column
+class PHPRtfLite_Element_Hyperlink extends PHPRtfLite_Element
 {
 
     /**
-     * column width
-     * @var float
+     * @var string
      */
-    protected $_width;
-
+    protected $_hyperlink = '';
 
     /**
-     * Constructor
-     *
-     * @param float $width
+     * sets hyperling
+     * @param string $hyperlink
      */
-    public function __construct($width)
+    public function setHyperlink($hyperlink)
     {
-        $this->_width = $width;
+        $this->_hyperlink = $hyperlink;
     }
 
     /**
-     * Sets column width
-     *
-     * @param float $width
+     * gets opening token
+     * @return string
      */
-    public function setWidth($width)
+    protected function getOpeningToken()
     {
-        $this->_width = $width;
+        $hyperlink = PHPRtfLite::quoteRtfCode($this->_hyperlink);
+        return '{\field {\*\fldinst {HYPERLINK "' . $hyperlink . '"}}{\\fldrslt {';
     }
 
     /**
-     * Gets column width
-     * 
-     * @return float
+     * gets closing token
+     * @return string
      */
-    public function getWidth()
+    protected function getClosingToken()
     {
-        return $this->_width;
+        return '}}}';
     }
 
 }

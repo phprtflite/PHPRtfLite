@@ -29,7 +29,8 @@
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Border
  */
-class PHPRtfLite_Border_Format {
+class PHPRtfLite_Border_Format
+{
 
     /**
      * constants for border format type

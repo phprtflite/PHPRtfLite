@@ -22,7 +22,7 @@
 
 /**
  * Class for creating sections within the rtf document.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
@@ -37,12 +37,6 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
      * @var PHPRtfLite_Border
      */
     protected $_border;
-
-    /**
-     * flag, if section is the first section within the rtf document
-     * @var boolean
-     */
-    protected $_isFirst = false;
 
     /**
      * vertical alignment
@@ -66,7 +60,7 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
      * array of column widths. only used when using more than one column within the section
      * @var array
      */
-    protected $_columnWidths;
+    protected $_columnWidths = array();
 
     /**
      * flag for not breaking within the section, if true do not break
@@ -329,14 +323,20 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
     /**
      * Gets width of page layout.
      * @return float
+     * @throws PHPRtfLite_Exception thrown if paper layout width is lower or equal 0
      */
     public function getLayoutWidth()
     {
-        $pageWidth      = !empty($this->_paperWidth)    ? $this->_paperWidth    : $this->_rtf->getPaperWidth();
-        $marginLeft     = !empty($this->_marginLeft)    ? $this->_marginLeft    : $this->_rtf->getMarginLeft();
-        $marginRight    = !empty($this->_marginRight)   ? $this->_marginRight   : $this->_rtf->getMarginRight();
+        $paperWidth     = $this->_paperWidth !== null   ? $this->_paperWidth    : $this->_rtf->getPaperWidth();
+        $marginLeft     = $this->_marginLeft !== null   ? $this->_marginLeft    : $this->_rtf->getMarginLeft();
+        $marginRight    = $this->_marginRight !== null  ? $this->_marginRight   : $this->_rtf->getMarginRight();
+        $layoutWidth    = $paperWidth - $marginLeft - $marginRight;
 
-        return $pageWidth - $marginLeft - $marginRight;
+        if ($layoutWidth <= 0) {
+            throw new PHPRtfLite_Exception('The paper layout width is lower or equal zero!');
+        }
+
+        return $layoutWidth;
     }
 
     /**
@@ -374,22 +374,7 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         if ($this->_border === null) {
             $this->_border = new PHPRtfLite_Border($this->_rtf);
         }
-
-        if ($left) {
-            $this->_border->setBorderLeft($borderFormat);
-        }
-
-        if ($top) {
-            $this->_border->setBorderTop($borderFormat);
-        }
-
-        if ($right) {
-            $this->_border->setBorderRight($borderFormat);
-        }
-
-        if ($bottom) {
-            $this->_border->setBorderBottom($borderFormat);
-        }
+        $this->_border->setBorders($borderFormat, $left, $top, $right, $bottom);
     }
 
     /**
@@ -399,7 +384,7 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
     public function setNumberOfColumns($columnsCount)
     {
         $this->_numberOfColumns = $columnsCount;
-        $this->_columnWidths = null;
+        $this->_columnWidths    = array();
     }
 
     /**
@@ -431,26 +416,33 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
     /**
      * Sets section columns with different widths.<br>
-     * If you use this function, you shouldn't use {@see setNumberOfColumns}.
-     * 
+     * NOTE: If you use this function, you shouldn't use {@see setNumberOfColumns}.
      * @param   array   $columnWidths array with columns widths
-     *
-     * @throws  PHPRtfLite_Exception, if column widths are exceeding the defined paper width
+     * @throws  PHPRtfLite_Exception, if column widths are exceeding the defined layout width
      */
     public function setColumnWidths($columnWidths)
     {
         if (is_array($columnWidths)) {
             $this->_numberOfColumns = count($columnWidths);
-            $paperWidth = $this->_paperWidth ? $this->_paperWidth : $this->_rtf->getPaperWidth();
+            $layoutWidth = $this->getLayoutWidth();
             $usedWidth = array_sum($columnWidths);
             
-            if ($usedWidth <= $paperWidth) {
+            if ($usedWidth <= $layoutWidth) {
                 $this->_columnWidths = $columnWidths;
             }
             else {
-                throw new PHPRtfLite_Exception('The section column widths are exceeding the defined paper width!');
+                throw new PHPRtfLite_Exception('The section column widths are exceeding the defined layout width!');
             }
         }
+    }
+
+    /**
+     * gets widths for columns
+     * @return array
+     */
+    public function getColumnWidths()
+    {
+        return $this->_columnWidths;
     }
 
     /**
@@ -569,25 +561,7 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
      */
     public function insertPageBreak()
     {
-        $this->_elements[] = "\\page";
-    }
-
-    /**
-     * Sets this section as first section
-     * @param boolean $first
-     */
-    public function setFirst($first = true)
-    {
-        $this->_isFirst = $first;
-    }
-
-    /**
-     * Returns true, if this section if the first section
-     * @return boolean
-     */
-    public function isFirst()
-    {
-        return $this->_isFirst;
+        $this->writeRtfCode('\page');
     }
 
     /**
@@ -597,11 +571,6 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
     public function output()
     {
         $stream = $this->_rtf->getStream();
-
-        //section is not first section
-        if (!$this->_isFirst) {
-            $stream->write('\sect \sectd ');
-        }
 
         //headers
         $headers = $this->_headers ? $this->_headers : $this->_rtf->getHeaders();
@@ -635,7 +604,7 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
             $stream->write('\cols' . $this->_numberOfColumns . ' ');
         }
 
-        if ($this->_columnWidths === null) {
+        if (empty($this->_columnWidths)) {
             if ($this->_spaceBetweenColumns) {
                   $stream->write('\colsx' . round($this->_spaceBetweenColumns * PHPRtfLite::TWIPS_IN_CM) . ' ');
             }

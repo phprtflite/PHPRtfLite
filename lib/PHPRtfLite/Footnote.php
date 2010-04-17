@@ -22,7 +22,7 @@
 
 /**
  * class for creating footnotes in rtf documents.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010 Steffen Zeidler
  * @package     PHPRtfLite_Footnote
@@ -129,6 +129,14 @@ class PHPRtfLite_Footnote
             $font = self::$_defaultFont;
         }
 
+        if ($font) {
+            $rtf->registerFont($font);
+        }
+
+        if ($parFormat) {
+            $rtf->registerParFormat($parFormat);
+        }
+
         $this->_font        = $font;
         $this->_parFormat   = $parFormat;
     }
@@ -160,9 +168,8 @@ class PHPRtfLite_Footnote
      */
     public function setFont(PHPRtfLite_Font $font)
     {
+        $this->_rtf->registerFont($font);
         $this->_font = $font;
-        $font->setColorTable($this->_rtf->getColorTable());
-        $font->setFontTable($this->_rtf->getFontTable());
     }
 
     /**
@@ -182,8 +189,8 @@ class PHPRtfLite_Footnote
      */
     public function setParFormat(PHPRtfLite_ParFormat $parFormat)
     {
+        $this->_rtf->registerParFormat($parFormat);
         $this->_parFormat = $parFormat;
-        $parFormat->setColorTable($this->_rtf->getColorTable());
     }
 
     /**

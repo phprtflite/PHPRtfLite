@@ -37,19 +37,26 @@ class PHPRtfLite_StreamOutput
      */
     private $_fileHandler;
 
+    
     /**
-     * constructor
-     *
+     * opens file stream
+     * 
      * @param   string  $filename
      */
-    public function __construct($filename) {
+    public function open($filename)
+    {
         $this->_fileHandler = fopen($filename, 'wb');
+        if (!$this->_fileHandler) {
+            throw new PHPRtfLite_Exception("Could not open file '$filename' for stream!");
+        }
+        flock($this->_fileHandler, LOCK_EX);
     }
 
     /**
      * closes file handler
      */
-    public function close() {
+    public function close()
+    {
         if ($this->_fileHandler !== null) {
             fclose($this->_fileHandler);
             $this->_fileHandler = null;
@@ -61,16 +68,13 @@ class PHPRtfLite_StreamOutput
      *
      * @param string $string
      */
-    public function write($string) {
-        fwrite($this->_fileHandler, $string);
-    }
+    public function write($string)
+    {
+        if ($this->_fileHandler === null) {
+            $this->open();
+        }
 
-    /**
-     * destructor
-     * closes the file handler
-     */
-    public function __destruct() {
-        $this->close();
+        fwrite($this->_fileHandler, $string);
     }
 
 }

@@ -1,6 +1,7 @@
 <?php
 
-require '../lib/PHPRtfLite.php';
+$dir = dirname(__FILE__);
+require_once $dir . '/../lib/PHPRtfLite.php';
 
 // register PHPRtfLite class loader
 PHPRtfLite::registerAutoloader();
@@ -15,7 +16,7 @@ $times12 = new PHPRtfLite_Font(12, 'Times new Roman');
 $sect = $rtf->addSection();
 //Write utf-8 encoded text.
 //Text is from file. But you can use another resouce: db, sockets and other
-$sect->writeText(file_get_contents('sources/utf8.txt'), $times12, null);
+$sect->writeText(file_get_contents($dir . '/sources/utf8.txt'), $times12, null);
 
-//sends rft document
-$rtf->sendRtf('utf8.rtf');
+// save rft document
+$rtf->save($dir . '/generated/utf8.rtf');

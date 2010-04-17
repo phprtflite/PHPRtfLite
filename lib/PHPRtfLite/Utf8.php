@@ -35,7 +35,8 @@ class PHPRtfLite_Utf8 {
      *
      * @param string $str
      */
-    static public function getUnicodeEntities($str) {
+    public static function getUnicodeEntities($str)
+    {
         return self::unicodeToEntitiesPreservingAscii(self::utf8ToUnicode($str));
     }
 
@@ -46,7 +47,8 @@ class PHPRtfLite_Utf8 {
      *
      * @return array
      */
-    static private function utf8ToUnicode($str) {
+    private static function utf8ToUnicode($str)
+    {
         $unicode = array();
         $values = array();
         $lookingFor = 1;
@@ -58,7 +60,7 @@ class PHPRtfLite_Utf8 {
                 $unicode[] = $thisValue;
             }
             else {
-                if (count( $values ) == 0) {
+                if (count($values) == 0) {
                     $lookingFor = $thisValue < 224 ? 2 : 3;
                 }
 
@@ -86,14 +88,15 @@ class PHPRtfLite_Utf8 {
      *
      * @return string
      */
-    static private function unicodeToEntitiesPreservingAscii($unicode) {
+    private static function unicodeToEntitiesPreservingAscii($unicode)
+    {
         $entities = '';
 
         foreach ($unicode as $value) {
             if ($value != 65279) {
-               $entities .= $value > 127 
-                            ? '\uc0\u' . $value . ' '
-                            : chr($value);
+                $entities .= $value > 127
+                             ? '\uc0\u' . $value . ' '
+                             : chr($value);
             }
         }
 

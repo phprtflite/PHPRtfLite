@@ -1,9 +1,13 @@
 <?php
 
-require '../lib/PHPRtfLite.php';
+$dir = dirname(__FILE__);
+require_once $dir . '/../lib/PHPRtfLite.php';
 
 // register PHPRtfLite class loader
 PHPRtfLite::registerAutoloader();
+
+//Rtf document
+$rtf = new PHPRtfLite();
 
 //Fonts
 $fontHead = new PHPRtfLite_Font(12, 'Arial');
@@ -31,8 +35,6 @@ $parPhp->setBorder($border);
 $parPhp->setIndentLeft(5);
 $parPhp->setIndentRight(0.5);
 
-//Rtf document
-$rtf = new PHPRtfLite();
 //section
 $sect = $rtf->addSection();
 
@@ -48,7 +50,7 @@ $cell->writeText('Testing paragraphs in table cells.', new PHPRtfLite_Font(14, '
 
 $cell = $table->getCell(2, 2);
 
-$cell->emptyParagraph($fontSmall, $parBlack);
+$cell->addEmptyParagraph($fontSmall, $parBlack);
 $cell->writeText('Various paragraphs', $fontHead, $parHead);
 
 $par = new PHPRtfLite_ParFormat('center');
@@ -67,7 +69,7 @@ $par->setBackgroundColor('#ffcc99');
 $border = PHPRtfLite_Border::create($rtf, 1, '#ff0000');
 $par->setBorder($border);
 
-$cell->writeText('', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
+$cell->addEmptyParagraph();
 
 $cell->writeText('Alignment: right
 Indent Left: 5
@@ -75,5 +77,5 @@ Indent Right: 10
 BackColor: #ffcc99
 Border: red', new PHPRtfLite_Font(8, 'Verdana'), $par);
 
-//send to browser
-$rtf->sendRtf('paragraphs_in_tables.rtf');
+// save rtf document
+$rtf->save($dir . '/generated/paragraphs_in_tables.rtf');

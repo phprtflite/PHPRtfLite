@@ -1,5 +1,6 @@
 <?php
-require '../lib/PHPRtfLite.php';
+$dir = dirname(__FILE__);
+require_once $dir . '/../lib/PHPRtfLite.php';
 
 // register PHPRtfLite class loader
 PHPRtfLite::registerAutoloader();
@@ -168,5 +169,5 @@ $table->writeToCell(1, 10, '1-st place', $font1, null);
 $table->writeToCell(2, 10, '2-st place', $font1, null);
 $table->writeToCell(3, 10, '3-d place', $font1, null);
 
-// send to browser
-$rtf->sendRtf('chess_tournament.rtf');
+// save rtf document
+$rtf->save($dir . '/generated/chess_tournament.rtf');

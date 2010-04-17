@@ -1,6 +1,7 @@
 <?php
 
-require '../lib/PHPRtfLite.php';
+$dir = dirname(__FILE__);
+require_once $dir . '/../lib/PHPRtfLite.php';
 
 // register PHPRtfLite class loader
 PHPRtfLite::registerAutoloader();
@@ -19,17 +20,17 @@ $parGreyCenter->setShading(10);
 
 // header
 $header = $rtf->addHeader('first');
-$header->addImage('sources/rtf_thumb.jpg', $parFormat);
+$header->addImage($dir . '/sources/rtf_thumb.jpg', $parFormat);
 $header->writeText('Image in header.', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 
 $sect = $rtf->addSection();
 $sect->writeText('Images with PhpRtf.', new PHPRtfLite_Font(14), new PHPRtfLite_ParFormat('center'));
 
 $sect->writeText('<br>Here is .jpg image. <tab>', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$sect->addImage('sources/rtf_thumb.jpg', null);
+$sect->addImage($dir . '/sources/rtf_thumb.jpg', null);
 
 $sect->writeText('<br>Here is .png image. <tab>', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$sect->addImage('sources/html.png', null);
+$sect->addImage($dir . '/sources/html.png', null);
 
 $sect->writeText('<br><br><b>Formating sizes of images:</b>', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 
@@ -42,21 +43,21 @@ $table->writeToCell(1, 1, '<br> Original size.', new PHPRtfLite_Font(), new PHPR
 //getting cell object, writing text and adding image
 $cell = $table->getCell(1, 2);
 $cell->writeText('<br>   ', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$cell->addImage('sources/cats.jpg', null);
+$cell->addImage($dir . '/sources/cats.jpg', null);
 
 $table->writeToCell(2, 1, '<br> Width is set.', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 //writing to cell and adding image from table object
 $table->writeToCell(2, 2, '<br>   ', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$table->addImageToCell(2, 2, 'sources/cats.jpg', null, 5);
+$table->addImageToCell(2, 2, $dir . '/sources/cats.jpg', null, 5);
 
 $table->writeToCell(3, 1, '<br> Height is set.', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 $table->writeToCell(3, 2, '<br>   ', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$table->addImageToCell(3, 2, 'sources/cats.jpg', null, 0, 3.5);
+$table->addImageToCell(3, 2, $dir . '/sources/cats.jpg', null, 0, 3.5);
 
 $table->writeToCell(4, 1, '<br> Both: width and height are set.', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 $cell = $table->getCell(4, 2);
 $cell->writeText('<br>   ', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$img = $cell->addImage('sources/cats.jpg', null, 3, 5);
+$img = $cell->addImage($dir . '/sources/cats.jpg', null, 3, 5);
 
 $sect->writeText('<page/><b>Borders of images</b>', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 $table = $sect->addTable();
@@ -66,14 +67,14 @@ $table->addColumnsList(array(7.5, 6.5));
 $table->writeToCell(1, 1, '<br> Sample borders', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 $cell = $table->getCell(1, 2);
 $cell->writeText('<br>   ', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$img = $cell->addImage('sources/cats.jpg', null);
+$img = $cell->addImage($dir . '/sources/cats.jpg', null);
 $border = PHPRtfLite_Border::create($rtf, 3, '#000000');
 $img->setBorder($border);
 
 $table->writeToCell(2, 1, '<br> Borders with space', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 $cell = $table->getCell(2, 2);
 $cell->writeText('<br>   ', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
-$img = $cell->addImage('sources/cats.jpg', null);
+$img = $cell->addImage($dir . '/sources/cats.jpg', null);
 
 $borderFormatBlue = new PHPRtfLite_Border_Format(2, '#0000ff', 'simple', 0.5);
 $borderFormatRed = new PHPRtfLite_Border_Format(2, '#ff0000', 'simple', 0.5);
@@ -87,8 +88,8 @@ $img->setBorder($border);
 $sect->writeRtfCode('\par ');
 
 $sect->writeText('<b>Images in paragraph</b><br><br>', new PHPRtfLite_Font(), $parGreyLeft);
-$img = $sect->addImage('sources/html.png', $parGreyCenter);
+$img = $sect->addImage($dir . '/sources/html.png', $parGreyCenter);
 $img->setWidth(1.5);
 
-// send to browser
-$rtf->sendRtf('images.rtf');
+// save rtf document
+$rtf->save($dir . '/generated/images.rtf');

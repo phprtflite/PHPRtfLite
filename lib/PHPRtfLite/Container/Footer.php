@@ -22,154 +22,19 @@
 
 /**
  * Class for creating footers within the rtf document or section.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Container
  */
-class PHPRtfLite_Container_Footer extends PHPRtfLite_Container
+class PHPRtfLite_Container_Footer extends PHPRtfLite_Container_Header
 {
-
-    /**
-     * constants defining header types
-     */
-    const TYPE_ALL      = 'all';
-    const TYPE_LEFT     = 'left';
-    const TYPE_RIGHT    = 'right';
-    const TYPE_FIRST    = 'first';
-
-    /**
-     * @var PHPRtfLite
-     */
-    protected $_rtf;
 
     /**
      * @var string
      */
-    protected $_type;
+    protected $_rtfType = 'footer';
 
-    /**
-     * @var float
-     */
-    protected $_offsetHeight;
-
-    /**
-     * Constructor
-     * 
-     * @param PHPRtfLite    $rtf
-     * @param string        $type
-     */
-    public function __construct(PHPRtfLite $rtf, $type)
-    {
-        $this->_rtf = $rtf;
-        $this->_type = $type;
-
-        if ($this->_type == self::TYPE_FIRST) {
-            $rtf->setFirstPageHasSpecialLayout(true);
-        }
-    }
-
-    /**
-     * Set vertical footer position from the bottom of the page
-     *
-     * @param   float   $height
-     */
-    public function setPosition($height)
-    {
-        $this->_offsetHeight = $height;
-    }
-
-    /**
-     * Gets type as rtf code
-     *
-     * @return string rtf code
-     * @throws PHPRtfLite_Exception, if type is not allowed,
-     *   because of the rtf document specific settings.
-     */
-    protected function getTypeAsRtfCode()
-    {
-        switch ($this->_type) {
-            case self::TYPE_ALL:
-                if (!$this->_rtf->isOddEvenDifferent()) {
-                    return 'footer';
-                }
-
-                throw new PHPRtfLite_Exception('Footer type ' . $this->_type . ' is not allowed, when using odd even different!');
-
-            case self::TYPE_LEFT:
-                if ($this->_rtf->isOddEvenDifferent()) {
-                    return 'footerl';
-                }
-
-                throw new PHPRtfLite_Exception('Footer type ' . $this->_type . ' is not allowed, when using not odd even different!');
-
-            case self::TYPE_RIGHT:
-                if ($this->_rtf->isOddEvenDifferent()) {
-                    return 'footerr';
-                }
-
-                throw new PHPRtfLite_Exception('Footer type ' . $this->_type . ' is not allowed, when using not odd even different!');
-
-            case self::TYPE_FIRST:
-                if ($this->getFirstPageHasSpecialLayout()) {
-                    return 'footerf';
-                }
-
-                throw new PHPRtfLite_Exception('Footer type ' . $this->_type . ' is not allowed, when using not special layout for first page!');
-
-            default:
-                throw new PHPRtfLite_Exception('Footer type is not defined! You gave me: ', $this->_type);
-        }
-    }
-
-    /**
-     * overwritten method, throws exception, because footers does not support footnotes/endnotes
-     *
-     * @param string                $noteText
-     * @param PHPRtfLite_Font       $font
-     * @param PHPRtfLite_ParFormat  $parFormat
-     *
-     * @throws PHPRtfLite_Exception, footnote/endnote is not supported by footers
-     */
-    public function addFootnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
-    {
-        throw new PHPRtfLite_Exception('Footers does not support footnotes!');
-    }
-
-    /**
-     * overwritten method, throws exception, because footers does not support footnotes/endnotes
-     *
-     * @param string                $noteText
-     * @param PHPRtfLite_Font       $font
-     * @param PHPRtfLite_ParFormat  $parFormat
-     *
-     * @throws PHPRtfLite_Exception, footnote/endnote is not supported by footers
-     */
-    public function addEndnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
-    {
-        throw new PHPRtfLite_Exception('Footers does not support endnotes!');
-    }
-
-    /**
-     * Gets rtf code of footer
-     *
-     * @return string rtf code
-     */
-    public function output()
-    {
-        $stream = $this->_rtf->getStream();
-        
-        if (isset($this->_offsetHeight)) {
-            $stream->write('\footery' . round(PHPRtfLite::TWIPS_IN_CM * $this->_offsetHeight) . ' ');
-        }
-
-        $stream->write('{\\' . $this->getTypeAsRtfCode() . ' ');
-        parent::output();
-        $stream->write('\par}');
-
-        return $stream->write("\r\n");
-    }
-    
 }

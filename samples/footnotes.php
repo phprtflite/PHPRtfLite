@@ -1,6 +1,7 @@
 <?php
 
-require '../lib/PHPRtfLite.php';
+$dir = dirname(__FILE__);
+require_once $dir . '/../lib/PHPRtfLite.php';
 
 // register PHPRtfLite class loader
 PHPRtfLite::registerAutoloader();
@@ -58,5 +59,5 @@ $sectionText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi e
 $sect->writeText($sectionText, $font);
 $sect->addFootnote('This is a footnote');
 
-// send to browser
-$rtf->sendRtf('footnotes.rtf');
+// save rtf document
+$rtf->save($dir . '/generated/footnotes.rtf');
