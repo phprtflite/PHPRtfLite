@@ -247,7 +247,6 @@ class PHPRtfLite {
                 $year       = date('Y', $value);
                 $month      = date('m', $value);
                 $day        = date('d', $value);
-                $month      = date('m', $value);
                 $hours      = date('H', $value);
                 $minutes    = date('i', $value);
 
@@ -284,8 +283,8 @@ class PHPRtfLite {
      * @return  string
      */
     public function getProperty($name) {
-        return isset($this->_property[$name])
-               ? $this->_property[$name]
+        return isset($this->_properties[$name])
+               ? $this->_properties[$name]
                : null;
     }
 
@@ -408,7 +407,7 @@ class PHPRtfLite {
      * @return PHPRtfLite_Font
      */
     public function getDefaultFontForNotes() {
-        return PHPRtfLite_Footnote::getDefaultFont($font);
+        return PHPRtfLite_Footnote::getDefaultFont();
     }
 
     /**

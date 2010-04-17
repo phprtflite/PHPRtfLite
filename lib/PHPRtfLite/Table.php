@@ -389,7 +389,7 @@ class PHPRtfLite_Table {
      * @param   integer $endRow         end row, if null, then text alignment is set only to the row range.
      * @param   integer $endColumn      end column, if null, then text alignment is set just to the column range.
      */
-    public function setTextAlignmentForCellRange($alignment, $startRow, $startColumn, $endRow = 0, $endColumn = 0) {
+    public function setTextAlignmentForCellRange($alignment, $startRow, $startColumn, $endRow = null, $endColumn = null) {
         list($startRow, $startColumn, $endRow, $endColumn) = PHPRtfLite_Table::getValidCellRange($startRow, $startColumn, $endRow, $endColumn);
 
         if ($this->checkIfCellExists($startRow, $startColumn)
@@ -412,7 +412,7 @@ class PHPRtfLite_Table {
      * @param   integer         $endRow         end row, if null, then font is set only to the row range.
      * @param   integer         $endColumn      end column, if null, then font is set just to the column range.
      */
-    public function setFontForCellRange(PHPRtfLite_Font $font, $startRow, $startColumn, $endRow = 0, $endColumn = 0) {
+    public function setFontForCellRange(PHPRtfLite_Font $font, $startRow, $startColumn, $endRow = null, $endColumn = null) {
         list($startRow, $startColumn, $endRow, $endColumn) = PHPRtfLite_Table::getValidCellRange($startRow, $startColumn, $endRow, $endColumn);
 
         if ($this->checkIfCellExists($startRow, $startColumn)

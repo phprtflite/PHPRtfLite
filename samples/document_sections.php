@@ -84,11 +84,11 @@ $sect->setPaperWidth(25);
 $border = PHPRtfLite_Border::create(0);
 $sect->setBorder($border);
 $sect->setSpaceBetweenColumns(1);
-$sect->setColumnsCount(2);
+$sect->setNumberOfColumns(2);
 $sect->setLineBetweenColumns();
 
 writeSectionText($sect, $arial14, $times12, $text, $text2, $text3);
-  	
+
 //section 2
 $sect = $rtf->addSection();
 //Header overriden
