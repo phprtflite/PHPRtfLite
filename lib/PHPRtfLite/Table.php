@@ -739,25 +739,25 @@ class PHPRtfLite_Table {
 
                     switch ($cell->getVerticalAlignment()) {
                         case PHPRtfLite_Table_Cell::VERTICAL_ALIGN_TOP:
-                            $content .= '\clvertalt ' . " \r\n";
+                            $content .= '\clvertalt';
                             break;
 
                         case PHPRtfLite_Table_Cell::VERTICAL_ALIGN_CENTER:
-                            $content .= '\clvertalc ' . " \r\n";
+                            $content .= '\clvertalc';
                             break;
 
                         case PHPRtfLite_Table_Cell::VERTICAL_ALIGN_BOTTOM:
-                            $content .= '\clvertalb ' . " \r\n";
+                            $content .= '\clvertalb';
                             break;
                     }
 
                     switch ($cell->getRotateTo()) {
                         case PHPRtfLite_Table_Cell::ROTATE_RIGHT:
-                            $content .= '\cltxtbrl ' . " \r\n";
+                            $content .= '\cltxtbrl';
                             break;
 
                         case PHPRtfLite_Table_Cell::ROTATE_LEFT:
-                            $content .= '\cltxbtlr ' . " \r\n";
+                            $content .= '\cltxbtlr';
                             break;
                     }
 

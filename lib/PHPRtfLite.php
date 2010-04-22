@@ -1087,7 +1087,7 @@ class PHPRtfLite {
             $part .= $section->getContent();
         }
 
-        $this->_content = '{\rtf\ansi\deff0 \r\n';
+        $this->_content = '{\rtf\ansi\deff0' . "\r\n";
         $this->_content .= $this->getFontTable();
         $this->_content .= $this->getColorTable();
         $this->_content .= $part.'}';
