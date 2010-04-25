@@ -22,7 +22,7 @@
 
 /**
  * Class for creating rtf documents.
- * @version     1.0.0
+ * @version     1.0.1
  * @author      Denis Slaveckij <info@phprtf.com>, Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2009 Steffen Zeidler
  * @package     PHPRtfLite

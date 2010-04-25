@@ -21,7 +21,7 @@
 
 /**
  * Class for creating columns of table in rtf documents.
- * @version     1.0.0
+ * @version     1.0.1
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2009 Steffen Zeidler
  * @package     PHPRtfLite

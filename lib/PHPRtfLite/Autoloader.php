@@ -21,7 +21,7 @@
 
 /**
  * Class for autoloading PHPRtfLite classes.
- * @version     1.0.0
+ * @version     1.0.1
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010 Steffen Zeidler
  * @package     PHPRtfLite

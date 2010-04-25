@@ -22,7 +22,7 @@
 
 /**
  * UTF8 class with static functions that converts utf8 characters into rtf utf8 entities.
- * @version     1.0.0
+ * @version     1.0.1
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
