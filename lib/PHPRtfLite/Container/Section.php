@@ -500,6 +500,29 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_verticalAlignment;
     }
 
+
+    /**
+     * adds enumeration
+     *
+     * @param PHPRtfLite_List_Enumeration $enum
+     */
+    public function addEnumeration(PHPRtfLite_List_Enumeration $enum)
+    {
+        $this->_elements[] = $enum;
+    }
+
+
+    /**
+     * adds numbering
+     *
+     * @param PHPRtfLite_List_Numbering $enum
+     */
+    public function addNumbering(PHPRtfLite_List_Numbering $numList)
+    {
+        $this->_elements[] = $numList;
+    }
+
+
     /**
      * Creates header for sections.
      * @param string $type Represented by class constants PHPRtfLite_Container_Header::TYPE_*
@@ -568,23 +591,23 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
      * Gets rtf code of section.
      * @return string rtf code
      */
-    public function output()
+    public function render()
     {
         $stream = $this->_rtf->getStream();
 
         //headers
         $headers = $this->_headers ? $this->_headers : $this->_rtf->getHeaders();
         if (!empty($headers)) {
-            foreach ($headers as $value) {
-                $value->output();
+            foreach ($headers as $header) {
+                $header->render();
             }
         }
 
         //footers
         $footers = $this->_footers ? $this->_footers : $this->_rtf->getFooters();
         if (!empty($footers)) {
-            foreach ($footers as $value) {
-                $value->output();
+            foreach ($footers as $footer) {
+                $footer->render();
             }
         }
 
@@ -687,7 +710,7 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         }
 
         $stream->write("\r\n");
-        parent::output();
+        parent::render();
         $stream->write("\r\n");
     }
 

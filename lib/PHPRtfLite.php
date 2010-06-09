@@ -73,6 +73,12 @@ class PHPRtfLite
     protected $_footers     = array();
 
     /**
+     * charset of text inputs for rtf document, default is UTF-8
+     * @var string
+     */
+    protected $_charset     = 'UTF-8';
+
+    /**
      * paper width
      * @var integer
      */
@@ -122,13 +128,13 @@ class PHPRtfLite
 
     /**
      * font table instance
-     * @var PHPRtfLite_DocHeadDefinition_FontTable
+     * @var PHPRtfLite_DocHead_FontTable
      */
     protected $_fontTable;
 
     /**
      * color table instance
-     * @var PHPRtfLite_DocHeadDefinition_ColorTable 
+     * @var PHPRtfLite_DocHead_ColorTable 
      */
     protected $_colorTable;
 
@@ -196,13 +202,13 @@ class PHPRtfLite
      * flag, if true use landscape layout
      * @var boolean
      */
-    protected $_isLandscape         = false;
+    protected $_isLandscape     = false;
 
     /**
      * document head definition for notes
-     * @var PHPRtfLite_DocHeadDefinition_Note
+     * @var PHPRtfLite_DocHead_Note
      */
-    private $_noteDocHeadDefinition = null;
+    private $_noteDocHead = null;
 
     /**
      * output stream
@@ -243,6 +249,26 @@ class PHPRtfLite
     public static function unregisterAutoloader()
     {
         return spl_autoload_unregister(array('PHPRtfLite_Autoloader', 'autoload'));
+    }
+
+    /**
+     * sets charset for rtf text inputs
+     *
+     * @param string $charset
+     */
+    public function setCharset($charset)
+    {
+        $this->_charset = $charset;
+    }
+
+    /**
+     * gets charset for rtf text inputs
+     * 
+     * @return string
+     */
+    public function getCharset()
+    {
+        return $this->_charset;
     }
 
     /**
@@ -305,15 +331,15 @@ class PHPRtfLite
     /**
      * gets document head definition for notes
      *
-     * @return PHPRtfLite_DocHeadDefinition_Note
+     * @return PHPRtfLite_DocHead_Note
      */
-    public function getNoteDocHeadDefinition()
+    public function getNoteDocHead()
     {
-        if ($this->_noteDocHeadDefinition === null) {
-            $this->_noteDocHeadDefinition = new PHPRtfLite_DocHeadDefinition_Note();
+        if ($this->_noteDocHead === null) {
+            $this->_noteDocHead = new PHPRtfLite_DocHead_Note();
         }
 
-        return $this->_noteDocHeadDefinition;
+        return $this->_noteDocHead;
     }
 
     /**
@@ -323,7 +349,7 @@ class PHPRtfLite
      */
     public function setFootnoteNumberingType($numberingType)
     {
-        $this->getNoteDocHeadDefinition()->setFootnoteNumberingType($numberingType);
+        $this->getNoteDocHead()->setFootnoteNumberingType($numberingType);
     }
 
     /**
@@ -333,7 +359,7 @@ class PHPRtfLite
      */
     public function getFootnoteNumberingType()
     {
-        return $this->getNoteDocHeadDefinition()->getFootnoteNumberingType();
+        return $this->getNoteDocHead()->getFootnoteNumberingType();
     }
 
     /**
@@ -343,7 +369,7 @@ class PHPRtfLite
      */
     public function setEndnoteNumberingType($numberingType)
     {
-        $this->getNoteDocHeadDefinition()->setEndnoteNumberingType($numberingType);
+        $this->getNoteDocHead()->setEndnoteNumberingType($numberingType);
     }
 
     /**
@@ -353,7 +379,7 @@ class PHPRtfLite
      */
     public function getEndnoteNumberingType()
     {
-        return $this->getNoteDocHeadDefinition()->getEndnoteNumberingType();
+        return $this->getNoteDocHead()->getEndnoteNumberingType();
     }
 
     /**
@@ -363,7 +389,7 @@ class PHPRtfLite
      */
     public function setFootnoteStartNumber($startNumber)
     {
-        $this->getNoteDocHeadDefinition()->setFootnoteStartNumber($startNumber);
+        $this->getNoteDocHead()->setFootnoteStartNumber($startNumber);
     }
 
     /**
@@ -373,7 +399,7 @@ class PHPRtfLite
      */
     public function getFootnoteStartNumber()
     {
-        return $this->getNoteDocHeadDefinition()->getFootnoteStartNumber();
+        return $this->getNoteDocHead()->getFootnoteStartNumber();
     }
 
     /**
@@ -383,7 +409,7 @@ class PHPRtfLite
      */
     public function setEndnoteStartNumber($startNumber)
     {
-        $this->getNoteDocHeadDefinition()->setEndnoteStartNumber($startNumber);
+        $this->getNoteDocHead()->setEndnoteStartNumber($startNumber);
     }
 
     /**
@@ -393,7 +419,7 @@ class PHPRtfLite
      */
     public function getEndnoteStartNumber()
     {
-        return $this->getNoteDocHeadDefinition()->getEndnoteStartNumber();
+        return $this->getNoteDocHead()->getEndnoteStartNumber();
     }
 
     /**
@@ -401,7 +427,7 @@ class PHPRtfLite
      */
     public function setRestartFootnoteNumberEachPage()
     {
-        $this->getNoteDocHeadDefinition()->setRestartFootnoteNumberEachPage();
+        $this->getNoteDocHead()->setRestartFootnoteNumberEachPage();
     }
 
     /**
@@ -411,7 +437,7 @@ class PHPRtfLite
      */
     public function setRestartEndnoteNumberEachPage()
     {
-        $this->getNoteDocHeadDefinition()->setRestartEndnoteNumberEachPage();
+        $this->getNoteDocHead()->setRestartEndnoteNumberEachPage();
     }
 
     /**
@@ -419,7 +445,7 @@ class PHPRtfLite
      */
     public function isRestartFootnoteNumberEachPage()
     {
-        return $this->getNoteDocHeadDefinition()->isRestartFootnoteNumberEachPage();
+        return $this->getNoteDocHead()->isRestartFootnoteNumberEachPage();
     }
 
     /**
@@ -429,7 +455,7 @@ class PHPRtfLite
      */
     public function isRestartEndnoteNumberEachPage()
     {
-        return $this->getNoteDocHeadDefinition()->isRestartEndnoteNumberEachPage();
+        return $this->getNoteDocHead()->isRestartEndnoteNumberEachPage();
     }
 
     /**
@@ -887,24 +913,24 @@ class PHPRtfLite
 
     /**
      * gets color table
-     * @return PHPRtfLite_DocHeadDefinition_ColorTable
+     * @return PHPRtfLite_DocHead_ColorTable
      */
     public function getColorTable()
     {
         if ($this->_colorTable === null) {
-            $this->_colorTable = new PHPRtfLite_DocHeadDefinition_ColorTable();
+            $this->_colorTable = new PHPRtfLite_DocHead_ColorTable();
         }
         return $this->_colorTable;
     }
 
     /**
      * gets font table
-     * @return PHPRtfLite_DocHeadDefinition_FontTable
+     * @return PHPRtfLite_DocHead_FontTable
      */
     public function getFontTable()
     {
         if ($this->_fontTable === null) {
-            $this->_fontTable = new PHPRtfLite_DocHeadDefinition_FontTable();
+            $this->_fontTable = new PHPRtfLite_DocHead_FontTable();
         }
         return $this->_fontTable;
     }
@@ -953,7 +979,7 @@ class PHPRtfLite
     public function save($file)
     {
         $this->_stream->open($file);
-        $this->prepare();
+        $this->render();
         $this->_stream->close();
     }
 
@@ -1065,9 +1091,9 @@ class PHPRtfLite
     /**
      * prepares rtf contents
      */
-    protected function prepare()
+    protected function render()
     {
-        $this->_stream->write('{\rtf\ansi\deff0 \r\n');
+        $this->_stream->write('{\rtf\ansi\deff0' . "\r\n");
         $this->_stream->write($this->getFontTable()->getContent());
         $this->_stream->write($this->getColorTable()->getContent());
 
@@ -1121,16 +1147,16 @@ class PHPRtfLite
         }
 
         // document header definition for footnotes and endnotes
-        $this->_stream->write($this->getNoteDocHeadDefinition()->getContent());
+        $this->_stream->write($this->getNoteDocHead()->getContent());
 
         //headers and footers if there are no sections
         if (count($this->_sections) == 0) {
             foreach ($this->_headers as $header) {
-                $header->output();
+                $header->render();
             }
 
             foreach ($this->_footers as $footer) {
-                $footer->output();
+                $footer->render();
             }
         }
 
@@ -1139,7 +1165,7 @@ class PHPRtfLite
             if ($key != 0) {
                 $this->_stream->write('\sect \sectd ');
             }
-            $section->output();
+            $section->render();
         }
 
         $this->_stream->write('}');

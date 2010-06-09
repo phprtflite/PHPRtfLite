@@ -712,7 +712,7 @@ class PHPRtfLite_Table
      *
      * @return string rtf code
      */
-    public function output()
+    public function render()
     {
         if (empty($this->_rows) || empty($this->_columns)) {
             return;
@@ -785,25 +785,25 @@ class PHPRtfLite_Table
 
                     switch ($cell->getVerticalAlignment()) {
                         case PHPRtfLite_Table_Cell::VERTICAL_ALIGN_TOP:
-                            $stream->write('\clvertalt ' . " \r\n");
+                            $stream->write('\clvertalt');
                             break;
 
                         case PHPRtfLite_Table_Cell::VERTICAL_ALIGN_CENTER:
-                            $stream->write('\clvertalc ' . " \r\n");
+                            $stream->write('\clvertalc');
                             break;
 
                         case PHPRtfLite_Table_Cell::VERTICAL_ALIGN_BOTTOM:
-                            $stream->write('\clvertalb ' . " \r\n");
+                            $stream->write('\clvertalb');
                             break;
                     }
 
                     switch ($cell->getRotateTo()) {
                         case PHPRtfLite_Table_Cell::ROTATE_RIGHT:
-                            $stream->write('\cltxtbrl ' . " \r\n");
+                            $stream->write('\cltxtbrl');
                             break;
 
                         case PHPRtfLite_Table_Cell::ROTATE_LEFT:
-                            $stream->write('\cltxbtlr ' . " \r\n");
+                            $stream->write('\cltxbtlr');
                             break;
                     }
 
@@ -826,7 +826,7 @@ class PHPRtfLite_Table
             foreach ($this->_columns as $column) {
                 $cell = $this->getCell($rowIndex, $columnIndex);
                 if (!$cell->isHorizontalMerged()) {
-                    $cell->output();
+                    $cell->render();
                 }
                 $columnIndex++;
             }

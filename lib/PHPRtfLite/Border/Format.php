@@ -22,7 +22,7 @@
 
 /**
  * Class for border format.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
@@ -57,7 +57,7 @@ class PHPRtfLite_Border_Format
 
     /**
      * rtf color table
-     * @var PHPRtfLite_DocHeadDefinition_ColorTable
+     * @var PHPRtfLite_DocHead_ColorTable
      */
     protected $_colorTable;
 
@@ -72,10 +72,10 @@ class PHPRtfLite_Border_Format
      * @param   string      $color  color of border (example '#ff0000' or '#f00')
      * @param   string      $type   represented by class constants PHPRtfLite_Border_Format::TYPE_*<br>
      *   Possible values:<br>
-     *     TYPE_SINGLE  => 'single'<br>
-     *     TYPE_DOT      = 'dot'<br>
-     *     TYPE_DASH     = 'dash'<br>
-     *     TYPE_DOTDASH  = 'dotdash'<br>
+     *     TYPE_SINGLE:     single (default)<br>
+     *     TYPE_DOT:        dot<br>
+     *     TYPE_DASH:       dash<br>
+     *     TYPE_DOTDASH:    dotdash<br>
      * @param   float       $space  space between borders and the paragraph
      */
     public function __construct($size = 0, $color = null, $type = null, $space = 0)
@@ -150,9 +150,9 @@ class PHPRtfLite_Border_Format
     /**
      * sets rtf color table
      *
-     * @param PHPRtfLite_DocHeadDefinition_ColorTable $colorTable
+     * @param PHPRtfLite_DocHead_ColorTable $colorTable
      */
-    public function setColorTable(PHPRtfLite_DocHeadDefinition_ColorTable $colorTable)
+    public function setColorTable(PHPRtfLite_DocHead_ColorTable $colorTable)
     {
         if ($this->_color) {
             $colorTable->add($this->_color);

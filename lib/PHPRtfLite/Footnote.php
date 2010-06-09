@@ -216,7 +216,7 @@ class PHPRtfLite_Footnote
     /**
      * renders footnote/endnote
      */
-    public function output()
+    public function render()
     {
         $stream = $this->_rtf->getStream();
 
@@ -227,8 +227,10 @@ class PHPRtfLite_Footnote
         if ($this->_parFormat) {
             $stream->write($this->_parFormat->getContent());
         }
-
-        $stream->write($this->_font->getContent());
+        if ($this->_font) {
+            $stream->write($this->_font->getContent());
+        }
+        
         $stream->write('{\up6\chftn}' . "\r\n"
                      . PHPRtfLite::quoteRtfCode($this->_text)
                      . '} ');

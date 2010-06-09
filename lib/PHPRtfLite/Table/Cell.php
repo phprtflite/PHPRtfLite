@@ -22,7 +22,7 @@
 
 /**
  * Class for creating cells of table in rtf documents.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>, Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2009 Steffen Zeidler
  * @package     PHPRtfLite
@@ -63,13 +63,13 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
      * horizontal alignment
      * @var string
      */
-    protected $_alignment           = self::TEXT_ALIGN_LEFT;
+    protected $_alignment;
 
     /**
      * vertical alignment
      * @var string
      */
-    protected $_verticalAlignment   = self::VERTICAL_ALIGN_TOP;
+    protected $_verticalAlignment;
 
     /**
      * font used for the cell
@@ -167,7 +167,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
      *     TEXT_ALIGN_RIGHT     => 'right'      - right alignment<br>
      *     TEXT_ALIGN_JUSTIFY   => 'justify'    - justify alignment
      */
-    public function setTextAlignment($alignment = self::TEXT_ALIGN_LEFT)
+    public function setTextAlignment($alignment)
     {
         $this->_alignment = $alignment;
     }
@@ -212,7 +212,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
      *     VERTICAL_ALIGN_CENTER    => 'center' - center alignment<br>
      *     VERTICAL_ALIGN_BOTTOM    => 'bottom' - bottom alignment
      */
-    public function setVerticalAlignment($verticalAlignment = self::VERTICAL_ALIGN_TOP)
+    public function setVerticalAlignment($verticalAlignment)
     {
         $this->_verticalAlignment = $verticalAlignment;
     }
@@ -235,7 +235,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
      *     ROTATE_RIGHT => 'right'  - right<br>
      *     ROTATE_LEFT  => 'left'   - left
      */
-    public function rotateTo($rotateTo = self::ROTATE_RIGHT)
+    public function rotateTo($rotateTo)
     {
         $this->_rotateTo = $rotateTo;
     }
@@ -439,7 +439,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
      *
      * @return string rtf code
      */
-    public function output()
+    public function render()
     {
         $stream = $this->_rtf->getStream();
         $stream->write('{');
@@ -466,8 +466,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
             $stream->write($this->_font->getContent());
         }
 
-        parent::output();
+        parent::render();
 
-        $stream->write('\cell \pard}' . "\r\n");
+        $stream->write('\cell\pard}' . "\r\n");
     }
 }

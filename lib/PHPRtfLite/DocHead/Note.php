@@ -22,12 +22,13 @@
 
 /**
  * class for doucment head definition for footnotes and endnotes
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010 Steffen Zeidler
- * @package     PHPRtfLite_DocDefinition
+ * @package     PHPRtfLite
+ * @subpackage  PHPRtfLite_DocHead
  */
-class PHPRtfLite_DocHeadDefinition_Note
+class PHPRtfLite_DocHead_Note
 {
 
     /**

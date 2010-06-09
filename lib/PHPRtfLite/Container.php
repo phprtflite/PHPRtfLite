@@ -247,7 +247,7 @@ abstract class PHPRtfLite_Container
      * @todo refactor this method
      * @return string rtf code
      */
-    public function output()
+    public function render()
     {
         $stream = $this->_rtf->getStream();
 
@@ -280,7 +280,7 @@ abstract class PHPRtfLite_Container
                 }
             }
 
-            $element->output();
+            $element->render();
         }
     }
 

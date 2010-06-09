@@ -22,22 +22,33 @@
 
 /**
  * UTF8 class with static functions that converts utf8 characters into rtf utf8 entities.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
  * @package     PHPRtfLite
  */
-class PHPRtfLite_Utf8 {
+class PHPRtfLite_Utf8
+{
 
     /**
      * Converts text with utf8 characters into rtf utf8 entites.
      *
-     * @param string $str
+     * @param string $text
      */
-    public static function getUnicodeEntities($str)
+    public static function getUnicodeEntities($text, $inCharset)
     {
-        return self::unicodeToEntitiesPreservingAscii(self::utf8ToUnicode($str));
+        if ($inCharset != 'UTF-8') {
+            if (extension_loaded('iconv')) {
+                $text = iconv($inCharset, 'UTF-8//TRANSLIT', $text);
+            }
+            else {
+                throw new PHPRtfLite_Exception('Iconv extension is not available! '
+                                             . 'Activate this extension or use UTF-8 encoded texts!');
+            }
+        }
+        $text = self::utf8ToUnicode($text);
+        return self::unicodeToEntitiesPreservingAscii($text);
     }
 
     /**
@@ -54,7 +65,7 @@ class PHPRtfLite_Utf8 {
         $lookingFor = 1;
 
         for ($i = 0; $i < strlen($str); $i++ ) {
-           $thisValue = ord($str[$i]);
+            $thisValue = ord($str[$i]);
 
             if ($thisValue < 128) {
                 $unicode[] = $thisValue;

@@ -111,34 +111,65 @@ class PHPRtfLite_Element
      */
     private static function convertTagsToRtf($text)
     {
-        //bold
-        $text = preg_replace('/<STRONG[ ]*>(.*?)<\/STRONG[ ]*>/smi', '\b \1\b0 ', $text);
-        $text = preg_replace('/<B[ ]*>(.*?)<\/B[ ]*>/smi', '\b \1\b0 ', $text);
-        //italic
-        $text = preg_replace('/<EM[ ]*>(.*?)<\/EM[ ]*>/smi', '\i \1\i0 ', $text);
-        $text = preg_replace('/<I[ ]*>(.*?)<\/I[ ]*>/smi', '\i \1\i0 ', $text);
-        //underline
-        $text = preg_replace('/<U[ ]*>(.*?)<\/U[ ]*>/smi', '\ul \1\ul0 ', $text);
-        //break
-        $text = preg_replace('/<BR[ ]*(\/)?[ ]*>/smi', '\line ', $text);
-        //horizontal rule
-        $text = preg_replace('/<HR[ ]*(\/)?[ ]*>/smi', '{\pard \brdrb \brdrs \brdrw10 \brsp20 \par}', $text);
+        $search = array(
+            // bold
+            '/<STRONG[ ]*>(.*?)<\/STRONG[ ]*>/smi',
+            '/<B[ ]*>(.*?)<\/B[ ]*>/smi',
+            // italic
+            '/<EM[ ]*>(.*?)<\/EM[ ]*>/smi',
+            '/<I[ ]*>(.*?)<\/I[ ]*>/smi',
+            // underline
+            '/<U[ ]*>(.*?)<\/U[ ]*>/smi',
+            // break
+            '/<BR[ ]*(\/)?[ ]*>/smi',
+            '/<LINE[ ]*(\/)?[ ]*>/smi',
+            // horizontal rule
+            '/<HR[ ]*(\/)?[ ]*>/smi',
+            '/<CHDATE[ ]*(\/)?[ ]*>/smi',
+            '/<CHDPL[ ]*(\/)?[ ]*>/smi',
+            '/<CHDPA[ ]*(\/)?[ ]*>/smi',
+            '/<CHTIME[ ]*(\/)?[ ]*>/smi',
+            '/<CHPGN[ ]*(\/)?[ ]*>/smi',
+            // tab
+            '/<TAB[ ]*(\/)?[ ]*>/smi',
+            // bullet
+            '/<BULLET[ ]*(\/)?[ ]*>/smi',
+            '/<PAGENUM[ ]*(\/)?[ ]*>/smi',
+            '/<SECTNUM[ ]*(\/)?[ ]*>/smi',
+//            '/<PAGE[ ]*(\/)?[ ]*>/smi',
+//            '/<SECT[ ]*(\/)?[ ]*>/smi'
+        );
 
-        $text = preg_replace('/<CHDATE[ ]*(\/)?[ ]*>/smi', '\chdate ', $text);
-        $text = preg_replace('/<CHDPL[ ]*(\/)?[ ]*>/smi', '\chdpl ', $text);
-        $text = preg_replace('/<CHDPA[ ]*(\/)?[ ]*>/smi', '\chdpa ', $text);
-        $text = preg_replace('/<CHTIME[ ]*(\/)?[ ]*>/smi', '\chtime ', $text);
-        $text = preg_replace('/<CHPGN[ ]*(\/)?[ ]*>/smi', '\chpgn ', $text);
+        $replace = array(
+            // bold
+            '\b \1\b0 ',
+            '\b \1\b0 ',
+            // italic
+            '\i \1\i0 ',
+            '\i \1\i0 ',
+            // underline
+            '\ul \1\ul0 ',
+            // break
+            '\line ',
+            '\line ',
+            // horizontal rule
+            '{\pard \brdrb \brdrs \brdrw10 \brsp20 \par}',
+            '\chdate ',
+            '\chdpl ',
+            '\chdpa ',
+            '\chtime ',
+            '\chpgn ',
+            // tab
+            '\tab ',
+            // bullet
+            '\bullet ',
+            '\chpgn ',
+            '\sectnum ',
+//            '\page ',
+//            '\sect '
+        );
 
-        $text = preg_replace('/<TAB[ ]*(\/)?[ ]*>/smi', '\tab ', $text);
-        $text = preg_replace('/<BULLET[ ]*(\/)?[ ]*>/smi', '\bullet ', $text);
-
-        $text = preg_replace('/<PAGENUM[ ]*(\/)?[ ]*>/smi', '\chpgn ', $text);
-        $text = preg_replace('/<SECTNUM[ ]*(\/)?[ ]*>/smi', '\sectnum ', $text);
-
-        $text = preg_replace('/<LINE[ ]*(\/)?[ ]*>/smi', '\line ', $text);
-        //$text = preg_replace('/<PAGE[ ]*(\/)?[ ]*>/smi', '\\page ', $text);
-        //$text = preg_replace('/<SECT[ ]*(\/)?[ ]*>/smi', '\\sect', $text);
+        $text = preg_replace($search, $replace, $text);
 
         return $text;
     }
@@ -172,9 +203,9 @@ class PHPRtfLite_Element
     }
 
     /**
-     * streams the output
+     * renders the element
      */
-    public function output()
+    public function render()
     {
         $stream = $this->_rtf->getStream();
         $text = $this->_text;
@@ -184,7 +215,7 @@ class PHPRtfLite_Element
             if ($this->_convertTagsToRtf) {
                 $text = self::convertTagsToRtf($text);
             }
-            $text = PHPRtfLite_Utf8::getUnicodeEntities($text);
+            $text = PHPRtfLite_Utf8::getUnicodeEntities($text, $this->_rtf->getCharset());
         }
 
         $stream->write($this->getOpeningToken());

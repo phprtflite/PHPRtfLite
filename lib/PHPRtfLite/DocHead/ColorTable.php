@@ -22,13 +22,14 @@
 
 /**
  * defines color table for the rtf document head
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010 Steffen Zeidler
  * @package     PHPRtfLite
+ * @subpackage  PHPRtfLite_DocHead
  */
 
-class PHPRtfLite_DocHeadDefinition_ColorTable
+class PHPRtfLite_DocHead_ColorTable
 {
 
     /**
@@ -43,9 +44,9 @@ class PHPRtfLite_DocHeadDefinition_ColorTable
         $color = ltrim($color, '#');
 
         if (strlen($color) == 3) {
-            return str_repeat(substr($color, 0, 1), 2)
-                 . str_repeat(substr($color, 1, 1), 2)
-                 . str_repeat(substr($color, 2, 1), 2);
+            $color = str_repeat(substr($color, 0, 1), 2)
+                   . str_repeat(substr($color, 1, 1), 2)
+                   . str_repeat(substr($color, 2, 1), 2);
         }
 
         return strtoupper($color);
@@ -88,8 +89,8 @@ class PHPRtfLite_DocHeadDefinition_ColorTable
 
     /**
      * Gets rtf code of color.
-     * @param string $color color
-     * @return string
+     * @param   string $color color
+     * @return  string
      */
     public function getColorIndex($color)
     {

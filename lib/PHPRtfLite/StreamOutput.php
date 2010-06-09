@@ -22,7 +22,7 @@
 
 /**
  * Class for streaming the rtf output.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010 Steffen Zeidler
  * @package     PHPRtfLite

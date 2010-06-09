@@ -22,7 +22,7 @@
 
 /**
  * Class for displaying images in rtf documents.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
@@ -45,11 +45,6 @@ class PHPRtfLite_Image
      * @var string
      */
     protected $_file;
-
-    /**
-     * @var string
-     */
-    protected $_extension;
 
     /**
      * @var float
@@ -93,30 +88,31 @@ class PHPRtfLite_Image
     {
         $this->_rtf = $rtf;
         $this->_parFormat = $parFormat;
+        if ($parFormat) {
+            $parFormat->setColorTable($this->_rtf->getColorTable());
+        }
 
         if (file_exists($imageFile)) {
             $this->_file = $imageFile;
-            $pathInfo = pathInfo($imageFile);
-
-            if (isset($pathInfo['extension'])) {
-                $this->_extension = strtolower($pathInfo['extension']);
-            }
 
             list($this->_defaultWidth, $this->_defaultHeight) = getimagesize($imageFile);
-
-            if ($width !== null) {
-                $this->setWidth($width);
-            }
-
-            if ($height !== null) {
-                $this->setHeight($height);
-            }
+            
+            $this->_width = $width;
+            $this->_height = $height;
         }
         else {
             $this->_defaultWidth = 20;
             $this->_defaultHeight = 20;
-            $this->_extension = 'png';
         }
+    }
+
+    /**
+     * checks, if image file is available or missing
+     * @return boolean
+     */
+    public function isMissing()
+    {
+        return $this->_file === null;
     }
 
     /**
@@ -240,6 +236,9 @@ class PHPRtfLite_Image
         return round($height * PHPRtfLite::TWIPS_IN_CM);
     }
 
+    /**
+     * adds rtf image code to show that the file is missing
+     */
     private function addMissingFileToStream()
     {
         $stream = $this->_rtf->getStream();
@@ -293,7 +292,7 @@ class PHPRtfLite_Image
      *
      * @return string rtf code
      */
-    public function output()
+    public function render()
     {
         $stream = $this->_rtf->getStream();
 
@@ -306,15 +305,21 @@ class PHPRtfLite_Image
         $stream->write('\picwgoal' . $this->getImageWidth());
         $stream->write('\pichgoal' . $this->getImageHeight());
 
-        switch ($this->_extension) {
-            case 'jpeg':
-            case 'jpg':
-                $stream->write('\jpegblip ');
-                break;
+        if ($this->_file) {
+            $pathInfo = pathinfo($this->_file);
+            $extension = isset($pathInfo['extension'])
+                         ? strtolower($pathInfo['extension'])
+                         : '';
+        }
+        else {
+            $extension = 'png';
+        }
 
-            case 'png':
-                $stream->write('\pngblip ');
-                break;
+        if ($extension == 'png') {
+            $stream->write('\pngblip ');
+        }
+        else {
+            $stream->write('\jpegblip ');
         }
 
         $this->addImageAsHexToStream();

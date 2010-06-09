@@ -177,7 +177,7 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container
      * streams rtf code for header/footer
      * @return string rtf code
      */
-    public function output()
+    public function render()
     {
         $stream = $this->_rtf->getStream();
         
@@ -186,7 +186,7 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container
         }
 
         $stream->write('{\\' . $this->getTypeAsRtfCode() . ' ');
-        parent::output();
+        parent::render();
         $stream->write('\par}' . "\r\n");
     }
 

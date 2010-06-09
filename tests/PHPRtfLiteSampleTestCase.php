@@ -19,10 +19,12 @@ abstract class PHPRtfLiteSampleTestCase extends PHPUnit_Framework_TestCase
         $this->copyTempFileToSample();
     }
 
+
     protected function getSampleDir()
     {
         return dirname(__FILE__) . '/../samples';
     }
+
 
     protected function copyTempFileToSample()
     {
@@ -34,6 +36,7 @@ abstract class PHPRtfLiteSampleTestCase extends PHPUnit_Framework_TestCase
         rename($sampleTmpFile, $sampleFile);
     }
 
+
     protected function copySampleFileToTemp()
     {
         $sampleFile     = $this->getSampleFile();
@@ -44,10 +47,12 @@ abstract class PHPRtfLiteSampleTestCase extends PHPUnit_Framework_TestCase
         rename($sampleFile, $sampleTmpFile);
     }
 
+
     protected function getSampleTempFile()
     {
         return $this->getSampleFile() . '-tmp';
     }
+
 
     protected function processTest($samplePhp)
     {

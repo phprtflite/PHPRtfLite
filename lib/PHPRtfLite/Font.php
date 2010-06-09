@@ -22,7 +22,7 @@
 
 /**
  * Class for fonts in rtf documents.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
@@ -42,12 +42,12 @@ class PHPRtfLite_Font
     const ANIMATE_SHIMMER              = 6;
 
     /**
-     * @var PHPRtfLite_DocHeadDefinition_ColorTable
+     * @var PHPRtfLite_DocHead_ColorTable
      */
     protected $_colorTable;
 
     /**
-     * @var PHPRtfLite_DocHeadDefinition_FontTable
+     * @var PHPRtfLite_DocHead_FontTable
      */
     protected $_fontTable;
 
@@ -130,9 +130,9 @@ class PHPRtfLite_Font
     /**
      * sets rtf color table
      * 
-     * @param PHPRtfLite_DocHeadDefinition_ColorTable $colorTable
+     * @param PHPRtfLite_DocHead_ColorTable $colorTable
      */
-    public function setColorTable(PHPRtfLite_DocHeadDefinition_ColorTable $colorTable)
+    public function setColorTable(PHPRtfLite_DocHead_ColorTable $colorTable)
     {
         if (!empty($this->_color)) {
             $colorTable->add($this->_color);
@@ -143,18 +143,31 @@ class PHPRtfLite_Font
         $this->_colorTable = $colorTable;
     }
 
+
     /**
      * sets rtf font table
      * 
-     * @param PHPRtfLite_DocHeadDefinition_FontTable $fontTable
+     * @param PHPRtfLite_DocHead_FontTable $fontTable
      */
-    public function setFontTable(PHPRtfLite_DocHeadDefinition_FontTable $fontTable)
+    public function setFontTable(PHPRtfLite_DocHead_FontTable $fontTable)
     {
         if (!empty($this->_fontFamily)) {
             $fontTable->add($this->_fontFamily);
         }
         $this->_fontTable = $fontTable;
     }
+
+
+    /**
+     * gets font family
+     * 
+     * @return string
+     */
+    public function getFontFamily()
+    {
+        return $this->_fontFamily;
+    }
+
 
     /**
      * Sets text bold
@@ -289,7 +302,11 @@ class PHPRtfLite_Font
      */
     public function getContent()
     {
-        $content = $this->_size > 0 ? '\fs' . ($this->_size * 2) . ' ' : '';
+        $content = '';
+        
+        if ($this->_size > 0) {
+            $content .= '\fs' . ($this->_size * 2) . ' ';
+        }
 
         if ($this->_fontFamily && $this->_fontTable) {
             $fontIndex = $this->_fontTable->getFontIndex($this->_fontFamily);
@@ -327,7 +344,7 @@ class PHPRtfLite_Font
         if ($this->_isStriked) {
             $content .= '\strike ' . $this->_animation;
         }
-        if ($this->_isDoubleStriked) {
+        elseif ($this->_isDoubleStriked) {
             $content .= '\striked1 ' . $this->_animation;
         }
 

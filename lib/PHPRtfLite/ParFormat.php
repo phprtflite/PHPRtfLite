@@ -22,7 +22,7 @@
 
 /**
  * Paragraph formatting class for rtf documents.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
@@ -41,7 +41,7 @@ class PHPRtfLite_ParFormat
 
     /**
      * rtf color table
-     * @var PHPRtfLite_DocHeadDefinition_ColorTable
+     * @var PHPRtfLite_DocHead_ColorTable
      */
     protected $_colorTable;
 
@@ -147,7 +147,7 @@ class PHPRtfLite_ParFormat
     }
 
     /**
-     * Sets first line indention (default 0)
+     * Sets first line indention in centimeter (default 0)
      *
      * @param   float   $indentFirst
      */
@@ -157,7 +157,7 @@ class PHPRtfLite_ParFormat
     }
 
     /**
-     * Gets first line indention
+     * Gets first line indention in centimeter
      * 
      * @return float
      */
@@ -167,7 +167,7 @@ class PHPRtfLite_ParFormat
     }
 
     /**
-     * Sets left indent (default 0)
+     * Sets left indent in centimeter (default 0)
      *
      * @param   float   $indentLeft
      */
@@ -177,7 +177,7 @@ class PHPRtfLite_ParFormat
     }
 
     /**
-     * Gets left indent
+     * Gets left indent in centimeter
      *
      * @return float
      */
@@ -187,7 +187,7 @@ class PHPRtfLite_ParFormat
     }
 
     /**
-     * Sets right indent (default 0)
+     * Sets right indent in centimeter (default 0)
      *
      * @param   float   $indentRight
      */
@@ -197,7 +197,7 @@ class PHPRtfLite_ParFormat
     }
 
     /**
-     * Gets right indent
+     * Gets right indent in centimeter
      *
      * @return float
      */
@@ -289,9 +289,9 @@ class PHPRtfLite_ParFormat
     /**
      * sets rtf color table
      * 
-     * @param PHPRtfLite_DocHeadDefinition_ColorTable $colorTable
+     * @param PHPRtfLite_DocHead_ColorTable $colorTable
      */
-    public function setColorTable(PHPRtfLite_DocHeadDefinition_ColorTable $colorTable)
+    public function setColorTable(PHPRtfLite_DocHead_ColorTable $colorTable)
     {
         if ($this->_backgroundColor) {
             $colorTable->add($this->_backgroundColor);

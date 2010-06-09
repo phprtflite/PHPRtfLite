@@ -22,7 +22,7 @@
 
 /**
  * Class for creating borders within rtf documents.
- * @version     1.0.0
+ * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
@@ -64,10 +64,10 @@ class PHPRtfLite_Border
      * @param   string  $color  color of border (example '#ff0000' or '#f00')
      * @param   string  $type   represented by class constants PHPRtfLite_Border_Format::TYPE_*<br>
      *   Possible values:<br>
-     *     PHPRtfLite_Border_Format::TYPE_SINGLE  => 'single'<br>
-     *     PHPRtfLite_Border_Format::TYPE_DOT      = 'dot'<br>
-     *     PHPRtfLite_Border_Format::TYPE_DASH     = 'dash'<br>
-     *     PHPRtfLite_Border_Format::TYPE_DOTDASH  = 'dotdash'
+     *     PHPRtfLite_Border_Format::TYPE_SINGLE  'single'<br>
+     *     PHPRtfLite_Border_Format::TYPE_DOT     'dot'<br>
+     *     PHPRtfLite_Border_Format::TYPE_DASH    'dash'<br>
+     *     PHPRtfLite_Border_Format::TYPE_DOTDASH 'dotdash'
      *
      * @param   float   $space  space between borders and the paragraph
      * @param   boolean $left   left border

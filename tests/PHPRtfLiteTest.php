@@ -103,6 +103,49 @@ class PHPRtfLiteTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * tests addHeader with expected exception for odd even pages
+     * @expectedException PHPRtfLite_Exception
+     */
+    public function testAddHeaderEvenOddException()
+    {
+        $this->_rtf->addHeader(PHPRtfLite_Container_Header::TYPE_LEFT);
+        $this->_rtf->getContent();
+    }
+
+    /**
+     * tests addHeader with odd and even page headers
+     */
+    public function testAddHeaderEvenOdd()
+    {
+        $this->_rtf->setOddEvenDifferent();
+        $this->_rtf->addHeader(PHPRtfLite_Container_Header::TYPE_LEFT);
+        $this->_rtf->addHeader(PHPRtfLite_Container_Header::TYPE_RIGHT);
+        $this->assertEquals(2, count($this->_rtf->getHeaders()));
+        $this->_rtf->getContent();
+    }
+
+    /**
+     * tests addHeader with first page
+     */
+    public function testAddHeaderFirst()
+    {
+        $this->_rtf->addHeader(PHPRtfLite_Container_Header::TYPE_FIRST);
+        $this->assertEquals(1, count($this->_rtf->getHeaders()));
+        $this->_rtf->getContent();
+    }
+
+    /**
+     * tests addHeader with expected exception for all page header
+     * @expectedException PHPRtfLite_Exception
+     */
+    public function testAddHeaderAllException()
+    {
+        $this->_rtf->setOddEvenDifferent();
+        $this->_rtf->addHeader(PHPRtfLite_Container_Header::TYPE_ALL);
+        $this->_rtf->getContent();
+    }
+
+    /**
      * tests addFooter
      */
     public function testAddFooter()
