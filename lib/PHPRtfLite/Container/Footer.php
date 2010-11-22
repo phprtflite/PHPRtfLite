@@ -109,7 +109,7 @@ class PHPRtfLite_Container_Footer extends PHPRtfLite_Container {
                 throw new PHPRtfLite_Exception('Footer type ' . $this->_type . ' is not allowed, when using not odd even different!');
 
             case self::TYPE_FIRST:
-                if ($this->getFirstPageHasSpecialLayout()) {
+                if ($this->_rtf->getFirstPageHasSpecialLayout()) {
                     return 'footerf';
                 }
 
