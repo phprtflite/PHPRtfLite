@@ -72,6 +72,15 @@ abstract class PHPRtfLite_List
 
 
     /**
+     * gets list character
+     *
+     * @param   integer $number
+     * @return  string
+     */
+    abstract protected function getListCharacter($number);
+
+
+    /**
      * constructor
      *
      * @param   PHPRtfLite              $rtf
@@ -87,15 +96,6 @@ abstract class PHPRtfLite_List
         $this->_font        = $font;
         $this->_parFormat   = $parFormat;
     }
-
-
-    /**
-     * gets list character
-     *
-     * @param   integer $number
-     * @return  string
-     */
-    abstract protected function getListCharacter($number);
 
 
     /**

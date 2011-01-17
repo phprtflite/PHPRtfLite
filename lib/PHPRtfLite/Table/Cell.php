@@ -125,6 +125,13 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
     protected $_pard = '\pard \intbl ';
 
     /**
+     * nested table
+     * @var PHPRtfLite_Table_Nested
+     */
+    protected $_nestedTable;
+
+
+    /**
      * Constructor of cell.
      *
      * @param   PHPRtfLite_Table    $table          table instance
@@ -155,8 +162,24 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
      */
     public function addTable($alignment = PHPRtfLite_Table::ALIGN_LEFT)
     {
-        throw new PHPRtfLite_Exception('Nested table are not supported in the current version!');
+        $nestDepth = $this->_table->getNestDepth() + 1;
+        $table = new PHPRtfLite_Table_Nested($this, $alignment, $nestDepth);
+        $this->_elements[] = $table;
+
+        return $table;
     }
+
+
+    /**
+     * gets table instance
+     *
+     * @return PHPRtfLite_Table
+     */
+    public function getTable()
+    {
+        return $this->_table;
+    }
+
 
     /**
      * Sets text alignment for cell. The method PHPRtfLite_Table->writeToCell() overrides it with alignment of an instance of PHPRtfLite_ParFormat.
@@ -311,6 +334,15 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
         return $this->_verticalMerged;
     }
 
+    public function isVerticalMergedFirstInRange()
+    {
+        if ($this->_rowIndex == 1) {
+            return true;
+        }
+        $cellBefore = $this->_table->getCell($this->_rowIndex - 1, $this->_columnIndex);
+        return !$cellBefore->isVerticalMerged();
+    }
+
     /**
      * Sets cell width
      *
@@ -328,7 +360,10 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
      */
     public function getWidth()
     {
-        return $this->_width;
+        if ($this->_width) {
+            return $this->_width;
+        }
+        return $this->_table->getColumn($this->_columnIndex)->getWidth();
     }
 
     /**
@@ -434,6 +469,54 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
         return $this->_columnIndex;
     }
 
+    public function renderDefinition()
+    {
+        $stream = $this->_rtf->getStream();
+        if ($this->isVerticalMerged()) {
+            if ($this->isVerticalMergedFirstInRange()) {
+                $stream->write('\clvmgf');
+            }
+            else {
+                $stream->write('\clvmrg');
+            }
+        }
+
+        $backgroundColor = $this->getBackgroundColor();
+        if ($backgroundColor) {
+            $colorTable = $this->_rtf->getColorTable();
+            $stream->write('\clcbpat' . $colorTable->getColorIndex($backgroundColor) . ' ');
+        }
+
+        switch ($this->getVerticalAlignment()) {
+            case self::VERTICAL_ALIGN_TOP:
+                $stream->write('\clvertalt');
+                break;
+
+            case self::VERTICAL_ALIGN_CENTER:
+                $stream->write('\clvertalc');
+                break;
+
+            case self::VERTICAL_ALIGN_BOTTOM:
+                $stream->write('\clvertalb');
+                break;
+        }
+
+        switch ($this->getRotateTo()) {
+            case self::ROTATE_RIGHT:
+                $stream->write('\cltxtbrl');
+                break;
+
+            case self::ROTATE_LEFT:
+                $stream->write('\cltxbtlr');
+                break;
+        }
+
+        $border = $this->getBorder();
+        if ($border) {
+            $stream->write($border->getContent('\cl'));
+        }
+    }
+
     /**
      * Gets rtf code for cell
      *
@@ -442,8 +525,35 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
     public function render()
     {
         $stream = $this->_rtf->getStream();
-        $stream->write('{');
+        $stream->write("\r\n");
 
+        parent::render();
+
+        if ($this->_table->isNestedTable()) {
+            $containerElements = $this->getElements();
+            $numOfContainerElements = count($containerElements);
+            if (!($containerElements[$numOfContainerElements - 1] instanceof PHPRtfLite_Table_Nested)) {
+                $stream->write('{\nestcell{\nonesttables\par}\pard}' . "\r\n");
+                $stream->write('{\*\nesttableprops ');
+                $row = $this->_table->getRow($this->_rowIndex);
+                $this->_table->renderRowDefinition($row);
+                $stream->write('\nestrow}{\nonesttables\par}' . "\r\n");
+
+            }
+            else {
+                $stream->write("\r\n");
+            }
+        }
+        else {
+            $stream->write('\cell\pard' . "\r\n");
+        }
+    }
+
+
+    public function renderContentDefinition()
+    {
+        $stream = $this->_rtf->getStream();
+        
         switch ($this->_alignment) {
             case self::TEXT_ALIGN_LEFT:
                 $stream->write('\ql');
@@ -461,13 +571,5 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
                 $stream->write('\qj');
                 break;
         }
-
-        if ($this->_font) {
-            $stream->write($this->_font->getContent());
-        }
-
-        parent::render();
-
-        $stream->write('\cell\pard}' . "\r\n");
     }
 }

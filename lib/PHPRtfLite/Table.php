@@ -81,17 +81,51 @@ class PHPRtfLite_Table
      */
     protected $_leftPosition = 0;
 
+    /**
+     * nest depth
+     * 0: main document
+     * 1: table cell
+     * 2: nested table cell
+     * 3: double nested table cell
+     * 4: three times nested table cell
+     * .. and so on ..
+     * @var integer
+     */
+    protected $_nestDepth = 1;
+
     
     /**
      * Constructor
      * @param PHPRtfLite_Container
      * @param string
      */
-    public function __construct(PHPRtfLite_Container $container, $alignment = self::ALIGN_LEFT)
+    public function __construct(PHPRtfLite_Container $container, $alignment = self::ALIGN_LEFT, $nestDepth = 1)
     {
         $this->_container = $container;
         $this->_alignment = $alignment;
+        $this->_nestDepth = $nestDepth;
     }
+
+    /**
+     * gets nested depth
+     * 
+     * @return integer
+     */
+    public function getNestDepth()
+    {
+        return $this->_nestDepth;
+    }
+
+    /**
+     * checks, if table is a nested table
+     *
+     * @return boolean
+     */
+    public function isNestedTable()
+    {
+        return $this->_nestDepth > 1;
+    }
+
 
     /**
      * Gets rtf container instance
@@ -165,6 +199,16 @@ class PHPRtfLite_Table
     public function isFirstRowHeader()
     {
         return $this->_firstRowIsHeader;
+    }
+
+    /**
+     * gets alignment
+     * 
+     * @return string
+     */
+    public function getAlignment()
+    {
+        return $this->_alignment;
     }
 
     /**
@@ -719,123 +763,88 @@ class PHPRtfLite_Table
         }
 
         $stream = $this->getRtf()->getStream();
-
-        $stream->write('\pard ');
-        $rowIndex = 1;
+        $stream->write('\trowd' . "\r\n");
 
         foreach ($this->_rows as $row) {
-            $stream->write('\trowd ' . "\r\n");
-
-            if ($this->_alignment) {
-                switch ($this->_alignment) {
-                    case self::ALIGN_CENTER:
-                        $stream->write('\trqc ' . "\r\n");
-                        break;
-
-                    case self::ALIGN_RIGHT:
-                        $stream->write('\trqr ' . "\r\n");
-                        break;
-
-                    default:
-                        $stream->write('\trql ' . "\r\n");
-                        break;
-                }
-            }
-
-            if ($row->getHeight()) {
-                $stream->write('\trrh' . round($row->getHeight() * PHPRtfLite::TWIPS_IN_CM));
-            }
-
-            if ($this->isPreventPageBreak()) {
-                $stream->write('\trkeep ');
-            }
-
-            if ($this->isFirstRowHeader() && $rowIndex == 1) {
-                $stream->write('\trhdr ');
-            }
-
-            if (!empty($this->_leftPosition)) {
-                $stream->write('\trleft' . round($this->_leftPosition * PHPRtfLite::TWIPS_IN_CM) . ' ');
-            }
-
-            $stream->write("\r\n");
-            $width = 0;
-            $columnIndex = 1;
-
-            foreach ($this->_columns as $column) {
-                $cell = $this->getCell($rowIndex, $columnIndex);
-
-                if (!$cell->isHorizontalMerged()) {
-                    $cellWidth = $cell->getWidth() ? $cell->getWidth() : $column->getWidth();
-                    $width += round($cellWidth * PHPRtfLite::TWIPS_IN_CM);
-
-                    if ($cell->isVerticalMerged()) {
-                        if ($rowIndex == 1 || ($rowIndex > 1 && !$this->getCell($rowIndex - 1, $columnIndex)->isVerticalMerged())) {
-                            $stream->write('\clvmgf' . "\r\n");
-                        }
-                        else {
-                            $stream->write('\clvmrg' . "\r\n");
-                        }
-                    }
-
-                    $backgroundColor = $cell->getBackgroundColor();
-                    if ($backgroundColor) {
-                        $stream->write('\clcbpat' . $this->getRtf()->getColorTable()->getColorIndex($backgroundColor) . " \r\n");
-                    }
-
-                    switch ($cell->getVerticalAlignment()) {
-                        case PHPRtfLite_Table_Cell::VERTICAL_ALIGN_TOP:
-                            $stream->write('\clvertalt');
-                            break;
-
-                        case PHPRtfLite_Table_Cell::VERTICAL_ALIGN_CENTER:
-                            $stream->write('\clvertalc');
-                            break;
-
-                        case PHPRtfLite_Table_Cell::VERTICAL_ALIGN_BOTTOM:
-                            $stream->write('\clvertalb');
-                            break;
-                    }
-
-                    switch ($cell->getRotateTo()) {
-                        case PHPRtfLite_Table_Cell::ROTATE_RIGHT:
-                            $stream->write('\cltxtbrl');
-                            break;
-
-                        case PHPRtfLite_Table_Cell::ROTATE_LEFT:
-                            $stream->write('\cltxbtlr');
-                            break;
-                    }
-
-                    $border = $cell->getBorder();
-                    if ($border) {
-                        $stream->write($border->getContent('\\cl'));
-                    }
-
-                    $stream->write('\cellx' . $width . " \r\n");
-                }
-                
-                $columnIndex++;
-            }
-
-            //@since version 2.0
-            $stream->write('\pard \intbl' . "\r\n");
-
-            $columnIndex = 1;
-
-            foreach ($this->_columns as $column) {
-                $cell = $this->getCell($rowIndex, $columnIndex);
-                if (!$cell->isHorizontalMerged()) {
-                    $cell->render();
-                }
-                $columnIndex++;
-            }
-
-            $stream->write('\pard \intbl \row ' . "\r\n");
-            $rowIndex++;
+            //$stream->write('\pard\intbl\itap' . $this->_nestDepth . "\r\n");
+            $this->renderRowCells($row);
+            $stream->write("\r\n" . '{');
+            $this->renderRowDefinition($row);
+            $stream->write('\row}' . "\r\n");
         }
 
-        $stream->write('\pard' . "\r\n");
+        $stream->write('\pard\itap0' . "\r\n");
+    }
+
+    /**
+     *
+     * @param PHPRtfLite_Table_Row $row
+     */
+    public function renderRowDefinition(PHPRtfLite_Table_Row $row)
+    {
+        $rowIndex = $row->getRowIndex();
+        $stream = $this->getRtf()->getStream();
+        $stream->write('\trowd');
+
+        if ($this->_alignment) {
+            switch ($this->_alignment) {
+                case self::ALIGN_CENTER:
+                    $stream->write('\trqc');
+                    break;
+
+                case self::ALIGN_RIGHT:
+                    $stream->write('\trqr');
+                    break;
+
+                default:
+                    $stream->write('\trql');
+                    break;
+            }
+        }
+
+        $rowHeight = $row->getHeight();
+        if ($rowHeight) {
+            $stream->write('\trrh' . round($rowHeight * PHPRtfLite::TWIPS_IN_CM));
+        }
+
+        if ($this->isPreventPageBreak()) {
+            $stream->write('\trkeep ');
+        }
+
+        if ($this->isFirstRowHeader() && $rowIndex == 1) {
+            $stream->write('\trhdr ');
+        }
+
+        if ($this->getLeftPosition() != '') {
+            $stream->write('\trleft' . round($this->getLeftPosition() * PHPRtfLite::TWIPS_IN_CM) . ' ');
+        }
+
+        $width = 0;
+        foreach ($this->getColumns() as $columnIndex => $column) {
+            $cell = $this->getCell($rowIndex, $columnIndex + 1);
+
+            // render cell definition
+            if (!$cell->isHorizontalMerged()) {
+                $cell->renderDefinition();
+
+                // cell width
+                $width += round($cell->getWidth() * PHPRtfLite::TWIPS_IN_CM);
+                $stream->write('\cellx' . $width);
+            }
+        }
+    }
+
+    protected function renderRowCells(PHPRtfLite_Table_Row $row)
+    {
+        $rowIndex = $row->getRowIndex();
+        $stream = $this->getRtf()->getStream();
+
+        foreach ($this->getColumns() as $columnIndex => $column) {
+            $cell = $this->getCell($rowIndex, $columnIndex + 1);
+            if (!$cell->isHorizontalMerged()) {
+                $cell->render();
+            }
+        }
     }
 
 }

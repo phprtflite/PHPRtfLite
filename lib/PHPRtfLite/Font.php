@@ -350,4 +350,26 @@ class PHPRtfLite_Font
 
         return $content;
     }
+
+
+    public function getClosingContent()
+    {
+        $content = '';
+        if ($this->_color) {
+            $content .= '\cf0 ';
+        }
+        if ($this->_backgroundColor) {
+            $content .= '\chcbpat0 ';
+        }
+        if ($this->_isBold) {
+            $content .= '\b0 ';
+        }
+        if ($this->_isItalic) {
+            $content .= '\i0 ';
+        }
+        if ($this->_isUnderlined) {
+            $content .= '\ul0 ';
+        }
+        return $content;
+    }
 }

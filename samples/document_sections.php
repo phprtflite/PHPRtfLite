@@ -50,7 +50,7 @@ The free software/open-source word processors AbiWord and OpenOffice.org can vie
 
 The default editor for Mac OS X, TextEdit, can also view and edit RTF files.
 
-Since RTF files are text files, it�s easy to produce RTF with many programming languages, like Perl, Java, C++, Pascal, COBOL, or Lisp. Perl, for example, has the RTF::Writer module for this purpose.
+Since RTF files are text files, it\'s easy to produce RTF with many programming languages, like Perl, Java, C++, Pascal, COBOL, or Lisp. Perl, for example, has the RTF::Writer module for this purpose.
 ';
 
 

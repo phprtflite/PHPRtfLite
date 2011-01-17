@@ -105,4 +105,13 @@ class PHPRtfLite_Table_Row
         return $this->_cells[$columnIndex - 1];
     }
 
+    /**
+     * gets row index of row
+     * @return integer
+     */
+    public function getRowIndex()
+    {
+        return $this->_rowIndex;
+    }
+
 }
