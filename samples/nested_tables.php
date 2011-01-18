@@ -17,12 +17,12 @@ $nestedTable = $cell->addTable();
 $cell->writeText('default cell I');
 
 $nestedTable->addRows(2, 1);
-$nestedTable->addColumnsList(array(2));
+$nestedTable->addColumnsList(array(4));
 $cell = $nestedTable->getCell(1, 1);
 $cell->writeText('Before double nested table' . "\r\n");
 $doubleNestedTable = $cell->addTable();
 $doubleNestedTable->addRows(2, 1);
-$doubleNestedTable->addColumnsList(array(2));
+$doubleNestedTable->addColumnsList(array(2, 2));
 
 $cell = $doubleNestedTable->getCell(1, 1);
 $cell->setTextAlignment(PHPRtfLite_Table_Cell::TEXT_ALIGN_RIGHT);
@@ -37,8 +37,10 @@ $threeTimesNestedTable = $cell->addTable();
 $threeTimesNestedTable->addRows(1, 1);
 $threeTimesNestedTable->addColumnsList(array(2));
 $threeTimesNestedTable->writeToCell(1, 1, 'three times nested table II');
-$doubleNestedTable->writeToCell(1, 1, 'double nested cell I');
-$doubleNestedTable->writeToCell(2, 1, 'double nested cell II');
+$doubleNestedTable->writeToCell(1, 1, 'double nested cell 1:1');
+$doubleNestedTable->writeToCell(2, 1, 'double nested cell 2:1');
+$doubleNestedTable->writeToCell(1, 2, 'double nested cell 1:2');
+$doubleNestedTable->writeToCell(2, 2, 'double nested cell 2:2');
 
 $nestedTable->writeToCell(2, 1, 'nested cell');
 

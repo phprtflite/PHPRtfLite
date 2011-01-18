@@ -2,7 +2,7 @@
 /* 
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -24,7 +24,7 @@
  * Class for creating cells of table in rtf documents.
  * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>, Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2009 Steffen Zeidler
+ * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Table
  */
@@ -517,39 +517,46 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
         }
     }
 
+
     /**
-     * Gets rtf code for cell
-     *
-     * @return string rtf code
+     * renders rtf code for cell
      */
     public function render()
     {
         $stream = $this->_rtf->getStream();
         $stream->write("\r\n");
 
+        // renders container elements
         parent::render();
 
         if ($this->_table->isNestedTable()) {
             $containerElements = $this->getElements();
             $numOfContainerElements = count($containerElements);
+
+            // if last container element is not a nested table, close cell
             if (!($containerElements[$numOfContainerElements - 1] instanceof PHPRtfLite_Table_Nested)) {
                 $stream->write('{\nestcell{\nonesttables\par}\pard}' . "\r\n");
-                $stream->write('{\*\nesttableprops ');
-                $row = $this->_table->getRow($this->_rowIndex);
-                $this->_table->renderRowDefinition($row);
-                $stream->write('\nestrow}{\nonesttables\par}' . "\r\n");
 
-            }
-            else {
-                $stream->write("\r\n");
+                // if last cell of row, close row
+                if ($this->getColumnIndex() == $this->_table->getColumnsCount()) {
+                    $stream->write('{\*\nesttableprops ');
+                    $row = $this->_table->getRow($this->_rowIndex);
+                    $this->_table->renderRowDefinition($row);
+                    $stream->write('\nestrow}{\nonesttables\par}');
+                }
             }
         }
         else {
-            $stream->write('\cell\pard' . "\r\n");
+            // closing tag for cell definition
+            $stream->write('\cell\pard');
         }
+        $stream->write("\r\n");
     }
 
 
+    /**
+     * renders cell content definition
+     */
     public function renderContentDefinition()
     {
         $stream = $this->_rtf->getStream();
@@ -572,4 +579,5 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
                 break;
         }
     }
+
 }

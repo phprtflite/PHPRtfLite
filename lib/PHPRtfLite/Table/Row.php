@@ -2,7 +2,7 @@
 
 /*
     PHPRtfLite
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -24,7 +24,7 @@
  * Class for creating rows of table in rtf documents.
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2009 Steffen Zeidler
+ * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Table
  */
@@ -56,7 +56,7 @@ class PHPRtfLite_Table_Row
 
 
     /**
-     * Constructor
+     * constructor
      * 
      * @param PHPRtfLite_Table  $table
      * @param integer           $rowIndex
@@ -69,8 +69,9 @@ class PHPRtfLite_Table_Row
         $this->_height      = $height;
     }
 
+
     /**
-     * Sets row height
+     * sets row height
      *
      * @param float $height
      */
@@ -79,8 +80,9 @@ class PHPRtfLite_Table_Row
         $this->_height = $height;
     }
 
+
     /**
-     * Gets row height
+     * gets row height
      *
      * @return float
      */
@@ -89,11 +91,11 @@ class PHPRtfLite_Table_Row
         return $this->_height;
     }
 
+
     /**
      * Gets cell instance for the given column index
      *
      * @param   integer                 $columnIndex
-     *
      * @return  PHPRtfLite_Table_Cell
      */
     public function getCellByIndex($columnIndex)
@@ -105,8 +107,10 @@ class PHPRtfLite_Table_Row
         return $this->_cells[$columnIndex - 1];
     }
 
+
     /**
      * gets row index of row
+     *
      * @return integer
      */
     public function getRowIndex()

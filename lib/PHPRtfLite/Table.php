@@ -738,6 +738,7 @@ class PHPRtfLite_Table
         return isset($this->_rows[$rowIndex - 1]);
     }
 
+
     /**
      * Returns true, if rowIndex and columnIndex do exists in table
      * 
@@ -750,6 +751,7 @@ class PHPRtfLite_Table
     {
         return ($this->checkRowIndex($rowIndex) && $this->checkColumnIndex($columnIndex));
     }
+
 
     /**
      * Gets rtf code for table
@@ -766,7 +768,6 @@ class PHPRtfLite_Table
         $stream->write('\trowd' . "\r\n");
 
         foreach ($this->_rows as $row) {
-            //$stream->write('\pard\intbl\itap' . $this->_nestDepth . "\r\n");
             $this->renderRowCells($row);
             $stream->write("\r\n" . '{');
             $this->renderRowDefinition($row);
@@ -776,7 +777,9 @@ class PHPRtfLite_Table
         $stream->write('\pard\itap0' . "\r\n");
     }
 
+
     /**
+     * renders row definition
      *
      * @param PHPRtfLite_Table_Row $row
      */
@@ -834,6 +837,12 @@ class PHPRtfLite_Table
         }
     }
 
+
+    /**
+     * renders row cells
+     *
+     * @param PHPRtfLite_Table_Row $row
+     */
     protected function renderRowCells(PHPRtfLite_Table_Row $row)
     {
         $rowIndex = $row->getRowIndex();

@@ -2,7 +2,7 @@
 /* 
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -25,7 +25,7 @@
  * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
+ * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Container
  */
@@ -255,6 +255,7 @@ abstract class PHPRtfLite_Container
         return $endnote;
     }
 
+
     /**
      * renders rtf code for that container
      *
@@ -270,14 +271,9 @@ abstract class PHPRtfLite_Container
         $lastKey = $this->countElements() - 1;
 
         foreach ($this->_elements as $key => $element) {
-//            $addParagraph = $this->needToAddParagraph($key);
-//            if ($addParagraph) {
-//                $stream->write('\par ');
-//            }
-
-            $isCellWithTextContent = $this->isCellTextContent($key);
             if ($this instanceof PHPRtfLite_Table_Cell && !($element instanceof PHPRtfLite_Table)) {
                 $prevElement = isset($this->_elements[$key - 1]) ? $this->_elements[$key - 1] : false;
+                // table cell initialization
                 if (!$prevElement || $prevElement instanceof PHPRtfLite_Table) {
                     $stream->write('\pard\intbl\itap' . $this->getTable()->getNestDepth() . "\r\n");
                     $this->renderContentDefinition();
@@ -295,7 +291,6 @@ abstract class PHPRtfLite_Container
                     $stream->write('{');
                 }
                 $stream->write($parFormat->getContent());
-//                $stream->write($this->_pard . $parFormat->getContent());
             }
 
             $font = $this->getCellFont($element);
@@ -305,8 +300,7 @@ abstract class PHPRtfLite_Container
 
             $element->render();
 
-            $addParagraph = $this->needToAddParagraph2($key);
-            if ($addParagraph) {
+            if ($this->needToAddParagraph($key)) {
                 $stream->write('\par ');
             }
 
@@ -315,7 +309,6 @@ abstract class PHPRtfLite_Container
             }
 
             if ($parFormat && $this instanceof PHPRtfLite_Table_Cell && $lastKey != $key) {
-//                $stream->write('}');
                 $stream->write('}');
             }
         }
@@ -330,19 +323,19 @@ abstract class PHPRtfLite_Container
      */
     private function needToAddParagraph($key)
     {
-        if ($key > 0) {
+        if (isset($this->_elements[$key + 1])) {
+            $nextElement = $this->_elements[$key + 1];
             $element = $this->_elements[$key];
-            $prevElement = $this->_elements[$key - 1];
+            $isNextElementTable = $nextElement instanceof PHPRtfLite_Table;
 
-            if ($prevElement instanceof PHPRtfLite_Table && $prevElement->getNestDepth() == 1) {
-                return !($element instanceof PHPRtfLit_Table);
+            if ($element instanceof PHPRtfLite_Table && $element->getNestDepth() == 1) {
+                return !$isNextElementTable;
             }
-            else if ($prevElement instanceof PHPRtfLite_Element) {
-                return (!$prevElement->isEmptyParagraph()
-                       && ($element instanceof PHPRtfLite_Table || $element->getParFormat()));
+            else if ($element instanceof PHPRtfLite_Element) {
+                return (!$element->isEmptyParagraph() && ($isNextElementTable || $nextElement->getParFormat()));
             }
-            else if ($prevElement instanceof PHPRtfLite_Image) {
-                return ($element instanceof PHPRtfLite_Table || $element->getParFormat());
+            else if ($element instanceof PHPRtfLite_Image) {
+                return ($isNextElementTable || $nextElement->getParFormat());
             }
         }
 
@@ -351,48 +344,17 @@ abstract class PHPRtfLite_Container
 
 
     /**
-     * checks, if a \par has to be added
+     * gets font if container is a cell
      *
-     * @param   integer $key
-     * @return  boolean
+     * @param   PHPRtfLite_Table    $element
+     * @return  PHPRtfLite_Font     $font
      */
-    private function needToAddParagraph2($key)
-    {
-        if (isset($this->_elements[$key + 1])) {
-            $nextElement = $this->_elements[$key + 1];
-            $element = $this->_elements[$key];
-
-            if ($element instanceof PHPRtfLite_Table && $element->getNestDepth() == 1) {
-                return !($nextElement instanceof PHPRtfLit_Table);
-            }
-            else if ($element instanceof PHPRtfLite_Element) {
-                return (!$element->isEmptyParagraph()
-                       && ($nextElement instanceof PHPRtfLite_Table || $nextElement->getParFormat()));
-            }
-            else if ($element instanceof PHPRtfLite_Image) {
-                return ($nextElement instanceof PHPRtfLite_Table || $nextElement->getParFormat());
-            }
-        }
-
-        return false;
-    }
-
-
-    private function isCellTextContent($key)
-    {
-        $element = $this->_elements[$key];
-        if ($this instanceof PHPRtfLite_Table_Cell && !($element instanceof PHPRtfLite_Table)) {
-            return true;
-        }
-        return false;
-    }
-
-
     private function getCellFont($element)
     {
-        if ($this instanceof PHPRtfLite_Table_Cell && !($element instanceof PHPRtfLite_Table)) {
+        if ($this instanceof PHPRtfLite_Table_Cell && !($element instanceof PHPRtfLite_Table_Nested)) {
             return $this->getFont();
         }
+        return false;
     }
 
 
