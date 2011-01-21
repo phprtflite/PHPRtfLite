@@ -1,7 +1,7 @@
 <?php
 /* 
     PHPRtfLite
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -23,11 +23,12 @@
  * Class for autoloading PHPRtfLite classes.
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2010 Steffen Zeidler
+ * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  */
 class PHPRtfLite_Autoloader
 {
+
     /**
      * base dir of the PHPRtfLite package
      * @var string
@@ -36,13 +37,15 @@ class PHPRtfLite_Autoloader
 
 
     /**
-     * Sets the base dir, where PHPRtfLite classes can be found
+     * sets the base dir, where PHPRtfLite classes can be found
+     *
      * @param string $dir
      */
     public static function setBaseDir($dir)
     {
         self::$_baseDir = $dir;
     }
+
 
     /**
      * loads PHPRtfLite classes

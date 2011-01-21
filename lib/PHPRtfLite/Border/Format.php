@@ -2,7 +2,7 @@
 /* 
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -25,7 +25,7 @@
  * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
+ * @copyright   2007-2008 Denis Slaveckij, 2010-2011s Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Border
  */
@@ -39,6 +39,7 @@ class PHPRtfLite_Border_Format
     const TYPE_DOT      = 'dot';
     const TYPE_DASH     = 'dash';
     const TYPE_DOTDASH  = 'dotdash';
+
 
     /**
      * @var integer
@@ -66,8 +67,10 @@ class PHPRtfLite_Border_Format
      */
     protected $_space;
     
+
     /**
-     * Constructor
+     * constructor
+     *
      * @param   integer     $size   size of border
      * @param   string      $color  color of border (example '#ff0000' or '#f00')
      * @param   string      $type   represented by class constants PHPRtfLite_Border_Format::TYPE_*<br>
@@ -85,6 +88,7 @@ class PHPRtfLite_Border_Format
         $this->_color   = $color;
         $this->_space   = round($space * PHPRtfLite::TWIPS_IN_CM);
     }
+
 
     /**
      * Gets border format type as rtf code
@@ -108,8 +112,9 @@ class PHPRtfLite_Border_Format
         }
     }
 
+
     /**
-     * Gets border format type
+     * gets border format type
      * 
      * @return string
      */
@@ -118,8 +123,9 @@ class PHPRtfLite_Border_Format
         return $this->_type;
     }
 
+
     /**
-     * Gets border color
+     * gets border color
      *
      * @return string
      */
@@ -128,8 +134,10 @@ class PHPRtfLite_Border_Format
         return $this->_color;
     }
 
+
     /**
      * gets size
+     *
      * @return integer
      */
     public function getSize()
@@ -137,8 +145,9 @@ class PHPRtfLite_Border_Format
         return $this->_size;
     }
 
+
     /**
-     * Gets border space
+     * gets border space
      *
      * @return float
      */
@@ -146,6 +155,7 @@ class PHPRtfLite_Border_Format
     {
         return $this->_space;
     }
+
 
     /**
      * sets rtf color table
@@ -161,7 +171,8 @@ class PHPRtfLite_Border_Format
     }
 
     /**
-     * Gets rtf code
+     * gets rtf code
+     *
      * @return string rtf code
      */
     public function getContent()

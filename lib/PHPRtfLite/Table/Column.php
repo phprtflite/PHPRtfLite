@@ -1,7 +1,7 @@
 <?php
 /*
     PHPRtfLite
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -23,7 +23,7 @@
  * Class for creating columns of table in rtf documents.
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2009 Steffen Zeidler
+ * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Table
  */
@@ -38,7 +38,7 @@ class PHPRtfLite_Table_Column
 
 
     /**
-     * Constructor
+     * constructor
      *
      * @param float $width
      */
@@ -47,8 +47,9 @@ class PHPRtfLite_Table_Column
         $this->_width = $width;
     }
 
+
     /**
-     * Sets column width
+     * sets column width
      *
      * @param float $width
      */
@@ -57,8 +58,9 @@ class PHPRtfLite_Table_Column
         $this->_width = $width;
     }
 
+
     /**
-     * Gets column width
+     * gets column width
      * 
      * @return float
      */

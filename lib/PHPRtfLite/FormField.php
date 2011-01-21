@@ -1,7 +1,7 @@
 <?php
 /*
     PHPRtfLite
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -23,49 +23,129 @@
  * abstract class for form fields in rtf documents.
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2010 Steffen Zeidler
+ * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_FormField
  */
-class PHPRtfLite_FormField
+abstract class PHPRtfLite_FormField
 {
-    const TYPT_TEXT     = 0;
-    const TYPE_CHECKBOX = 1;
-    const TYPE_LIST     = 2;
 
+    /**
+     * rtf instance
+     * @var PHPRtfLite
+     */
+    protected $_rtf;
+
+    /**
+     * font instance
+     * @var PHPRtfLite_Font
+     */
     protected $_font;
 
+    /**
+     * par format instance
+     * @var PHPRtfLite_ParFormat
+     */
     protected $_parFormat;
 
-    protected $_type;
-
+    /**
+     * default value
+     * @var string
+     */
     protected $_defaultValue;
 
 
-    abstract public function render();
-    
+    /**
+     * abstract method to get the form field's specific rtf code
+     *
+     * @return string
+     */
+    abstract protected function getRtfCode();
+
+
+    /**
+     * abstract method to get the form field's type
+     *
+     * @return string
+     */
+    abstract protected function getType();
+
 
     /**
      * constructor
      *
      * @param   PHPRtfLite              $rtf
-     * @param   integer                 $type
      * @param   PHPRtfLite_Font         $font
      * @param   PHPRtfLite_ParFormat    $parFormat
      */
-    public function __construct(PHPRtfLite $rtf, $type = null,
-                                PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
+    public function __construct(PHPRtfLite $rtf, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
     {
         $this->_rtf         = $rtf;
-        $this->_type        = $type;
         $this->_font        = $font;
         $this->_parFormat   = $parFormat;
+        if ($font) {
+            $this->_rtf->registerFont($font);
+        }
     }
 
 
+    /**
+     * sets default value
+     *
+     * @param   string  $value
+     */
     public function setDefaultValue($value)
     {
         $this->_defaultValue = $value;
+    }
+
+
+    /**
+     * gets font instance
+     *
+     * @return PHPRtfLite_Font
+     */
+    public function getFont()
+    {
+        return $this->_font;
+    }
+
+
+    /**
+     * gets par format instance
+     *
+     * @return PHPRtfLite_ParFormat
+     */
+    public function getParFormat()
+    {
+        return $this->_parFormat;
+    }
+
+
+    /**
+     * renders form field
+     */
+    public function render()
+    {
+        $stream = $this->_rtf->getStream();
+
+        $stream->write(' ');
+        if ($this->_font) {
+            $stream->write('{' . $this->_font->getContent());
+        }
+
+        $defaultValue = PHPRtfLite_Utf8::getUnicodeEntities($this->_defaultValue, $this->_rtf->getCharset());
+        $content = '{\field'
+            . '{\*\fldinst ' . $this->getType()
+            . '  {\*\formfield' . $this->getRtfCode() . '}'
+            . '}{\fldrslt ' . $defaultValue . '}}';
+
+        $stream->write($content);
+
+        if ($this->_font) {
+            $stream->write($this->_font->getClosingContent() . '}');
+        }
+        $stream->write(' ');
     }
 
 }

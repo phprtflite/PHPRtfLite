@@ -2,7 +2,7 @@
 /*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -24,11 +24,10 @@
  * defines color table for the rtf document head
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2010 Steffen Zeidler
+ * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_DocHead
  */
-
 class PHPRtfLite_DocHead_ColorTable
 {
 
@@ -39,6 +38,12 @@ class PHPRtfLite_DocHead_ColorTable
     protected $_colors = array('000000');
 
 
+    /**
+     * gets color in hex code
+     *
+     * @param  string $color
+     * @return string
+     */
     private static function getColorAsFullHexCode($color)
     {
         $color = ltrim($color, '#');
@@ -52,11 +57,11 @@ class PHPRtfLite_DocHead_ColorTable
         return strtoupper($color);
     }
 
+
     /**
-     * Formats color code.
-     * @static
-     * @param string $color Color
+     * formats color code.
      *
+     * @param string $color Color
      * @return string rtf color
      * @throws PHPRtfLite_Exception, if color is not a 3or 6 digit hex number
      */
@@ -73,8 +78,10 @@ class PHPRtfLite_DocHead_ColorTable
         throw new PHPRtfLite_Exception('Color must be a hex number of length 3 or 6 digits! You gave me: #' . $color);
     }
 
+
     /**
-     * Adds color to rtf document.
+     * adds color to rtf document
+     *
      * @param string $color color
      */
     public function add($color)
@@ -87,8 +94,10 @@ class PHPRtfLite_DocHead_ColorTable
         }
     }
 
+
     /**
-     * Gets rtf code of color.
+     * gets rtf code of color
+     *
      * @param   string $color color
      * @return  string
      */
@@ -99,8 +108,10 @@ class PHPRtfLite_DocHead_ColorTable
         return $index !== false ? $index + 1 : false;
     }
 
+
     /**
      * gets rtf color table
+     *
      * @return string
      */
     public function getContent()

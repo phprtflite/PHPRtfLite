@@ -2,7 +2,7 @@
 /* 
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -21,11 +21,11 @@
 */
 
 /**
- * Paragraph formatting class for rtf documents.
+ * paragraph formatting class for rtf documents.
  * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
+ * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  */
 class PHPRtfLite_ParFormat
@@ -38,6 +38,7 @@ class PHPRtfLite_ParFormat
     const TEXT_ALIGN_CENTER = 'center';
     const TEXT_ALIGN_RIGHT  = 'right';
     const TEXT_ALIGN_JUSTIFY = 'justify';
+
 
     /**
      * rtf color table
@@ -107,7 +108,7 @@ class PHPRtfLite_ParFormat
 
 
     /**
-     * Constructor
+     * constructor
      *
      * @param   string  $alignment  represented by class constants TEXT_ALIGN_*<br>
      *   Possible values:<br>
@@ -121,8 +122,9 @@ class PHPRtfLite_ParFormat
         $this->_alignment = $alignment;
     }
 
+
     /**
-     * Sets text alignment
+     * sets text alignment
      *
      * @param   string  $alignment  represented by class constants TEXT_ALIGN_*<br>
      *   Possible values:<br>
@@ -136,8 +138,9 @@ class PHPRtfLite_ParFormat
         $this->_alignment = $alignment;
     }
 
+
     /**
-     * Gets text alignment
+     * gets text alignment
      *
      * @return string
      */
@@ -146,8 +149,9 @@ class PHPRtfLite_ParFormat
         return $this->_alignment;
     }
 
+
     /**
-     * Sets first line indention in centimeter (default 0)
+     * sets first line indention in centimeter (default 0)
      *
      * @param   float   $indentFirst
      */
@@ -156,8 +160,9 @@ class PHPRtfLite_ParFormat
         $this->_indentFirstLine = round($indentFirst * PHPRtfLite::TWIPS_IN_CM);
     }
 
+
     /**
-     * Gets first line indention in centimeter
+     * gets first line indention in centimeter
      * 
      * @return float
      */
@@ -166,8 +171,9 @@ class PHPRtfLite_ParFormat
         return $this->_indentFirstLine;
     }
 
+
     /**
-     * Sets left indent in centimeter (default 0)
+     * sets left indent in centimeter (default 0)
      *
      * @param   float   $indentLeft
      */
@@ -176,8 +182,9 @@ class PHPRtfLite_ParFormat
         $this->_indentLeft = round($indentLeft * PHPRtfLite::TWIPS_IN_CM);
     }
 
+
     /**
-     * Gets left indent in centimeter
+     * gets left indent in centimeter
      *
      * @return float
      */
@@ -186,8 +193,9 @@ class PHPRtfLite_ParFormat
         return $this->_indentLeft;
     }
 
+
     /**
-     * Sets right indent in centimeter (default 0)
+     * sets right indent in centimeter (default 0)
      *
      * @param   float   $indentRight
      */
@@ -196,8 +204,9 @@ class PHPRtfLite_ParFormat
         $this->_indentRight = round($indentRight * PHPRtfLite::TWIPS_IN_CM);
     }
 
+
     /**
-     * Gets right indent in centimeter
+     * gets right indent in centimeter
      *
      * @return float
      */
@@ -206,8 +215,9 @@ class PHPRtfLite_ParFormat
         return $this->_indentRight;
     }
 
+
     /**
-     * Sets the space before paragraph
+     * sets the space before paragraph
      *
      * @param   integer $spaceBefore space before
      */
@@ -216,8 +226,9 @@ class PHPRtfLite_ParFormat
         $this->_spaceBefore = round($spaceBefore * PHPRtfLite::SPACE_IN_POINTS);
     }
 
+
     /**
-     * Gets the space before paragraph
+     * gets the space before paragraph
      *
      * @return  integer
      */
@@ -225,9 +236,10 @@ class PHPRtfLite_ParFormat
     {
         return $this->_spaceBefore;
     }
-    
+
+
     /**
-     * Sets the space after paragraph
+     * sets the space after paragraph
      *
      * @param integer $spaceAfter space after
      */
@@ -236,8 +248,9 @@ class PHPRtfLite_ParFormat
         $this->_spaceAfter = round($spaceAfter * PHPRtfLite::SPACE_IN_POINTS);
     }
 
+
     /**
-     * Gets the space after paragraph
+     * gets the space after paragraph
      *
      * @return integer
      */
@@ -246,8 +259,9 @@ class PHPRtfLite_ParFormat
         return $this->_spaceAfter;
     }
 
+
     /**
-     * Sets line space
+     * sets line space
      *
      * @param   integer     $spaceBetweenLines  space between lines
      */
@@ -256,8 +270,9 @@ class PHPRtfLite_ParFormat
         $this->_spaceBetweenLines = round($spaceBetweenLines * PHPRtfLite::SPACE_IN_LINES);
     }
 
+
     /**
-     * Gets line space
+     * gets line space
      *
      * @return  integer
      */
@@ -266,8 +281,9 @@ class PHPRtfLite_ParFormat
         return $this->_spaceBetweenLines;
     }
 
+
     /**
-     * Sets shading
+     * sets shading
      *
      * @param   integer $shading shading in percents (from 0 till 100)
      */
@@ -276,8 +292,9 @@ class PHPRtfLite_ParFormat
         $this->_shading = $shading * 100;
     }
 
+
     /**
-     * Gets shading
+     * gets shading
      *
      * @return  integer
      */
@@ -285,6 +302,7 @@ class PHPRtfLite_ParFormat
     {
         return $this->_shading;
     }
+
 
     /**
      * sets rtf color table
@@ -299,8 +317,9 @@ class PHPRtfLite_ParFormat
         $this->_colorTable = $colorTable;
     }
 
+
     /**
-     * Sets background color
+     * sets background color
      *
      * @param   string  $backgroundColor
      */
@@ -312,8 +331,9 @@ class PHPRtfLite_ParFormat
         }
     }
 
+
     /**
-     * Gets background color
+     * gets background color
      *
      * @return  string
      */
@@ -322,8 +342,9 @@ class PHPRtfLite_ParFormat
         return $this->_backgroundColor;
     }
 
+
     /**
-     * Sets border of paragraph
+     * sets border of paragraph
      *
      * @param PHPRtfLite_Border $border
      */
@@ -332,8 +353,9 @@ class PHPRtfLite_ParFormat
         $this->_border = $border;
     }
 
+
     /**
-     * Gets border of paragraph
+     * gets border of paragraph
      *
      * @return PHPRtfLite_Border
      */
@@ -342,8 +364,9 @@ class PHPRtfLite_ParFormat
         return $this->_border;
     }
 
+
     /**
-     * Gets rtf code of paragraph
+     * gets rtf code of paragraph
      *
      * @return  string  rtf code
      */
@@ -410,4 +433,5 @@ class PHPRtfLite_ParFormat
 
         return $content;
     }
+
 }

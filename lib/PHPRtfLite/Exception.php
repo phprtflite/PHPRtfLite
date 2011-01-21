@@ -1,7 +1,7 @@
 <?php
 /*
     PHPRtfLite
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -23,7 +23,7 @@
  * Class for exceptions within the PHPRtfLite package.
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2010 Steffen Zeidler
+ * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  */
 class PHPRtfLite_Exception extends Exception

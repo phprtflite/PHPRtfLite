@@ -2,7 +2,7 @@
 
 /*
     PHPRtfLite
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -24,7 +24,7 @@
  * class for creating footnotes in rtf documents.
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2010 Steffen Zeidler
+ * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite_Footnote
  */
 
@@ -141,6 +141,7 @@ class PHPRtfLite_Footnote
         $this->_parFormat   = $parFormat;
     }
 
+
     /**
      * sets default font for notes
      *
@@ -151,6 +152,7 @@ class PHPRtfLite_Footnote
         self::$_defaultFont = $font;
     }
 
+
     /**
      * gets default font
      *
@@ -160,6 +162,7 @@ class PHPRtfLite_Footnote
     {
         return self::$_defaultFont;
     }
+
 
     /**
      * sets font
@@ -172,6 +175,7 @@ class PHPRtfLite_Footnote
         $this->_font = $font;
     }
 
+
     /**
      * gets font
      *
@@ -181,6 +185,7 @@ class PHPRtfLite_Footnote
     {
         return $this->_font;
     }
+
 
     /**
      * sets paragraph format
@@ -193,6 +198,7 @@ class PHPRtfLite_Footnote
         $this->_parFormat = $parFormat;
     }
 
+
     /**
      * gets paragraph format
      *
@@ -203,6 +209,7 @@ class PHPRtfLite_Footnote
         return $this->_parFormat;
     }
 
+
     /**
      * gets type as rtf code
      *
@@ -212,6 +219,7 @@ class PHPRtfLite_Footnote
     {
         return '\footnote';
     }
+
 
     /**
      * renders footnote/endnote

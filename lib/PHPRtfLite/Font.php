@@ -2,7 +2,7 @@
 /* 
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -25,7 +25,7 @@
  * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
+ * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  */
 class PHPRtfLite_Font
@@ -111,8 +111,9 @@ class PHPRtfLite_Font
      */
     protected $_animation;
 
+
     /**
-     * Constructor
+     * constructor
      *
      * @param   integer $size               font size
      * @param   string  $fontFamily         font family (etc. "Times new Roman", "Arial" and other)
@@ -126,6 +127,7 @@ class PHPRtfLite_Font
         $this->_color           = $color;
         $this->_backgroundColor = $backgroundColor;
     }
+
 
     /**
      * sets rtf color table
@@ -170,7 +172,7 @@ class PHPRtfLite_Font
 
 
     /**
-     * Sets text bold
+     * sets text bold
      *
      * @param boolean $bold
      */
@@ -179,8 +181,9 @@ class PHPRtfLite_Font
         $this->_isBold = $bold;
     }
 
+
     /**
-     * Returns true, if text is styled bold
+     * returns true, if text is styled bold
      *
      * @return boolean
      */
@@ -189,8 +192,9 @@ class PHPRtfLite_Font
         return $this->_isBold;
     }
 
+
     /**
-     * Sets text italic
+     * sets text italic
      *
      * @param boolean $italic
      */
@@ -199,8 +203,9 @@ class PHPRtfLite_Font
         $this->_isItalic = $italic;
     }
 
+
     /**
-     * Returns true, if text is styled italic
+     * returns true, if text is styled italic
      *
      * @return boolean
      */
@@ -209,8 +214,9 @@ class PHPRtfLite_Font
         return $this->_isItalic;
     }
 
+
     /**
-     * Sets text underline
+     * sets text underline
      *
      * @param boolean $underlined
      */
@@ -219,8 +225,9 @@ class PHPRtfLite_Font
         $this->_isUnderlined = $underlined;
     }
 
+
     /**
-     * Returns true, if text is styled underlined
+     * returns true, if text is styled underlined
      *
      * @return boolean
      */
@@ -229,8 +236,9 @@ class PHPRtfLite_Font
         return $this->_isUnderlined;
     }
 
+
     /**
-     * Sets striked text
+     * sets striked text
      *
      * @param boolean $strike
      */
@@ -243,8 +251,9 @@ class PHPRtfLite_Font
         }
     }
 
+
     /**
-     * Returns true, if text is striked
+     * returns true, if text is striked
      *
      * @return  boolean
      */
@@ -253,8 +262,9 @@ class PHPRtfLite_Font
         return $this->_isStriked;
     }
 
+
     /**
-     * Sets double striked text
+     * sets double striked text
      *
      * @param boolean $strike
      */
@@ -267,8 +277,9 @@ class PHPRtfLite_Font
         }
     }
 
+
     /**
-     * Returns true, if text is striked double
+     * returns true, if text is striked double
      *
      * @return boolean
      */
@@ -277,8 +288,9 @@ class PHPRtfLite_Font
         return $this->_isDoubleStriked;
     }
 
+
     /**
-     * Sets animation for text
+     * sets animation for text
      *
      * @param integer $animation animation<br>
      *   Represented by class constants ANIMATE_*<br>
@@ -292,11 +304,12 @@ class PHPRtfLite_Font
      */ 
     public function setAnimation($animation)
     {
-          $this->_animation = $animation;
+        $this->_animation = $animation;
     }
 
+
     /**
-     * Gets rtf code of font
+     * gets rtf code of font
      *
      * @return string rtf code
      */
@@ -352,6 +365,11 @@ class PHPRtfLite_Font
     }
 
 
+    /**
+     * closes font content
+     *
+     * @return string
+     */
     public function getClosingContent()
     {
         $content = '';
@@ -372,4 +390,5 @@ class PHPRtfLite_Font
         }
         return $content;
     }
+
 }

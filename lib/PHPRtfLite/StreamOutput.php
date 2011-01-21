@@ -2,7 +2,7 @@
 /*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -24,7 +24,7 @@
  * Class for streaming the rtf output.
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2010 Steffen Zeidler
+ * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  */
 class PHPRtfLite_StreamOutput
@@ -52,6 +52,7 @@ class PHPRtfLite_StreamOutput
         flock($this->_fileHandler, LOCK_EX);
     }
 
+
     /**
      * closes file handler
      */
@@ -62,6 +63,7 @@ class PHPRtfLite_StreamOutput
             $this->_fileHandler = null;
         }
     }
+
 
     /**
      * writes string to file handler

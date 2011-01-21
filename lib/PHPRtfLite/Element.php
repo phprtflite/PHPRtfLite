@@ -1,7 +1,7 @@
 <?php
 /*
     PHPRtfLite
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -23,7 +23,7 @@
  * class for creating elements used in containers like sections, footers and headers.
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2010 Steffen Zeidler
+ * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Element
  */
@@ -78,14 +78,17 @@ class PHPRtfLite_Element
         $this->_parFormat   = $parFormat;
     }
 
+
     /**
      * checks, if element is an empty paragraph
+     *
      * @return boolean
      */
     public function isEmptyParagraph()
     {
         return ($this->_parFormat && $this->_text == '');
     }
+
 
     /**
      * sets flag, that text tags shall be converted into rtf code
@@ -95,8 +98,10 @@ class PHPRtfLite_Element
         $this->_convertTagsToRtf = true;
     }
 
+
     /**
      * gets par format
+     *
      * @return PHPRtfLite_ParFormat
      */
     public function getParFormat()
@@ -104,12 +109,14 @@ class PHPRtfLite_Element
         return $this->_parFormat;
     }
 
+
     /**
      * converts text tags into rtf code
+     *
      * @param  string $text
      * @return string
      */
-    private static function convertTagsToRtf($text)
+    public static function convertTagsToRtf($text)
     {
         $search = array(
             // bold
@@ -174,8 +181,10 @@ class PHPRtfLite_Element
         return $text;
     }
 
+
     /**
      * sets rtf code directly for this element without extra converting
+     *
      * @param string $text
      */
     public function writeRtfCode($text)
@@ -184,8 +193,10 @@ class PHPRtfLite_Element
         $this->_isTextRtfCode = true;
     }
 
+
     /**
      * gets opening token
+     *
      * @return string
      */
     protected function getOpeningToken()
@@ -193,14 +204,17 @@ class PHPRtfLite_Element
         return '{';
     }
 
+
     /**
      * gets closing token
+     *
      * @return string
      */
     protected function getClosingToken()
     {
         return '}';
     }
+
 
     /**
      * renders the element

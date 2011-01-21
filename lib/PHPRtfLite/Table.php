@@ -2,7 +2,7 @@
 /* 
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -25,7 +25,7 @@
  * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
+ * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Table
  */
@@ -38,6 +38,7 @@ class PHPRtfLite_Table
     const ALIGN_LEFT    = 'left';
     const ALIGN_CENTER  = 'center';
     const ALIGN_RIGHT   = 'right';
+
 
     /**
      * @var PHPRtfLite_Container
@@ -95,7 +96,8 @@ class PHPRtfLite_Table
 
     
     /**
-     * Constructor
+     * constructor
+     *
      * @param PHPRtfLite_Container
      * @param string
      */
@@ -106,6 +108,7 @@ class PHPRtfLite_Table
         $this->_nestDepth = $nestDepth;
     }
 
+
     /**
      * gets nested depth
      * 
@@ -115,6 +118,7 @@ class PHPRtfLite_Table
     {
         return $this->_nestDepth;
     }
+
 
     /**
      * checks, if table is a nested table
@@ -128,7 +132,7 @@ class PHPRtfLite_Table
 
 
     /**
-     * Gets rtf container instance
+     * gets rtf container instance
      *
      * @return PHPRtfLite_Container
      */
@@ -137,8 +141,10 @@ class PHPRtfLite_Table
         return $this->_container;
     }
 
+
     /**
      * gets rtf instance
+     *
      * @return PHPRtfLite
      */
     public function getRtf()
@@ -154,8 +160,9 @@ class PHPRtfLite_Table
         $this->_preventPageBreak = true;
     }
 
+
     /**
-     * Returns true, if a table should not be splited by a page break
+     * returns true, if a table should not be splited by a page break
      *
      * @return boolean
      */
@@ -164,8 +171,10 @@ class PHPRtfLite_Table
         return $this->_preventPageBreak;
     }
 
+
     /**
-     * Sets left position of table.
+     * sets left position of table
+     *
      * @param   float $leftPosition left position of table.
      */
     public function setLeftPosition($leftPosition)
@@ -173,8 +182,9 @@ class PHPRtfLite_Table
         $this->_leftPosition = $leftPosition;
     }
 
+
     /**
-     * Gets left position of table.
+     * gets left position of table
      * 
      * @return  float
      */
@@ -183,6 +193,7 @@ class PHPRtfLite_Table
         return $this->_leftPosition;
     }
 
+
     /**
      * Sets first row as header row. First row will be repeated at the top of each page.
      */
@@ -190,6 +201,7 @@ class PHPRtfLite_Table
     {
         $this->_firstRowIsHeader = true;
     }
+
 
     /**
      * Returns true, if first row should be used as header. First row will be repeated at the top of each page.
@@ -201,6 +213,7 @@ class PHPRtfLite_Table
         return $this->_firstRowIsHeader;
     }
 
+
     /**
      * gets alignment
      * 
@@ -211,8 +224,10 @@ class PHPRtfLite_Table
         return $this->_alignment;
     }
 
+
     /**
-     * Adds rows
+     * adds rows
+     *
      * @param   integer $rowCnt
      * @param   float   $height row height. When null, the height is sufficient for all the text in the line;
      *   when positive, the height is guaranteed to be at least the specified height; when negative,
@@ -225,8 +240,10 @@ class PHPRtfLite_Table
         }
     }
 
+
     /**
-     * Adds list of rows to a table.
+     * adds list of rows to a table.
+     *
      * @param array $heights array of heights for each row to add. When height is null,
      *   the height is sufficient for all the text in the line; when positive,
      *   the height is guaranteed to be at least the specified height; when negative,
@@ -240,8 +257,9 @@ class PHPRtfLite_Table
         }
     }
 
+
     /**
-     * Adds row
+     * adds row
      *
      * @param   float   $height row height. When 0, the height is sufficient for all the text in the line;
      *   when positive, the height is guaranteed to be at least the specified height; when negative,
@@ -257,10 +275,11 @@ class PHPRtfLite_Table
         return $row;
     }
 
+
     /**
-     * Gets row instance
-     * @param  integer $rowIndex
+     * gets row instance
      *
+     * @param  integer $rowIndex
      * @return PHPRtfLite_Table_Row
      * @throws PHPRtfLite_Exception, if rowIndex is not valid
      */
@@ -273,11 +292,11 @@ class PHPRtfLite_Table
         throw new PHPRtfLite_Exception('Invalid row index for table: ' . $rowIndex);
     }
 
+
     /**
-     * Adds column
+     * adds column
      *
      * @param   float   $width column width
-     *
      * @return  PHPRtfLite_Table_Column
      */
     public function addColumn($width)
@@ -288,10 +307,11 @@ class PHPRtfLite_Table
         return $column;
     }
 
+
     /**
-     * Gets column
-     * @param  integer $colIndex
+     * gets column
      *
+     * @param  integer $colIndex
      * @return PHPRtfLite_Table_Column
      * @throws PHPRtfLite_Exception, if colIndex is not valid
      */
@@ -304,8 +324,10 @@ class PHPRtfLite_Table
         throw new PHPRtfLite_Exception('Invalid column index for table: ' . $colIndex);
     }
 
+
     /**
-     * Adds list of columns
+     * adds list of columns
+     *
      * @param  array array of column widths.
      */
     public function addColumnsList($columnWidths)
@@ -315,11 +337,12 @@ class PHPRtfLite_Table
         }
     }
 
+
     /**
-     * Gets the instance of cell.
+     * gets the instance of cell
+     *
      * @param  integer $rowIndex
      * @param  integer $columnIndex
-     *
      * @return PHPRtfLite_Table_Cell
      * @throws PHPRtfLite_Exception, if index for row or column is not valid
      */
@@ -332,8 +355,9 @@ class PHPRtfLite_Table
         throw new PHPRtfLite_Exception('Wrong index for cell! You gave me: (row:' . $rowIndex . ', column:' . $columnIndex . ')');
     }
 
+
     /**
-     * Writes text to cell.
+     * writes text to cell
      *
      * @param   integer                 $rowIndex           row index of cell
      * @param   integer                 $columnIndex        column index of cell
@@ -354,8 +378,9 @@ class PHPRtfLite_Table
         }
     }
 
+
     /**
-     * Adds image to cell.
+     * adds image to cell
      *
      * @param   integer                 $rowIndex       row index of cell
      * @param   integer                 $columnIndex    column index of cell
@@ -363,8 +388,7 @@ class PHPRtfLite_Table
      * @param   PHPRtfLite_ParFormat    $parFormat      paragraph format
      * @param   float                   $width          if null image is displayed by it's original height.
      * @param   float                   $height         if null image is displayed by it's original width. If boths parameters are null, image is displayed as it is.
-     *
-     * @return PHPRtfLite_Image
+     * @return  PHPRtfLite_Image
      */
     public function addImageToCell($rowIndex,
                                    $columnIndex,
@@ -377,6 +401,7 @@ class PHPRtfLite_Table
             $this->getCell($rowIndex, $columnIndex)->addImage($file, $parFormat, $width, $height);
         }
     }
+
 
     /**
      * corrects cell range to be valid
@@ -410,6 +435,15 @@ class PHPRtfLite_Table
         return array($startRow, $startColumn, $endRow, $endColumn);
     }
 
+
+    /**
+     *
+     * @param integer $startRow
+     * @param integer $startColumn
+     * @param integer $endRow
+     * @param integer $endColumn
+     * @return array
+     */
     private function getCellsByCellRange($startRow, $startColumn, $endRow, $endColumn)
     {
         $cells = array();
@@ -421,14 +455,15 @@ class PHPRtfLite_Table
         return $cells;
     }
 
+
     /**
-     * Sets vertical alignment to cells of a given cell range
+     * sets vertical alignment to cells of a given cell range
+     *
      * @param   string  $verticalAlignment Vertical alignment of cell (default top). Represented by PHPRtfLite_Container::VERTICAL_ALIGN_*<br>
      *   Possible values:<br>
      *     PHPRtfLite_Container::VERTICAL_ALIGN_TOP     => 'top'    - top alignment;<br>
      *     PHPRtfLite_Container::VERTICAL_ALIGN_CENTER  => 'center' - center alignment;<br>
      *     PHPRtfLite_Container::VERTICAL_ALIGN_BOTTOM  => 'bottom' - bottom alignment.
-     * 
      * @param   integer $startRow       start row
      * @param   integer $startColumn    start column
      * @param   integer $endRow         end row, if null, then vertical alignment is set only to the row range.
@@ -449,8 +484,9 @@ class PHPRtfLite_Table
         }
     }
 
+
     /**
-     * Sets alignments to empty cells of a given cell range.
+     * sets alignments to empty cells of a given cell range
      *
      * @param   string  $alignment      alignment of cell. The method PHPRtfLite_Table_Cell->writeToCell() overrides it with PHPRtfLite_ParFormat alignment.<br>
      *   Alignment is represented by class constants PHPRtfLite_Container::TEXT_ALIGN_*<br>
@@ -459,7 +495,6 @@ class PHPRtfLite_Table
      *     PHPRtfLite_Container::TEXT_ALIGN_RIGHT   => 'right'  - right alignment<br>
      *     PHPRtfLite_Container::TEXT_ALIGN_CENTER  => 'center' - center alignment<br>
      *     PHPRtfLite_Container::TEXT_ALIGN_JUSTIFY => 'justify' - justify alignment
-     * 
      * @param   integer $startRow       start row
      * @param   integer $startColumn    start column
      * @param   integer $endRow         end row, if null, then text alignment is set only to the row range.
@@ -480,8 +515,9 @@ class PHPRtfLite_Table
         }
     }
 
+
     /**
-     * Sets font to empty cells of a given cell range.
+     * sets font to empty cells of a given cell range
      *
      * @param   PHPRtfLite_Font $font           font for empty cells. The method PHPRtfLite_Table_Cell->writeToCell() overrides it with another PHPRtfLite_Font.
      * @param   integer         $startRow       start row
@@ -504,14 +540,14 @@ class PHPRtfLite_Table
         }
     }
 
+
     /**
-     * Rotates cells of a given cell range.
+     * rotates cells of a given cell range
      * 
      * @param   string  $rotateTo       direction of rotation<br>
      *   Possible values (represented by PHPRtfLite_Table_Cell::ROTATE_*):<br>
      *     PHPRtfLite_Table_Cell::ROTATE_RIGHT  => 'right'<br>
      *     PHPRtfLite_Table_Cell::ROTATE_LEFT   => 'left'
-     *
      * @param   integer $startRow       start row
      * @param   integer $startColumn    start column
      * @param   integer $endRow         end row, if null, then rotation is set only to the row range.
@@ -532,8 +568,9 @@ class PHPRtfLite_Table
         }
     }
 
+
     /**
-     * Sets background color of cells of a given cell range.
+     * sets background color of cells of a given cell range
      *
      * @param   string  $backgroundColor    background color
      * @param   integer $startRow           start row
@@ -560,8 +597,9 @@ class PHPRtfLite_Table
         }
     }
 
+
     /**
-     * Sets border to cells of a given cell range.
+     * sets border to cells of a given cell range
      * 
      * @param   PHPRtfLite_Border   $border         border
      * @param   integer             $startRow       start row
@@ -585,6 +623,7 @@ class PHPRtfLite_Table
             }
         }
     }
+
 
     /**
      * @deprecated use setBorderForCellRange() instead
@@ -618,8 +657,9 @@ class PHPRtfLite_Table
         $this->setBorderForCellRange($border, $startRow, $startColumn, $endRow, $endColumn);
     }
 
+
     /**
-     * Merges cells of a given cell range.
+     * merges cells of a given cell range
      *
      * @param   integer $startRow       start row
      * @param   integer $startColumn    start column
@@ -676,8 +716,9 @@ class PHPRtfLite_Table
         }
     }
 
+
     /**
-     * Gets table rows
+     * gets table rows
      * 
      * @return array instances of PHPRtfLite_Table_Row
      */
@@ -686,8 +727,9 @@ class PHPRtfLite_Table
         return $this->_rows;
     }
 
+
     /**
-     * Gets number of rows in table
+     * gets number of rows in table
      *
      * @return integer
      */
@@ -696,8 +738,9 @@ class PHPRtfLite_Table
         return count($this->_rows);
     }
 
+
     /**
-     * Gets table columns
+     * gets table columns
      *
      * @return array instances of PHPRtfLite_Table_Column
      */
@@ -706,8 +749,9 @@ class PHPRtfLite_Table
         return $this->_columns;
     }
 
+
     /**
-     * Gets number of columns in table
+     * gets number of columns in table
      *
      * @return integer
      */
@@ -716,8 +760,9 @@ class PHPRtfLite_Table
         return count($this->_columns);
     }
 
+
     /**
-     * Returns true, if column index is valid
+     * returns true, if column index is valid
      *
      * @param   integer $colIndex
      * @return  boolean
@@ -727,8 +772,9 @@ class PHPRtfLite_Table
         return isset($this->_columns[$colIndex - 1]);
     }
 
+
     /**
-     * Returns true, if row index is valid
+     * returns true, if row index is valid
      *
      * @param   integer $rowIndex
      * @return  boolean
@@ -740,11 +786,10 @@ class PHPRtfLite_Table
 
 
     /**
-     * Returns true, if rowIndex and columnIndex do exists in table
+     * returns true, if rowIndex and columnIndex do exists in table
      * 
      * @param  integer $rowIndex
      * @param  integer $columnIndex
-     *
      * @return boolean
      */
     public function checkIfCellExists($rowIndex, $columnIndex)
@@ -754,7 +799,7 @@ class PHPRtfLite_Table
 
 
     /**
-     * Gets rtf code for table
+     * gets rtf code for table
      *
      * @return string rtf code
      */

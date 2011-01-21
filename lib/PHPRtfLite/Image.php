@@ -2,7 +2,7 @@
 /* 
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -25,7 +25,7 @@
  * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
+ * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  */
 class PHPRtfLite_Image
@@ -73,7 +73,7 @@ class PHPRtfLite_Image
 
     
     /**
-     * Constructor
+     * constructor
      * 
      * @param PHPRtfLite    $rtf
      * @param string        $imageFile image file incl. path
@@ -106,8 +106,10 @@ class PHPRtfLite_Image
         }
     }
 
+
     /**
      * checks, if image file is available or missing
+     *
      * @return boolean
      */
     public function isMissing()
@@ -115,8 +117,9 @@ class PHPRtfLite_Image
         return $this->_file === null;
     }
 
+
     /**
-     * Sets paragraph format for image
+     * sets paragraph format for image
      *
      * @param PHPRtfLite_ParFormat $parFormat
      */
@@ -126,8 +129,9 @@ class PHPRtfLite_Image
         $parFormat->setColorTable($this->_rtf->getColorTable());
     }
 
+
     /**
-     * Gets paragraph format for image
+     * gets paragraph format for image
      * 
      * @return PHPRtfLite_ParFormat
      */
@@ -136,8 +140,9 @@ class PHPRtfLite_Image
         return $this->_parFormat;
     }
 
+
     /**
-     * Sets image width
+     * sets image width
      *
      * @param   float   $width  if not defined image is displayed by it's height.
      */
@@ -146,8 +151,9 @@ class PHPRtfLite_Image
         $this->_width = $width;
     }
 
+
     /**
-     * Gets image width
+     * gets image width
      * 
      * @return float
      */
@@ -156,8 +162,9 @@ class PHPRtfLite_Image
         return $this->_width;
     }
 
+
     /**
-     * Sets image height
+     * sets image height
      *
      * @param   float   $height if not defined image is displayed by it's width.
      */
@@ -166,8 +173,9 @@ class PHPRtfLite_Image
         $this->_height = $height;
     }
 
+
     /**
-     * Gets image height
+     * gets image height
      * 
      * @return float
      */
@@ -176,8 +184,9 @@ class PHPRtfLite_Image
         return $this->_height;
     }
 
+
     /**
-     * Sets border of paragraph
+     * sets border of paragraph
      *
      * @param PHPRtfLite_Border $border
      */
@@ -186,8 +195,9 @@ class PHPRtfLite_Image
         $this->_border = $border;
     }
 
+
     /**
-     * Gets border of paragraph
+     * gets border of paragraph
      *
      * @return PHPRtfLite_Border
      */
@@ -196,8 +206,9 @@ class PHPRtfLite_Image
         return $this->_border;
     }
 
+
     /**
-     * Gets rtf image width
+     * gets rtf image width
      * 
      * @return integer
      */
@@ -216,8 +227,9 @@ class PHPRtfLite_Image
         return round($width * PHPRtfLite::TWIPS_IN_CM);
     }
 
+
     /**
-     * Gets rtf image height
+     * gets rtf image height
      *
      * @return integer
      */
@@ -236,6 +248,7 @@ class PHPRtfLite_Image
         return round($height * PHPRtfLite::TWIPS_IN_CM);
     }
 
+
     /**
      * adds rtf image code to show that the file is missing
      */
@@ -251,8 +264,9 @@ class PHPRtfLite_Image
         $stream->write('2a33189bd9f25cf437d4f500102731b5b67102460000000049454e44ae426082');
     }
 
+
     /**
-     * Gets file as hex encoded
+     * gets file as hex encoded
      *
      * @return string hex code
      */
@@ -287,8 +301,9 @@ class PHPRtfLite_Image
         }
     }
 
+
     /**
-     * Gets rtf code of image
+     * gets rtf code of image
      *
      * @return string rtf code
      */

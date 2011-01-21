@@ -2,7 +2,7 @@
 /*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -25,18 +25,22 @@
  * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
+ * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_List
  */
 class PHPRtfLite_List_Numbering extends PHPRtfLite_List
 {
 
+    /**
+     * constants for numbering types
+     */
     const TYPE_ALPHA_UPPER  = 1;
     const TYPE_ALPHA_LOWER  = 2;
     const TYPE_ROMAN_UPPER  = 3;
     const TYPE_ROMAN_LOWER  = 4;
     const TYPE_ARABIC_NUM   = 5;
+
 
     /**
      * @var string
@@ -140,8 +144,9 @@ class PHPRtfLite_List_Numbering extends PHPRtfLite_List
 
 
     /**
-     * Code based from: http://www.sajithmr.me/php-decimal-to-roman-number-conversion/
      * gets roman number
+     * Code based from:
+     * @see http://www.sajithmr.me/php-decimal-to-roman-number-conversion/
      *
      * @param  integer $index
      * @param  boolean $lowerCase

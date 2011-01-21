@@ -2,7 +2,7 @@
 
 /*
     PHPRtfLite
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -24,7 +24,7 @@
  * class for doucment head definition for footnotes and endnotes
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2010 Steffen Zeidler
+ * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_DocHead
  */
@@ -78,6 +78,7 @@ class PHPRtfLite_DocHead_Note
         $this->_footnoteNumberingType = $numberingType;
     }
 
+
     /**
      * gets footnote numbering type
      *
@@ -87,6 +88,7 @@ class PHPRtfLite_DocHead_Note
     {
         return $this->_footnoteNumberingType;
     }
+
 
     /**
      * sets endnote numbering type
@@ -98,6 +100,7 @@ class PHPRtfLite_DocHead_Note
         $this->_endnoteNumberingType = $numberingType;
     }
 
+
     /**
      * gets endnote numbering type
      *
@@ -107,6 +110,7 @@ class PHPRtfLite_DocHead_Note
     {
         return $this->_endnoteNumberingType;
     }
+
 
     /**
      * sets footnote start number
@@ -118,6 +122,7 @@ class PHPRtfLite_DocHead_Note
         $this->_footnoteStartNumber = $startNumber;
     }
 
+
     /**
      * gets footnote start number
      *
@@ -127,6 +132,7 @@ class PHPRtfLite_DocHead_Note
     {
         return $this->_footnoteStartNumber;
     }
+
 
     /**
      * sets endnote start number
@@ -138,6 +144,7 @@ class PHPRtfLite_DocHead_Note
         $this->_endnoteStartNumber = $startNumber;
     }
 
+
     /**
      * gets endnote start number
      *
@@ -148,6 +155,7 @@ class PHPRtfLite_DocHead_Note
         return $this->_endnoteStartNumber;
     }
 
+
     /**
      * sets restart footnote number on each page
      */
@@ -155,6 +163,7 @@ class PHPRtfLite_DocHead_Note
     {
         $this->_footnoteRestartEachPage = true;
     }
+
 
     /**
      * checks, if footnote numbering shall be started on each page
@@ -166,6 +175,7 @@ class PHPRtfLite_DocHead_Note
         return $this->_endnoteRestartEachPage;
     }
 
+
     /**
      * sets restart endnote number on each page
      */
@@ -173,6 +183,7 @@ class PHPRtfLite_DocHead_Note
     {
         $this->_endnoteRestartEachPage = true;
     }
+
 
     /**
      * checks, if endnote numbering shall be started on each page
@@ -184,12 +195,12 @@ class PHPRtfLite_DocHead_Note
         return $this->_endnoteRestartEachPage;
     }
 
+
     /**
      * gets numbering type for notes
      *
      * @param  integer $numbering
      * @param  string  $prefix
-     *
      * @return string
      */
     public static function getNumberingTypeAsRtf($numbering, $prefix = '\ftnn')
@@ -240,6 +251,7 @@ class PHPRtfLite_DocHead_Note
                 return $prefix . 'zodiacl';
         }
     }
+
 
     /**
      * renders document definition head for footnotes/endnotes

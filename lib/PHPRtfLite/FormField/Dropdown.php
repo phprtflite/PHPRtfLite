@@ -20,15 +20,33 @@
 */
 
 /**
- * class for text form fields in rtf documents.
+ * class for dropdown form fields in rtf documents.
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_FormField
  */
-class PHPRtfLite_FormField_Text extends PHPRtfLite_FormField
+class PHPRtfLite_FormField_Dropdown extends PHPRtfLite_FormField
 {
+
+    /**
+     * dropdown items
+     * @var array
+     */
+    protected $_items = array();
+
+
+    /**
+     * adds dropdown item
+     *
+     * @param string $text
+     */
+    public function addItem($text)
+    {
+        $this->_items[] = $text;
+    }
+
 
     /**
      * gets form field type
@@ -37,18 +55,24 @@ class PHPRtfLite_FormField_Text extends PHPRtfLite_FormField
      */
     protected function getType()
     {
-        return 'FORMTEXT';
+        return 'FORMDROPDOWN';
     }
 
 
     /**
-     * gets rtf code for form field text
+     * gets rtf code for dropdown form field
      *
      * @return string
      */
     public function getRtfCode()
     {
-        return '{\fftype0\fftypetxt0{\*\ffname Text1}}';
+        $content = '{\fftype2\ffres25\fftypetxt0\ffhaslistbox\ffdefres0';
+        foreach ($this->_items as $text) {
+            $text = PHPRtfLite_Utf8::getUnicodeEntities($text, $this->_rtf->getCharset());
+            $content .= '{\*\ffl ' . $text . '}';
+        }
+        $content .= '}';
+        return $content;
     }
 
 }

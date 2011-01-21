@@ -2,7 +2,7 @@
 /*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -24,11 +24,10 @@
  * defines font table for the rtf document head
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2010 Steffen Zeidler
+ * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_DocHead
  */
-
 class PHPRtfLite_DocHead_FontTable
 {
 
@@ -53,6 +52,7 @@ class PHPRtfLite_DocHead_FontTable
         }
     }
 
+
     /**
      * gets font index from font table
      *
@@ -64,8 +64,10 @@ class PHPRtfLite_DocHead_FontTable
         return array_search($fontFamily, $this->_fontFamilies);
     }
 
+
     /**
      * gets rtf font table
+     *
      * @return string
      */
     public function getContent()

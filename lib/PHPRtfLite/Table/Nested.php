@@ -30,6 +30,9 @@
 class PHPRtfLite_Table_Nested extends PHPRtfLite_Table
 {
 
+    /**
+     * renders nested table
+     */
     public function render()
     {
         if (empty($this->_rows) || empty($this->_columns)) {

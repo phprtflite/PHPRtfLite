@@ -2,7 +2,7 @@
 /* 
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -25,11 +25,11 @@
  * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
+ * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Container
  */
-class PHPRtfLite_Container_Header extends PHPRtfLite_Container
+class PHPRtfLite_Container_Header extends PHPRtfLite_Container_Base
 {
 
     /**
@@ -40,10 +40,6 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container
     const TYPE_RIGHT    = 'right';
     const TYPE_FIRST    = 'first';
 
-    /**
-     * @var PHPRtfLite
-     */
-    protected $_rtf;
 
     /**
      * @var string
@@ -77,6 +73,7 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container
         }
     }
 
+
     /**
      * Set vertical header position from the top of the page
      *
@@ -86,6 +83,7 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container
     {
         $this->_offsetHeight = $height;
     }
+
 
     /**
      * Gets type as rtf code
@@ -136,33 +134,6 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container
         }
     }
 
-    /**
-     * overwritten method, throws exception, because footers does not support footnotes/endnotes
-     *
-     * @param string                $noteText
-     * @param PHPRtfLite_Font       $font
-     * @param PHPRtfLite_ParFormat  $parFormat
-     *
-     * @throws PHPRtfLite_Exception, footnote/endnote is not supported by footers
-     */
-    public function addFootnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
-    {
-        throw new PHPRtfLite_Exception('Header/Footer does not support footnotes!');
-    }
-
-    /**
-     * overwritten method, throws exception, because footers does not support footnotes/endnotes
-     *
-     * @param string                $noteText
-     * @param PHPRtfLite_Font       $font
-     * @param PHPRtfLite_ParFormat  $parFormat
-     *
-     * @throws PHPRtfLite_Exception, footnote/endnote is not supported by footers
-     */
-    public function addEndnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
-    {
-        throw new PHPRtfLite_Exception('Header/Footer does not support endnotes!');
-    }
 
     /**
      * gets rtf type
@@ -172,6 +143,7 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container
     {
         return $this->_rtfType;
     }
+
 
     /**
      * streams rtf code for header/footer

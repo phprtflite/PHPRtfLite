@@ -2,7 +2,7 @@
 /* 
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011s Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -25,14 +25,14 @@
  * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
+ * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  */
 class PHPRtfLite_Utf8
 {
 
     /**
-     * Converts text with utf8 characters into rtf utf8 entites.
+     * converts text with utf8 characters into rtf utf8 entites
      *
      * @param string $text
      */
@@ -51,10 +51,10 @@ class PHPRtfLite_Utf8
         return self::unicodeToEntitiesPreservingAscii($text);
     }
 
+
     /**
+     * gets unicode for each character
      * @see http://www.randomchaos.com/documents/?source=php_and_unicode
-     *
-     * Gets unicode for each character
      *
      * @return array
      */
@@ -92,11 +92,11 @@ class PHPRtfLite_Utf8
         return $unicode;
     }
 
+
     /**
-     * Converts text with utf8 characters into rtf utf8 entites preserving ascii.
+     * converts text with utf8 characters into rtf utf8 entites preserving ascii
      *
      * @param  string $unicode
-     *
      * @return string
      */
     private static function unicodeToEntitiesPreservingAscii($unicode)

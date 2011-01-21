@@ -20,15 +20,28 @@
 */
 
 /**
- * class for text form fields in rtf documents.
+ * class for check box form fields in rtf documents.
  * @version     1.1.0
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_FormField
  */
-class PHPRtfLite_FormField_Text extends PHPRtfLite_FormField
+class PHPRtfLite_FormField_Checkbox extends PHPRtfLite_FormField
 {
+
+    /**
+     * flag, if checkbox is checked
+     * @var boolean
+     */
+    private $_checked   = false;
+
+    /**
+     * size of checkbox
+     * @var integer
+     */
+    private $_size      = 20;
+
 
     /**
      * gets form field type
@@ -37,18 +50,49 @@ class PHPRtfLite_FormField_Text extends PHPRtfLite_FormField
      */
     protected function getType()
     {
-        return 'FORMTEXT';
+        return 'FORMCHECKBOX';
     }
 
 
     /**
-     * gets rtf code for form field text
+     * sets checkbox to be set
+     */
+    public function setChecked()
+    {
+        $this->_checked = true;
+    }
+
+
+    /**
+     * sets default value
+     *
+     * @param   boolean $value
+     */
+    public function setDefaultValue($value)
+    {
+        $this->_checked = $value == true || $value == '1';
+    }
+
+
+    /**
+     * sets size of checkbox
+     *
+     * @param   integer s$size
+     */
+    public function setSize($size)
+    {
+        $this->_size = $size > 0 ? $size : 20;
+    }
+
+
+    /**
+     * gets checkbox rtf code
      *
      * @return string
      */
-    public function getRtfCode()
+    protected function getRtfCode()
     {
-        return '{\fftype0\fftypetxt0{\*\ffname Text1}}';
+        return '{\fftype1\ffhps' . $this->_size . '\ffdefres' . ($this->_checked ? '1' : '0') . '}';
     }
 
 }

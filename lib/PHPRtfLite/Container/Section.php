@@ -2,7 +2,7 @@
 /* 
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
 
@@ -25,7 +25,7 @@
  * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2010 Steffen Zeidler
+ * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Container
  */
@@ -142,7 +142,8 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
 
     /**
-     * Sets the paper width of pages in section.
+     * sets the paper width of pages in section.
+     *
      * @param float $width paper width
      */
     public function setPaperWidth($width)
@@ -150,8 +151,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_paperWidth = $width;
     }
 
+
     /**
-     * Gets the paper width of pages in section.
+     * gets the paper width of pages in section.
+     *
      * @return float paper width
      */
     public function getPaperWidth()
@@ -159,8 +162,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_paperWidth;
     }
 
+
     /**
-     * Sets the paper height of pages in section.   
+     * sets the paper height of pages in section.
+     *
      * @param float $height paper height
      */
     public function setPaperHeight($height)
@@ -168,14 +173,17 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_paperHeight = $height;
     }
 
+
     /**
-     * Gets the paper height of pages in section.
+     * gets the paper height of pages in section.
+     *
      * @return float paper height
      */
     public function getPaperHeight()
     {
         return $this->_paperHeight;
     }
+
 
     /**
      * gets if odd and even headers/footers are different
@@ -187,16 +195,18 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_useOddEvenDifferent;
     }
 
+
     /**
-     * Sets if odd and even headers/footers are different
+     * sets if odd and even headers/footers are different
      */
     public function setOddEvenDifferent($different = true)
     {
          $this->_useOddEvenDifferent = $different;
     }
 
+
     /**
-     * Sets the margins of pages in section.
+     * sets the margins of pages in section.
      * 
      * @param float $marginLeft Margin left
      * @param float $marginTop Margin top
@@ -211,8 +221,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_marginBottom    = $marginBottom;
     }
 
+
     /**
-     * Sets the left margin of document pages.
+     * sets the left margin of document pages.
+     *
      * @param float $margin
      */
     public function setMarginLeft($margin)
@@ -220,8 +232,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_marginLeft = $margin;
     }
 
+
     /**
-     * Gets the left margin of document pages.
+     * gets the left margin of document pages.
+     *
      * @return float $margin
      */
     public function getMarginLeft()
@@ -229,8 +243,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_marginLeft;
     }
 
+
     /**
-     * Sets the right margin of document pages.
+     * sets the right margin of document pages.
+     *
      * @param float $margin
      */
     public function setMarginRight($margin)
@@ -238,8 +254,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_marginRight = $margin;
     }
 
+
     /**
-     * Gets the right margin of document pages.
+     * gets the right margin of document pages.
+     *
      * @return float $margin
      */
     public function getMarginRight()
@@ -247,8 +265,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_marginRight;
     }
 
+
     /**
-     * Sets the top margin of document pages.
+     * sets the top margin of document pages.
+     *
      * @param float $margin
      */
     public function setMarginTop($margin)
@@ -256,8 +276,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_marginTop = $margin;
     }
 
+
     /**
-     * Gets the top margin of document pages.
+     * gets the top margin of document pages.
+     *
      * @return float $margin
      */
     public function getMarginTop()
@@ -265,8 +287,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_marginTop;
     }
 
+
     /**
-     * Sets the bottom margin of document pages.
+     * sets the bottom margin of document pages.
+     *
      * @param float $margin
      */
     public function setMarginBottom($margin)
@@ -274,8 +298,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_marginBottom = $margin;
     }
 
+
     /**
-     * Gets the bottom margin of document pages.
+     * gets the bottom margin of document pages.
+     *
      * @return float $margin
      */
     public function getMarginBottom()
@@ -283,9 +309,11 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_marginBottom;
     }
 
+
     /**
-     * Sets the gutter width. <br>   
+     * sets the gutter width. <br>
      * NOTICE: Does note work with OpenOffice.
+     *
      * @param float $gutter Gutter width
      */
     public function setGutter($gutter)
@@ -293,8 +321,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_gutter = $gutter;
     }
 
+
     /**
-     * Gets the gutter width.
+     * gets the gutter width.
+     *
      * @return float $gutter gutter width
      */
     public function getGutter()
@@ -302,8 +332,9 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_gutter;
     }
 
+
     /**
-     * Sets the margin definitions on left and right pages.<br>
+     * sets the margin definitions on left and right pages.<br>
      * Notice: Does not work with OpenOffice.
      */
     public function setMirrorMargins()
@@ -311,8 +342,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_useMirrorMargins = true;
     }
 
+
     /**
-     * Returns true, if use mirror margins should be used
+     * returns true, if use mirror margins should be used
+     *
      * @return boolean
      */
     public function isMirrorMargins()
@@ -320,8 +353,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_useMirrorMargins;
     }
 
+
     /**
-     * Gets width of page layout.
+     * gets width of page layout
+     *
      * @return float
      * @throws PHPRtfLite_Exception thrown if paper layout width is lower or equal 0
      */
@@ -339,8 +374,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $layoutWidth;
     }
 
+
     /**
-     * Sets border to rtf document.
+     * sets border to rtf document
+     *
      * @param PHPRtfLite_Border $border
      */
     public function setBorder(PHPRtfLite_Border $border)
@@ -348,8 +385,9 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_border = $border;
     }
 
+
     /**
-     * Gets border of document.
+     * gets border of document
      *
      * @return PHPRtfLite_Border
      */
@@ -358,8 +396,9 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_border;
     }
 
+
     /**
-     * Sets borders to rtf document.
+     * sets borders to rtf document.
      *
      * @param PHPRtfLite_Border_Format  $borderFormat
      * @param boolean                   $left
@@ -377,8 +416,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_border->setBorders($borderFormat, $left, $top, $right, $bottom);
     }
 
+
     /**
-     * Sets number of columns in section.
+     * sets number of columns in section.
+     *
      * @param integer $columnsCount number of columns
      */
     public function setNumberOfColumns($columnsCount)
@@ -387,8 +428,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_columnWidths    = array();
     }
 
+
     /**
-     * Gets number of columns in section.
+     * gets number of columns in section.
+     *
      * @return  integer $columnsCount number of columns
      */
     public function getNumberOfColumns()
@@ -396,8 +439,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_numberOfColumns;
     }
 
+
     /**
-     * Sets space (width) between columns.
+     * sets space (width) between columns
+     *
      * @param float $spaceBetweenColumns Space between columns
      */
     public function setSpaceBetweenColumns($spaceBetweenColumns)
@@ -405,8 +450,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_spaceBetweenColumns = $spaceBetweenColumns;
     }
 
+
     /**
-     * Gets space (width) between columns.
+     * gets space (width) between columns
+     *
      * @return float
      */
     public function getSpaceBetweenColumns()
@@ -414,9 +461,11 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_spaceBetweenColumns;
     }
 
+
     /**
-     * Sets section columns with different widths.<br>
+     * sets section columns with different widths.<br>
      * NOTE: If you use this function, you shouldn't use {@see setNumberOfColumns}.
+     *
      * @param   array   $columnWidths array with columns widths
      * @throws  PHPRtfLite_Exception, if column widths are exceeding the defined layout width
      */
@@ -436,8 +485,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         }
     }
 
+
     /**
      * gets widths for columns
+     *
      * @return array
      */
     public function getColumnWidths()
@@ -445,9 +496,11 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_columnWidths;
     }
 
+
     /**
-     * Do not break within the section.
-     * If foot notes are used in different sections, MS Word will always break sections.
+     * sets that it should not do a break within the section
+     * NOTE: If foot notes are used in different sections, MS Word will always break sections.
+     *
      * @param boolean $doNotBreak
      */
     public function setNoBreak($doNotBreak = true)
@@ -455,8 +508,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_doNotBreak = $doNotBreak;
     }
 
+
     /**
-     * Sets line between columns.
+     * sets line between columns.
+     *
      * @param boolean $flag
      */
     public function setLineBetweenColumns($flag = true)
@@ -464,8 +519,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_lineBetweenColumns = $flag;
     }
 
+
     /**
-     * Returns true, if line between columns is set.
+     * returns true, if line between columns is sets
+     *
      * @return boolean
      */
     public function hasLineBetweenColumns()
@@ -473,8 +530,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_lineBetweenColumns;
     }
 
+
     /**
-     * Sets vertical alignment of text within the section.
+     * sets vertical alignment of text within the section
+     *
      * @param string $alignment, represented by class constants VERTICAL_ALIGN_*<br>
      *   Possible values: <br>
      *     VERTICAL_ALIGN_TOP    = 'top';
@@ -490,8 +549,9 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         $this->_verticalAlignment = $alignment;
     }
 
+
     /**
-     * Gets vertical alignment of text within the section
+     * sets vertical alignment of text within the section
      *
      * @return string
      */
@@ -502,29 +562,8 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
 
     /**
-     * adds enumeration
+     * creates header for sections.
      *
-     * @param PHPRtfLite_List_Enumeration $enum
-     */
-    public function addEnumeration(PHPRtfLite_List_Enumeration $enum)
-    {
-        $this->_elements[] = $enum;
-    }
-
-
-    /**
-     * adds numbering
-     *
-     * @param PHPRtfLite_List_Numbering $enum
-     */
-    public function addNumbering(PHPRtfLite_List_Numbering $numList)
-    {
-        $this->_elements[] = $numList;
-    }
-
-
-    /**
-     * Creates header for sections.
      * @param string $type Represented by class constants PHPRtfLite_Container_Header::TYPE_*
      * Possible values: <br>
      *   PHPRtfLite_Container_Header::TYPE_ALL      => 'all' - all pages (different odd and even headers/footers must be not set) <br>
@@ -542,8 +581,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $header;
     }
 
+
     /**
-     * Gets defined headers for document pages.
+     * gets defined headers for document pages.
+     *
      * @return array contains PHPRtfLite_Container_Header objects
      */
     public function getHeaders()
@@ -551,8 +592,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_headers;
     }
 
+
     /**
-     * Creates footer for the document.
+     * creates footer for the document.
+     *
      * @param string $type Represented by class constants PHPRtfLite_Container_Footer::TYPE_*
      *   PHPRtfLite_Container_Footer::TYPE_ALL      => 'all' - all pages (different odd and even headers/footers must be not set) <br>
      *   PHPRtfLite_Container_Footer::TYPE_LEFT     => 'left' - left pages (different odd and even headers/footers must be set) <br>
@@ -569,8 +612,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $footer;
     }
 
+
     /**
-     * Gets defined footers for document pages.
+     * gets defined footers for document pages.
+     *
      * @return array contains PHPRtfLite_Container_FOOTER objects
      */
     public function getFooters()
@@ -578,18 +623,18 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         return $this->_footers;
     }
 
+
     /**
-     * Breaks page.
-     * @since 0.2.0/ This method is used instead of using "page" tag in PHPRTfLite_Container->writeText().
+     * insert a page break
      */
     public function insertPageBreak()
     {
         $this->writeRtfCode('\page');
     }
 
+
     /**
-     * Gets rtf code of section.
-     * @return string rtf code
+     * renders rtf code of section
      */
     public function render()
     {

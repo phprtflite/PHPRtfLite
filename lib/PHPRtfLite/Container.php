@@ -29,199 +29,8 @@
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Container
  */
-abstract class PHPRtfLite_Container
+abstract class PHPRtfLite_Container extends PHPRtfLite_Container_Base
 {
-
-    /**
-     * constants for text alignment
-     */
-    const TEXT_ALIGN_LEFT       = 'left';
-    const TEXT_ALIGN_RIGHT      = 'right';
-    const TEXT_ALIGN_CENTER     = 'center';
-    const TEXT_ALIGN_JUSTIFY    = 'justify';
-
-    /**
-     * constants for vertical alignment
-     */
-    const VERTICAL_ALIGN_TOP    = 'top';
-    const VERTICAL_ALIGN_BOTTOM = 'bottom';
-    const VERTICAL_ALIGN_CENTER = 'center';
-
-    /**
-     * @var PHPRtfLite
-     */
-    protected $_rtf;
-
-    /**
-     * @var array
-     */
-    protected $_elements = array();
-
-    /**
-     * @var string
-     */
-    protected $_pard = '\pard ';
-
-
-    /**
-     * Constructor
-     * @param PHPRtfLite $rtf
-     */
-    public function __construct(PHPRtfLite $rtf)
-    {
-        $this->_rtf = $rtf;
-    }
-
-    /**
-     * gets rtf object
-     *
-     * @return PHPRtfLite
-     */
-    public function getRtf()
-    {
-        return $this->_rtf;
-    }
-
-    /**
-     * counts container elements
-     *
-     * @return integer
-     */
-    public function countElements()
-    {
-        return count($this->_elements);
-    }
-
-    /**
-     * gets container elements
-     *
-     * @return array
-     */
-    public function getElements()
-    {
-        return $this->_elements;
-    }
-
-    /**
-     * adds element with rtf code directly (no converting will be made by PHPRtfLite)
-     *
-     * @param string $text
-     */
-    public function writeRtfCode($text)
-    {
-        $element = new PHPRtfLite_Element($this->_rtf);
-        $element->writeRtfCode($text);
-        $this->_elements[] = $element;
-    }
-
-    /**
-     * Adds empty paragraph to container.
-     * @param PHPRtfLite_Font       $font      
-     * @param PHPRtfLite_ParFormat  $parFormat 
-     */
-    public function addEmptyParagraph(PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
-    {
-        if ($parFormat === null) {
-            $parFormat = new PHPRtfLite_ParFormat();
-        }
-        $element = new PHPRtfLite_Element($this->_rtf, '', $font, $parFormat);
-        $this->_elements[] = $element;
-    }
-
-    /**
-     * Writes text to container.
-     * 
-     * @param string $text Text. Also you can use html style tags. Possible tags:<br>
-     *   strong, b- bold; <br>
-     *   em - ; <br>
-     *   i - italic; <br>
-     *   u - underline; <br>
-     *   br - line break; <br>
-     *   chdate - current date; <br>
-     *   chdpl - current date in long format; <br>
-     *   chdpa - current date in abbreviated format; <br>
-     *   chtime - current time; <br>
-     *   chpgn, pagenum - page number ; <br>
-     *   tab - tab
-     *   sectnum - section number; <br>
-     *   line - line break; <br>
-     *   page - page break; <br>
-     *   sect - section break; <br>
-     * @param PHPRtfLite_Font       $font               font of text
-     * @param PHPRtfLite_ParFormat  $parFormat          paragraph format, if null, text is written in the same paragraph.
-     * @param boolean               $convertTagsToRtf   if false, then html style tags are not replaced with rtf code
-     * @todo  refactor this method
-     */
-    public function writeText($text,
-                              PHPRtfLite_Font $font = null,
-                              PHPRtfLite_ParFormat $parFormat = null,
-                              $convertTagsToRtf = true)
-    {
-        $element = new PHPRtfLite_Element($this->_rtf, $text, $font, $parFormat);
-        if ($convertTagsToRtf) {
-            $element->setConvertTagsToRtf();
-        }
-        $this->_elements[] = $element;
-    }
-
-    /**
-     * Writes hyperlink to container.
-     *
-     * @param string                $hyperlink          hyperlink url (etc. "http://www.phprtf.com")
-     * @param string                $text               hyperlink text, if empty, hyperlink is written in previous paragraph format.
-     * @param PHPRtfLite_Font       $font       
-     * @param PHPRtfLite_ParFormat  $parFormat
-     * @param boolean               $convertTagsToRtf   if false, then html style tags are not replaced with rtf code
-     */
-    public function writeHyperLink($hyperlink,
-                                   $text,
-                                   PHPRtfLite_Font $font = null,
-                                   PHPRtfLite_ParFormat $parFormat = null,
-                                   $convertTagsToRtf = true)
-    {
-        $element = new PHPRtfLite_Element_Hyperlink($this->_rtf, $text, $font, $parFormat);
-        $element->setHyperlink($hyperlink);
-        $element->setConvertTagsToRtf();
-        $this->_elements[] = $element;
-    }
-
-    /**
-     * Adds table to element container.
-     *
-     * @param  string $alignment Alingment of table. Represented by class constants TEXT_ALIGN_*<br>
-     *    Possible values:<br>
-     *      PHPRtfLite_Container::TEXT_ALIGN_LEFT   => 'left',<br>
-     *      PHPRtfLite_Container::TEXT_ALIGN_CENTER => 'center',<br>
-     *      PHPRtfLite_Container::TEXT_ALIGN_RIGHT  => 'right'<br>
-     * 
-     * @return PHPRtfLite_Table
-     */
-    public function addTable($alignment = self::TEXT_ALIGN_LEFT)
-    {
-        $table = new PHPRtfLite_Table($this, $alignment);
-        $this->_elements[] = $table;
-        
-        return $table;
-    }
-
-    /**
-     * Adds image to element container.
-     * 
-     * @param string                $fileName   name of image file.
-     * @param PHPRtfLite_ParFormat  $parFormat  paragraph format, ff null image will appear in the same paragraph.
-     * @param float                 $width      if null image is displayed by it's height.
-     * @param float                 $height     if null image is displayed by it's width.
-     *   If boths parameters are null, image is displayed as it is.
-     *
-     * @return PHPRtfLite_Image
-     */
-    public function addImage($fileName, PHPRtfLite_ParFormat $parFormat = null, $width = null, $height = null)
-    {
-        $image = new PHPRtfLite_Image($this->_rtf, $fileName, $parFormat, $width, $height);
-        $this->_elements[] = $image;
-        
-        return $image;
-    }
 
     /**
      * adds a footnote
@@ -238,6 +47,7 @@ abstract class PHPRtfLite_Container
         $this->_elements[] = $footnote;
         return $footnote;
     }
+
 
     /**
      * adds an endnote
@@ -257,104 +67,69 @@ abstract class PHPRtfLite_Container
 
 
     /**
-     * renders rtf code for that container
+     * adds enumeration
      *
-     * @return string rtf code
+     * @param PHPRtfLite_List_Enumeration $enum
      */
-    public function render()
+    public function addEnumeration(PHPRtfLite_List_Enumeration $enum)
     {
-        $stream = $this->_rtf->getStream();
-
-        if (count($this->_elements) == 0) {
-            $this->addEmptyParagraph();
-        }
-        $lastKey = $this->countElements() - 1;
-
-        foreach ($this->_elements as $key => $element) {
-            if ($this instanceof PHPRtfLite_Table_Cell && !($element instanceof PHPRtfLite_Table)) {
-                $prevElement = isset($this->_elements[$key - 1]) ? $this->_elements[$key - 1] : false;
-                // table cell initialization
-                if (!$prevElement || $prevElement instanceof PHPRtfLite_Table) {
-                    $stream->write('\pard\intbl\itap' . $this->getTable()->getNestDepth() . "\r\n");
-                    $this->renderContentDefinition();
-                }
-            }
-
-            $parFormat = null;
-            if (!($element instanceof PHPRtfLite_Table)) {
-                $parFormat = $element->getParFormat();
-            }
-
-            if ($parFormat) {
-                $stream->write($this->_pard);
-                if ($this instanceof PHPRtfLite_Table_Cell && $lastKey != $key) {
-                    $stream->write('{');
-                }
-                $stream->write($parFormat->getContent());
-            }
-
-            $font = $this->getCellFont($element);
-            if ($font) {
-                $stream->write($font->getContent());
-            }
-
-            $element->render();
-
-            if ($this->needToAddParagraph($key)) {
-                $stream->write('\par ');
-            }
-
-            if ($font) {
-                $stream->write($font->getClosingContent());
-            }
-
-            if ($parFormat && $this instanceof PHPRtfLite_Table_Cell && $lastKey != $key) {
-                $stream->write('}');
-            }
-        }
+        $this->_elements[] = $enum;
     }
 
 
     /**
-     * checks, if a \par has to be added
+     * adds numbering
      *
-     * @param   integer $key
-     * @return  boolean
+     * @param PHPRtfLite_List_Numbering $enum
      */
-    private function needToAddParagraph($key)
+    public function addNumbering(PHPRtfLite_List_Numbering $numList)
     {
-        if (isset($this->_elements[$key + 1])) {
-            $nextElement = $this->_elements[$key + 1];
-            $element = $this->_elements[$key];
-            $isNextElementTable = $nextElement instanceof PHPRtfLite_Table;
-
-            if ($element instanceof PHPRtfLite_Table && $element->getNestDepth() == 1) {
-                return !$isNextElementTable;
-            }
-            else if ($element instanceof PHPRtfLite_Element) {
-                return (!$element->isEmptyParagraph() && ($isNextElementTable || $nextElement->getParFormat()));
-            }
-            else if ($element instanceof PHPRtfLite_Image) {
-                return ($isNextElementTable || $nextElement->getParFormat());
-            }
-        }
-
-        return false;
+        $this->_elements[] = $numList;
     }
 
 
     /**
-     * gets font if container is a cell
+     * adds checkbox field
      *
-     * @param   PHPRtfLite_Table    $element
-     * @return  PHPRtfLite_Font     $font
+     * @param   PHPRtfLite_Font         $font
+     * @param   PHPRtfLite_ParFormat    $parFormat
+     * @return  PHPRtfLite_FormField_Checkbox
      */
-    private function getCellFont($element)
+    public function addCheckbox(PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
     {
-        if ($this instanceof PHPRtfLite_Table_Cell && !($element instanceof PHPRtfLite_Table_Nested)) {
-            return $this->getFont();
-        }
-        return false;
+        $checkBox = new PHPRtfLite_FormField_Checkbox($this->_rtf, $font, $parFormat);
+        $this->_elements[] = $checkBox;
+        return $checkBox;
+    }
+
+
+    /**
+     * adds dropdown field
+     *
+     * @param   PHPRtfLite_Font         $font
+     * @param   PHPRtfLite_ParFormat    $parFormat
+     * @return  PHPRtfLite_FormField_Dropdown
+     */
+    public function addDropdown(PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
+    {
+        $dropdown = new PHPRtfLite_FormField_Dropdown($this->_rtf, $font, $parFormat);
+        $this->_elements[] = $dropdown;
+        return $dropdown;
+    }
+
+
+    /**
+     * adds text field
+     *
+     * @param   PHPRtfLite_Font         $font
+     * @param   PHPRtfLite_ParFormat    $parFormat
+     * @return  PHPRtfLite_FormField_Text
+     */
+    public function addTextField(PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
+    {
+        $textField = new PHPRtfLite_FormField_Text($this->_rtf, $font, $parFormat);
+        $this->_elements[] = $textField;
+        return $textField;
     }
 
 
@@ -369,4 +144,5 @@ abstract class PHPRtfLite_Container
     {
         $this->addEmptyParagraph($font, $parFormat);
     }
+
 }
