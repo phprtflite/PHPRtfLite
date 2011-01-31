@@ -1264,6 +1264,8 @@ class PHPRtfLite
             $this->_stream->write($this->_border->getContent('\pg'));
         }
 
+        $this->_stream->write('\pgnstart' . $this->_pageNumberStart);
+
         //headers and footers properties
         if ($this->_useOddEvenDifferent) {
             $this->_stream->write('\facingp ');
