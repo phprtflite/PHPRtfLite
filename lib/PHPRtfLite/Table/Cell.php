@@ -123,7 +123,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
     /**
      * @var string
      */
-    protected $_pard = '\pard \intbl ';
+    protected $_pard = '';
 
     /**
      * nested table
@@ -582,7 +582,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
                     $stream->write('{\*\nesttableprops ');
                     $row = $this->_table->getRow($this->_rowIndex);
                     $this->_table->renderRowDefinition($row);
-                    $stream->write('\nestrow}{\nonesttables\par}');
+                    $stream->write('\nestrow}');
                 }
             }
         }
