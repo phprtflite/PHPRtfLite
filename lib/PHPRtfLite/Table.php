@@ -698,7 +698,7 @@ class PHPRtfLite_Table
 
             for ($i = $start; $i <= $end; $i++) {
                 $cell = $this->getCell($j, $i);
-                if ($i == $start) {
+                if ($j == $startRow) {
                     $cell->setVerticalMergeStart();
                 }
                 else {

@@ -358,6 +358,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
     public function setVerticalMergeStart()
     {
         $this->_verticalMergeStart = true;
+        $this->_verticalMerged = true;
     }
 
 
