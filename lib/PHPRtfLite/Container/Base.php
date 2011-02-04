@@ -189,7 +189,9 @@ abstract class PHPRtfLite_Container_Base
     {
         $element = new PHPRtfLite_Element_Hyperlink($this->_rtf, $text, $font, $parFormat);
         $element->setHyperlink($hyperlink);
-        $element->setConvertTagsToRtf();
+        if ($convertTagsToRtf) {
+            $element->setConvertTagsToRtf();
+        }
         $this->_elements[] = $element;
     }
 
@@ -250,12 +252,9 @@ abstract class PHPRtfLite_Container_Base
 
         foreach ($this->_elements as $key => $element) {
             if ($this instanceof PHPRtfLite_Table_Cell && !($element instanceof PHPRtfLite_Table)) {
-                $prevElement = isset($this->_elements[$key - 1]) ? $this->_elements[$key - 1] : false;
                 // table cell initialization
-                if (!$prevElement || $prevElement instanceof PHPRtfLite_Table) {
-                    $stream->write('\pard\intbl\itap' . $this->getTable()->getNestDepth() . "\r\n");
-                    $stream->write($this->getCellAlignment());
-                }
+                $stream->write('\pard\intbl\itap' . $this->getTable()->getNestDepth() . "\r\n");
+                $stream->write($this->getCellAlignment());
             }
 
             $parFormat = null;

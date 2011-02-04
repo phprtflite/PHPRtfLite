@@ -283,7 +283,7 @@ class PHPRtfLite_Font
      *
      * @return boolean
      */
-    public function isDoubleStriked($striked = true)
+    public function isDoubleStriked()
     {
         return $this->_isDoubleStriked;
     }

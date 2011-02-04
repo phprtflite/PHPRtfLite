@@ -101,7 +101,7 @@ class PHPRtfLite_Table
      * @param PHPRtfLite_Container
      * @param string
      */
-    public function __construct(PHPRtfLite_Container $container, $alignment = self::ALIGN_LEFT, $nestDepth = 1)
+    public function __construct(PHPRtfLite_Container_Base $container, $alignment = self::ALIGN_LEFT, $nestDepth = 1)
     {
         $this->_container = $container;
         $this->_alignment = $alignment;
@@ -373,9 +373,7 @@ class PHPRtfLite_Table
                                 PHPRtfLite_ParFormat $parFormat = null,
                                 $convertTagsToRtf = true)
     {
-        if ($this->checkIfCellExists($rowIndex, $columnIndex)) {
-            $this->getCell($rowIndex, $columnIndex)->writeText($text, $font, $parFormat, $convertTagsToRtf);
-        }
+        $this->getCell($rowIndex, $columnIndex)->writeText($text, $font, $parFormat, $convertTagsToRtf);
     }
 
 
@@ -397,9 +395,7 @@ class PHPRtfLite_Table
                                    $width = null,
                                    $height = null)
     {
-        if ($this->checkIfCellExists($rowIndex, $columnIndex)) {
-            $this->getCell($rowIndex, $columnIndex)->addImage($file, $parFormat, $width, $height);
-        }
+        $this->getCell($rowIndex, $columnIndex)->addImage($file, $parFormat, $width, $height);
     }
 
 
@@ -702,12 +698,17 @@ class PHPRtfLite_Table
 
             for ($i = $start; $i <= $end; $i++) {
                 $cell = $this->getCell($j, $i);
-                $cell->setVerticalMerged(true);
+                if ($i == $start) {
+                    $cell->setVerticalMergeStart();
+                }
+                else {
+                    $cell->setVerticalMerged();
+                }
   
                 $width += $this->getColumn($i)->getWidth();
 
                 if ($i != $start) {
-                    $cell->setHorizontalMerged(true);
+                    $cell->setHorizontalMerged();
                     $cell->setWidth(null);
                 }
             }
@@ -794,7 +795,7 @@ class PHPRtfLite_Table
      */
     public function checkIfCellExists($rowIndex, $columnIndex)
     {
-        return ($this->checkRowIndex($rowIndex) && $this->checkColumnIndex($columnIndex));
+        return $this->checkRowIndex($rowIndex) && $this->checkColumnIndex($columnIndex);
     }
 
 
@@ -891,7 +892,6 @@ class PHPRtfLite_Table
     protected function renderRowCells(PHPRtfLite_Table_Row $row)
     {
         $rowIndex = $row->getRowIndex();
-        $stream = $this->getRtf()->getStream();
 
         foreach ($this->getColumns() as $columnIndex => $column) {
             $cell = $this->getCell($rowIndex, $columnIndex + 1);

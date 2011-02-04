@@ -110,7 +110,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
     /**
      * ture, if cell merge starts with this cell
-     * @var <type>
+     * @var boolean
      */
     protected $_verticalMergeStart = false;
 
@@ -314,12 +314,10 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
     /**
      * sets that cell is horizontal merged
-     *
-     * @param boolean $merged
      */
-    public function setHorizontalMerged($merged = true)
+    public function setHorizontalMerged()
     {
-        $this->_horizontalMerged = $merged;
+        $this->_horizontalMerged = true;
     }
 
 
@@ -336,12 +334,10 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
     /**
      * sets that cell is vertical merged
-     *
-     * @param boolean $merged
      */
-    public function setVerticalMerged($merged = true)
+    public function setVerticalMerged()
     {
-        $this->_verticalMerged = $merged;
+        $this->_verticalMerged = true;
     }
 
 
@@ -357,17 +353,22 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
 
     /**
+     * sets vertical merge start
+     */
+    public function setVerticalMergeStart()
+    {
+        $this->_verticalMergeStart = true;
+    }
+
+
+    /**
      * checks, if cell is first cell of a vertical cell range merge
      *
      * @return boolean
      */
     public function isVerticalMergedFirstInRange()
     {
-        if ($this->_rowIndex == 1) {
-            return true;
-        }
-        $cellBefore = $this->_table->getCell($this->_rowIndex - 1, $this->_columnIndex);
-        return !$cellBefore->isVerticalMerged();
+        return $this->_verticalMergeStart;
     }
 
 
@@ -588,6 +589,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
         }
         else {
             // closing tag for cell definition
+            $stream->write('\pard\intbl\itap' . $this->getTable()->getNestDepth() . "\r\n");
             $stream->write('\cell\pard');
         }
         $stream->write("\r\n");

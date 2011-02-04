@@ -64,7 +64,6 @@ class PHPRtfLite_Table_CellTest extends PHPUnit_Framework_TestCase
         $border = new PHPRtfLite_Border($table->getRtf());
         $border->setBorders(new PHPRtfLite_Border_Format(1, '#3F3'));
         $cell1x2 = $table->getCell(1, 2);
-        $cell1x1 = $table->getCell(1, 1);
         $cell2x2 = $table->getCell(2, 2);
         $cell1x2->setBorder($border);
         $this->assertEquals('#3F3', $cell1x2->getBorder()->getBorderLeft()->getColor());
