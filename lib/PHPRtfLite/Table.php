@@ -881,7 +881,7 @@ class PHPRtfLite_Table
 
         $rowHeight = $row->getHeight();
         if ($rowHeight) {
-            $stream->write('\trrh' . round($rowHeight * PHPRtfLite::TWIPS_IN_CM));
+            $stream->write('\trrh' . PHPRtfLite_Unit::getUnitInTwips($rowHeight));
         }
 
         if ($this->isPreventPageBreak()) {
@@ -893,7 +893,7 @@ class PHPRtfLite_Table
         }
 
         if ($this->getLeftPosition() != '') {
-            $stream->write('\trleft' . round($this->getLeftPosition() * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\trleft' . PHPRtfLite_Unit::getUnitInTwips($this->getLeftPosition()) . ' ');
         }
 
         $width = 0;
@@ -905,7 +905,7 @@ class PHPRtfLite_Table
                 $cell->renderDefinition();
 
                 // cell width
-                $width += round($cell->getWidth() * PHPRtfLite::TWIPS_IN_CM);
+                $width += PHPRtfLite_Unit::getUnitInTwips($cell->getWidth());
                 $stream->write('\cellx' . $width);
             }
         }

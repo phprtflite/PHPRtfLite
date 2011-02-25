@@ -33,8 +33,6 @@ class PHPRtfLite
 
     const SPACE_IN_POINTS           = 20;
     const SPACE_IN_LINES            = 240;
-    const TWIPS_IN_CM               = 567;
-    const CM_IN_POINTS              = 0.026434;
 
     /**
      * constants defining view modes
@@ -196,7 +194,7 @@ class PHPRtfLite
      * flag, if true use landscape layout
      * @var boolean
      */
-    private $_isLandscape     = false;
+    private $_isLandscape = false;
 
     /**
      * using hyphnation
@@ -229,6 +227,7 @@ class PHPRtfLite
         }
         $this->_stream = $stream;
     }
+
 
     /**
      * registers autoloader for PHPRtfLite classes
@@ -1242,16 +1241,16 @@ class PHPRtfLite
         if ($this->_isHyphenation) {
             $this->_stream->write('\hyphauto1');
         }
-        $this->_stream->write('\deftab' . round(self::TWIPS_IN_CM * $this->_defaultTabWidth) . ' ');
-        $this->_stream->write('\paperw' . round(self::TWIPS_IN_CM * $this->_paperWidth)  .' ');
-        $this->_stream->write('\paperh' . round(self::TWIPS_IN_CM * $this->_paperHeight) . ' ');
-        $this->_stream->write('\margl' . round(self::TWIPS_IN_CM * $this->_marginLeft) . ' ');
-        $this->_stream->write('\margr' . round(self::TWIPS_IN_CM * $this->_marginRight) . ' ');
-        $this->_stream->write('\margt' . round(self::TWIPS_IN_CM * $this->_marginTop) . ' ');
-        $this->_stream->write('\margb' . round(self::TWIPS_IN_CM * $this->_marginBottom) . ' ');
+        $this->_stream->write('\deftab' . PHPRtfLite_Unit::getUnitInTwips($this->_defaultTabWidth) . ' ');
+        $this->_stream->write('\paperw' . PHPRtfLite_Unit::getUnitInTwips($this->_paperWidth)  .' ');
+        $this->_stream->write('\paperh' . PHPRtfLite_Unit::getUnitInTwips($this->_paperHeight) . ' ');
+        $this->_stream->write('\margl' . PHPRtfLite_Unit::getUnitInTwips($this->_marginLeft) . ' ');
+        $this->_stream->write('\margr' . PHPRtfLite_Unit::getUnitInTwips($this->_marginRight) . ' ');
+        $this->_stream->write('\margt' . PHPRtfLite_Unit::getUnitInTwips($this->_marginTop) . ' ');
+        $this->_stream->write('\margb' . PHPRtfLite_Unit::getUnitInTwips($this->_marginBottom) . ' ');
 
         if (null !== $this->_gutter) {
-            $this->_stream->write('\gutter' . round($this->_gutter * self::TWIPS_IN_CM) . ' ');
+            $this->_stream->write('\gutter' . PHPRtfLite_Unit::getUnitInTwips($this->_gutter) . ' ');
         }
 
         if (true == $this->_useMirrorMargins) {

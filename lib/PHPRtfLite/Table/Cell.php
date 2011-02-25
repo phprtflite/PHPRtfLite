@@ -632,17 +632,18 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
                 break;
         }
 
+        // NOTE: microsoft and all other rtf readers I know confound left with top cell padding
         if ($this->_paddingLeft) {
-            $stream->write('\clpadft3\clpadt' . round(PHPRtfLite::TWIPS_IN_CM * $this->_paddingLeft) . ' ');
+            $stream->write('\clpadft3\clpadt' . PHPRtfLite_Unit::getUnitInTwips($this->_paddingLeft) . ' ');
         }
         if ($this->_paddingTop) {
-            $stream->write('\clpadfl3\clpadl' . round(PHPRtfLite::TWIPS_IN_CM * $this->_paddingTop) . ' ');
+            $stream->write('\clpadfl3\clpadl' . PHPRtfLite_Unit::getUnitInTwips($this->_paddingTop) . ' ');
         }
         if ($this->_paddingBottom) {
-            $stream->write('\clpadfb3\clpadb' . round(PHPRtfLite::TWIPS_IN_CM * $this->_paddingBottom) . ' ');
+            $stream->write('\clpadfb3\clpadb' . PHPRtfLite_Unit::getUnitInTwips($this->_paddingBottom) . ' ');
         }
         if ($this->_paddingRight) {
-            $stream->write('\clpadfr3\clpadr' . round(PHPRtfLite::TWIPS_IN_CM * $this->_paddingRight) . ' ');
+            $stream->write('\clpadfr3\clpadr' . PHPRtfLite_Unit::getUnitInTwips($this->_paddingRight) . ' ');
         }
 
         $border = $this->getBorder();

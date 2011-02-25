@@ -157,7 +157,7 @@ class PHPRtfLite_ParFormat
      */
     public function setIndentFirstLine($indentFirst)
     {
-        $this->_indentFirstLine = round($indentFirst * PHPRtfLite::TWIPS_IN_CM);
+        $this->_indentFirstLine = PHPRtfLite_Unit::getUnitInTwips($indentFirst);
     }
 
 
@@ -179,7 +179,7 @@ class PHPRtfLite_ParFormat
      */
     public function setIndentLeft($indentLeft)
     {
-        $this->_indentLeft = round($indentLeft * PHPRtfLite::TWIPS_IN_CM);
+        $this->_indentLeft = PHPRtfLite_Unit::getUnitInTwips($indentLeft);
     }
 
 
@@ -201,7 +201,7 @@ class PHPRtfLite_ParFormat
      */
     public function setIndentRight($indentRight)
     {
-        $this->_indentRight = round($indentRight * PHPRtfLite::TWIPS_IN_CM);
+        $this->_indentRight = PHPRtfLite_Unit::getUnitInTwips($indentRight);
     }
 
 

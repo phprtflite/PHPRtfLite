@@ -215,16 +215,14 @@ class PHPRtfLite_Image
     private function getImageWidth()
     {
         if ($this->_width > 0) {
-            $width = $this->_width;
+            return PHPRtfLite_Unit::getUnitInTwips($this->_width);
         }
-        elseif ($this->_height > 0) {
+        else if ($this->_height > 0) {
             $width = ($this->_defaultWidth / $this->_defaultHeight) * $this->_height;
-        }
-        else {
-            $width = $this->_defaultWidth * PHPRtfLite::CM_IN_POINTS;
+            return PHPRtfLite_Unit::getUnitInTwips($width);
         }
 
-        return round($width * PHPRtfLite::TWIPS_IN_CM);
+        return PHPRtfLite_Unit::getPointsInTwips($this->_defaultWidth);
     }
 
 
@@ -236,16 +234,14 @@ class PHPRtfLite_Image
     private function getImageHeight()
     {
         if ($this->_height > 0) {
-            $height = $this->_height;
+            return PHPRtfLite_Unit::getUnitInTwips($this->_height);
         }
-        elseif ($this->_width > 0) {
-            $height= ($this->_defaultHeight /$this->_defaultWidth) * $this->_width;
-        }
-        else {
-            $height = $this->_defaultHeight * PHPRtfLite::CM_IN_POINTS;
+        else if ($this->_width > 0) {
+            $height = ($this->_defaultHeight /$this->_defaultWidth) * $this->_width;
+            return PHPRtfLite_Unit::getUnitInTwips($height);
         }
 
-        return round($height * PHPRtfLite::TWIPS_IN_CM);
+        return PHPRtfLite_Unit::getPointsInTwips($this->_defaultHeight);
     }
 
 

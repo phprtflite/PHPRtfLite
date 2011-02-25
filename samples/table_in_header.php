@@ -22,11 +22,11 @@ $cell->setTextAlignment(PHPRtfLite_Table_Cell::TEXT_ALIGN_LEFT);
 $cell->writeText('Cell with left alignment');
 
 $cell = $table->getCell(1, 2);
-$cell->setTextAlignment(PHPRtfLite_Table_Cell::TEXT_ALIGN_LEFT);
+$cell->setTextAlignment(PHPRtfLite_Table_Cell::TEXT_ALIGN_CENTER);
 $cell->writeText('Cell with center alignment');
 
 $cell = $table->getCell(1, 3);
-$cell->setTextAlignment(PHPRtfLite_Table_Cell::TEXT_ALIGN_LEFT);
+$cell->setTextAlignment(PHPRtfLite_Table_Cell::TEXT_ALIGN_RIGHT);
 $cell->writeText('Cell with right alignment');
 
 $header->writeText('Text after table');

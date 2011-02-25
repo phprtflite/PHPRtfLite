@@ -86,7 +86,7 @@ class PHPRtfLite_Border_Format
         $this->_size    = $size * PHPRtfLite::SPACE_IN_POINTS;
         $this->_type    = $type;
         $this->_color   = $color;
-        $this->_space   = round($space * PHPRtfLite::TWIPS_IN_CM);
+        $this->_space   = PHPRtfLite_Unit::getUnitInTwips($space);
     }
 
 
@@ -169,6 +169,7 @@ class PHPRtfLite_Border_Format
         }
         $this->_colorTable = $colorTable;
     }
+
 
     /**
      * gets rtf code

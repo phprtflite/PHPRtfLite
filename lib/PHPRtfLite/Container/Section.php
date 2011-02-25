@@ -674,21 +674,21 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
         if (empty($this->_columnWidths)) {
             if ($this->_spaceBetweenColumns) {
-                  $stream->write('\colsx' . round($this->_spaceBetweenColumns * PHPRtfLite::TWIPS_IN_CM) . ' ');
+                  $stream->write('\colsx' . PHPRtfLite_Unit::getUnitInTwips($this->_spaceBetweenColumns) . ' ');
             }
         }
         else {
             $width = 0;
             foreach ($this->_columnWidths as $value) {
-                $width += $value * PHPRtfLite::TWIPS_IN_CM;
+                $width += PHPRtfLite_Unit::getUnitInTwips($value);
             }
 
             $printableWidth = $this->_rtf->getPaperWidth() - $this->_rtf->getMarginLeft() - $this->_rtf->getMarginRight();
-            $space = round(($printableWidth * PHPRtfLite::TWIPS_IN_CM - $width) / (count($this->_columnWidths) - 1));
+            $space = round((PHPRtfLite_Unit::getUnitInTwips($printableWidth) - $width) / (count($this->_columnWidths) - 1));
 
             $i = 1;
             foreach ($this->_columnWidths as $key => $value) {
-                $stream->write('\colno' . $i . '\colw' . ($value * PHPRtfLite::TWIPS_IN_CM));
+                $stream->write('\colno' . $i . '\colw' . PHPRtfLite_Unit::getUnitInTwips($value));
                 if (!empty($this->_columnWidths[$key])) {
                     $stream->write('\colsr' . $space);
                 }
@@ -703,31 +703,31 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
         /*---Page part---*/
         if ($this->_paperWidth) {
-            $stream->write('\pgwsxn' . round($this->_paperWidth * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\pgwsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_paperWidth) . ' ');
         }
 
         if ($this->_paperHeight) {
-            $stream->write('\pghsxn' . round($this->_paperHeight * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\pghsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_paperHeight) . ' ');
         }
 
         if ($this->_marginLeft) {
-            $stream->write('\marglsxn' . round($this->_marginLeft * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\marglsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginLeft) . ' ');
         }
 
         if ($this->_marginRight) {
-            $stream->write('\margrsxn' . round($this->_marginRight * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\margrsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginRight) . ' ');
         }
 
         if ($this->_marginTop) {
-            $stream->write('\margtsxn' . round($this->_marginTop * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\margtsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginTop) . ' ');
         }
 
         if ($this->_marginBottom) {
-            $stream->write('\margbsxn' . round($this->_marginBottom * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\margbsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginBottom) . ' ');
         }
 
         if ($this->_gutter) {
-            $stream->write('\guttersxn' . round($this->_gutter * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\guttersxn' . PHPRtfLite_Unit::getUnitInTwips($this->_gutter) . ' ');
         }
 
         if ($this->_useMirrorMargins) {
