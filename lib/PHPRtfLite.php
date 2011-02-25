@@ -92,25 +92,25 @@ class PHPRtfLite
 
     /**
      * left margin
-     * @var integer
+     * @var float
      */
     private $_marginLeft  = 3;
 
     /**
      * right margin
-     * @var integer
+     * @var float
      */
     private $_marginRight = 3;
 
     /**
      * top margin
-     * @var integer
+     * @var float
      */
     private $_marginTop   = 1;
 
     /**
      * bottom margin
-     * @var integer
+     * @var float
      */
     private $_marginBottom = 2;
 

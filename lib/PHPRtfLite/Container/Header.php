@@ -158,8 +158,14 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container_Base
         }
 
         $stream->write('{\\' . $this->getTypeAsRtfCode() . ' ');
+
         parent::render();
-        $stream->write('\par}' . "\r\n");
+
+        $containerElements = $this->getElements();
+        if ($containerElements[count($containerElements)-1] instanceof PHPRtfLite_Element) {
+        	$stream->write('\par');
+        }
+        $stream->write('}' . "\r\n");
     }
 
 }

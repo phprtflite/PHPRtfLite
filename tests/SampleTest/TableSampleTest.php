@@ -10,7 +10,7 @@ require_once dirname(__FILE__) . '/../PHPRtfLiteSampleTestCase.php';
 class TableSampleTest extends PHPRtfLiteSampleTestCase
 {
 
-    private $_name = 'table';
+    private $_name = 'tables';
 
     public function test()
     {

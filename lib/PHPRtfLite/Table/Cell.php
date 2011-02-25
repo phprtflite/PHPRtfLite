@@ -126,10 +126,28 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
     protected $_pard = '';
 
     /**
-     * nested table
-     * @var PHPRtfLite_Table_Nested
+     * cell padding left
+     * @var float
      */
-    protected $_nestedTable;
+    protected $_paddingLeft;
+
+    /**
+     * cell padding right
+     * @var float
+     */
+    protected $_paddingRight;
+
+    /**
+     * cell padding top
+     * @var float
+     */
+    protected $_paddingTop;
+
+    /**
+     * cell padding bottom
+     * @var float
+     */
+    protected $_paddingBottom;
 
 
     /**
@@ -509,6 +527,67 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
 
     /**
+     * sets cell paddings
+     *
+     * @param   integer $paddingLeft
+     * @param   integer $paddingTop
+     * @param   integer $paddingRight
+     * @param   integer $paddingBottom
+     */
+    public function setCellPaddings($paddingLeft, $paddingTop, $paddingRight, $paddingBottom)
+    {
+        $this->_paddingLeft     = $paddingLeft;
+        $this->_paddingTop      = $paddingTop;
+        $this->_paddingRight    = $paddingRight;
+        $this->_paddingBottom   = $paddingBottom;
+    }
+
+
+    /**
+     * sets cell padding left
+     *
+     * @param integer $padding
+     */
+    public function setPaddingLeft($padding)
+    {
+        $this->_paddingLeft = $padding;
+    }
+
+
+    /**
+     * sets cell padding right
+     *
+     * @param integer $padding
+     */
+    public function setPaddingRight($padding)
+    {
+        $this->_paddingRight = $padding;
+    }
+
+
+    /**
+     * sets cell padding top
+     *
+     * @param integer $padding
+     */
+    public function setPaddingTop($padding)
+    {
+        $this->_paddingTop = $padding;
+    }
+
+
+    /**
+     * sets cell padding bottom
+     *
+     * @param integer $padding
+     */
+    public function setPaddingBottom($padding)
+    {
+        $this->_paddingBottom = $padding;
+    }
+
+
+    /**
      * renders cell definition
      */
     public function renderDefinition()
@@ -553,6 +632,19 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
                 break;
         }
 
+        if ($this->_paddingLeft) {
+            $stream->write('\clpadft3\clpadt' . round(PHPRtfLite::TWIPS_IN_CM * $this->_paddingLeft) . ' ');
+        }
+        if ($this->_paddingTop) {
+            $stream->write('\clpadfl3\clpadl' . round(PHPRtfLite::TWIPS_IN_CM * $this->_paddingTop) . ' ');
+        }
+        if ($this->_paddingBottom) {
+            $stream->write('\clpadfb3\clpadb' . round(PHPRtfLite::TWIPS_IN_CM * $this->_paddingBottom) . ' ');
+        }
+        if ($this->_paddingRight) {
+            $stream->write('\clpadfr3\clpadr' . round(PHPRtfLite::TWIPS_IN_CM * $this->_paddingRight) . ' ');
+        }
+
         $border = $this->getBorder();
         if ($border) {
             $stream->write($border->getContent('\cl'));
@@ -590,7 +682,6 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
         }
         else {
             // closing tag for cell definition
-            $stream->write('\pard\intbl\itap' . $this->getTable()->getNestDepth() . "\r\n");
             $stream->write('\cell\pard');
         }
         $stream->write("\r\n");

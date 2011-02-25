@@ -82,37 +82,37 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
     /**
      * paper width
-     * @var integer
+     * @var float
      */
     protected $_paperWidth;
 
     /**
      * paper height
-     * @var integer
+     * @var float
      */
     protected $_paperHeight;
 
     /**
      * left margin
-     * @var integer
+     * @var float
      */
     protected $_marginLeft;
 
     /**
      * right margin
-     * @var integer
+     * @var float
      */
     protected $_marginRight;
 
     /**
      * top margin
-     * @var integer
+     * @var float
      */
     protected $_marginTop;
 
     /**
      * bottom margin
-     * @var integer
+     * @var float
      */
     protected $_marginBottom;
 

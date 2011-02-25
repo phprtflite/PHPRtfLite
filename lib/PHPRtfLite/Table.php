@@ -94,7 +94,13 @@ class PHPRtfLite_Table
      */
     protected $_nestDepth = 1;
 
-    
+    /**
+     * flag for preventing an empty paragraph after table
+     * @var boolean
+     */
+    protected $_preventEmptyParagraph = false;
+
+
     /**
      * constructor
      *
@@ -223,6 +229,28 @@ class PHPRtfLite_Table
     {
         return $this->_alignment;
     }
+
+
+    /**
+     * prevents adding an empty paragraph after table
+     *
+     * @param boolean
+     */
+    public function preventEmptyParagraph($value)
+    {
+    	$this->_preventEmptyParagraph = $value;
+    }
+
+
+    /**
+     * returns true, if no empty paragraph should be added after table
+     *
+     * @return boolean
+     */
+	public function getPreventEmptyParagraph()
+    {
+		return $this->_preventEmptyParagraph;
+	}
 
 
     /**

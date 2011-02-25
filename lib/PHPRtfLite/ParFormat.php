@@ -392,7 +392,7 @@ class PHPRtfLite_ParFormat
                 break;
         }
 
-        if ($this->_indentFirstLine > 0) {
+        if ($this->_indentFirstLine != 0) {
             $content .= '\fi' . $this->_indentFirstLine.' ';
         }
 
