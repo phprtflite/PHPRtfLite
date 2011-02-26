@@ -236,7 +236,7 @@ class PHPRtfLite_Table
      *
      * @param boolean
      */
-    public function preventEmptyParagraph($value)
+    public function preventEmptyParagraph($value = true)
     {
     	$this->_preventEmptyParagraph = $value;
     }
