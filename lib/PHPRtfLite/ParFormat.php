@@ -157,7 +157,7 @@ class PHPRtfLite_ParFormat
      */
     public function setIndentFirstLine($indentFirst)
     {
-        $this->_indentFirstLine = PHPRtfLite_Unit::getUnitInTwips($indentFirst);
+        $this->_indentFirstLine = $indentFirst;
     }
 
 
@@ -179,7 +179,7 @@ class PHPRtfLite_ParFormat
      */
     public function setIndentLeft($indentLeft)
     {
-        $this->_indentLeft = PHPRtfLite_Unit::getUnitInTwips($indentLeft);
+        $this->_indentLeft = $indentLeft;
     }
 
 
@@ -201,7 +201,7 @@ class PHPRtfLite_ParFormat
      */
     public function setIndentRight($indentRight)
     {
-        $this->_indentRight = PHPRtfLite_Unit::getUnitInTwips($indentRight);
+        $this->_indentRight = $indentRight;
     }
 
 
@@ -393,15 +393,15 @@ class PHPRtfLite_ParFormat
         }
 
         if ($this->_indentFirstLine != 0) {
-            $content .= '\fi' . $this->_indentFirstLine.' ';
+            $content .= '\fi' . PHPRtfLite_Unit::getUnitInTwips($this->_indentFirstLine) . ' ';
         }
 
         if ($this->_indentLeft > 0) {
-            $content .= '\li' . $this->_indentLeft.' ';
+            $content .= '\li' . PHPRtfLite_Unit::getUnitInTwips($this->_indentLeft) . ' ';
         }
 
         if ($this->_indentRight > 0) {
-            $content .= '\ri' . $this->_indentRight.' ';
+            $content .= '\ri' . PHPRtfLite_Unit::getUnitInTwips($this->_indentRight) .' ';
         }
 
         if ($this->_spaceBefore > 0) {

@@ -39,12 +39,6 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
     protected $_border;
 
     /**
-     * vertical alignment
-     * @var string
-     */
-    protected $_verticalAlignment;
-
-    /**
      * flag, if true, even and odd pages are using different layouts
      * @var boolean
      */
@@ -532,36 +526,6 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
 
     /**
-     * sets vertical alignment of text within the section
-     *
-     * @param string $alignment, represented by class constants VERTICAL_ALIGN_*<br>
-     *   Possible values: <br>
-     *     VERTICAL_ALIGN_TOP    = 'top';
-     *     VERTICAL_ALIGN_BOTTOM = 'bottom';
-     *     VERTICAL_ALIGN_CENTER = 'center';
-     * 'top' => top (default)<br>
-     * 'center' => center <br>
-     * 'bottom' => bottom <br>
-     * @todo bottom justify don't work
-     */
-    public function setVerticalAlignment($alignment)
-    {
-        $this->_verticalAlignment = $alignment;
-    }
-
-
-    /**
-     * sets vertical alignment of text within the section
-     *
-     * @return string
-     */
-    public function getVerticalAlignment()
-    {
-        return $this->_verticalAlignment;
-    }
-
-
-    /**
      * creates header for sections.
      *
      * @param string $type Represented by class constants PHPRtfLite_Container_Header::TYPE_*
@@ -732,26 +696,6 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
         if ($this->_useMirrorMargins) {
             $stream->write('\margmirsxn ');
-        }
-
-        if ($this->_verticalAlignment) {
-            switch ($this->_verticalAlignment) {
-                case 'center':
-                    $stream->write('\vertalc ');
-                    break;
-
-                case 'bottom':
-                    $stream->write('\vertalb ');
-                    break;
-
-                case 'justify':
-                    $stream->write('\vertalj ');
-                    break;
-
-                default:
-                    $stream->write('\vertalt ');
-                    break;
-            }
         }
 
         $stream->write("\r\n");

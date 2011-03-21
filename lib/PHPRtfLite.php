@@ -1304,7 +1304,7 @@ class PHPRtfLite
         //sections
         foreach ($this->_sections as $key => $section) {
             if ($key != 0) {
-                $this->_stream->write('\sect \sectd ');
+                $this->_stream->write('\sect\sectd ');
             }
             $section->render();
         }

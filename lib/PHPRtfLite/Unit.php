@@ -30,7 +30,7 @@ class PHPRtfLite_Unit
 
     const UNIT_CM           = 567;
     const UNIT_INCH         = 1440;
-    const TWIP_IN_POINTS    = 14.988078;
+    const UNIT_POINT        = 14.988078;
 
 
     /**
@@ -71,7 +71,7 @@ class PHPRtfLite_Unit
      */
     public static function getPointsInTwips($value)
     {
-        return round($value * self::TWIP_IN_POINTS);
+        return round($value * self::UNIT_POINT);
     }
 
 }

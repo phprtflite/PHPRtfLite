@@ -37,6 +37,21 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
     const ROTATE_RIGHT  = 'right';
     const ROTATE_LEFT   = 'left';
 
+    /**
+     * constants for text alignment
+     */
+    const TEXT_ALIGN_LEFT       = 'left';
+    const TEXT_ALIGN_RIGHT      = 'right';
+    const TEXT_ALIGN_CENTER     = 'center';
+    const TEXT_ALIGN_JUSTIFY    = 'justify';
+
+    /**
+     * constants for vertical alignment
+     */
+    const VERTICAL_ALIGN_TOP    = 'top';
+    const VERTICAL_ALIGN_BOTTOM = 'bottom';
+    const VERTICAL_ALIGN_CENTER = 'center';
+
 
     /**
      * @var PHPRtfLite

@@ -839,13 +839,13 @@ class PHPRtfLite_Table
         }
 
         $stream = $this->getRtf()->getStream();
-        $stream->write('\trowd' . "\r\n");
 
         foreach ($this->_rows as $row) {
-            $this->renderRowCells($row);
-            $stream->write("\r\n" . '{');
+            $stream->write('\trowd');
             $this->renderRowDefinition($row);
-            $stream->write('\row}' . "\r\n");
+            $stream->write("\r\n");
+            $this->renderRowCells($row);
+            $stream->write("\r\n" . '\row' . "\r\n");
         }
 
         $stream->write('\pard\itap0' . "\r\n");

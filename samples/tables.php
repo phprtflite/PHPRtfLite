@@ -26,7 +26,7 @@ for ($rowIndex = 1; $rowIndex <= $rowCount; $rowIndex++) {
 }
 
 $sect->writeText('Table with cell paddings
-(Using Microsoft Word top and bottom cell paddings are applied for all cells in a row)');
+(Using Microsoft Word top and bottom cell paddings are applied to all cells in a row)');
 $table = $sect->addTable();
 $table->addRows(4);
 $table->addColumnsList(array_fill(0, 4, $columnWidth));
