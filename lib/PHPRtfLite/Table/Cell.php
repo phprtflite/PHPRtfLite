@@ -37,6 +37,21 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
     const ROTATE_RIGHT  = 'right';
     const ROTATE_LEFT   = 'left';
 
+    /**
+     * constants for text alignment
+     */
+    const TEXT_ALIGN_LEFT       = 'left';
+    const TEXT_ALIGN_RIGHT      = 'right';
+    const TEXT_ALIGN_CENTER     = 'center';
+    const TEXT_ALIGN_JUSTIFY    = 'justify';
+
+    /**
+     * constants for vertical alignment
+     */
+    const VERTICAL_ALIGN_TOP    = 'top';
+    const VERTICAL_ALIGN_BOTTOM = 'bottom';
+    const VERTICAL_ALIGN_CENTER = 'center';
+
 
     /**
      * @var PHPRtfLite
@@ -110,7 +125,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
     /**
      * ture, if cell merge starts with this cell
-     * @var <type>
+     * @var boolean
      */
     protected $_verticalMergeStart = false;
 
@@ -123,13 +138,31 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
     /**
      * @var string
      */
-    protected $_pard = '\pard \intbl ';
+    protected $_pard = '';
 
     /**
-     * nested table
-     * @var PHPRtfLite_Table_Nested
+     * cell padding left
+     * @var float
      */
-    protected $_nestedTable;
+    protected $_paddingLeft;
+
+    /**
+     * cell padding right
+     * @var float
+     */
+    protected $_paddingRight;
+
+    /**
+     * cell padding top
+     * @var float
+     */
+    protected $_paddingTop;
+
+    /**
+     * cell padding bottom
+     * @var float
+     */
+    protected $_paddingBottom;
 
 
     /**
@@ -314,12 +347,10 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
     /**
      * sets that cell is horizontal merged
-     *
-     * @param boolean $merged
      */
-    public function setHorizontalMerged($merged = true)
+    public function setHorizontalMerged()
     {
-        $this->_horizontalMerged = $merged;
+        $this->_horizontalMerged = true;
     }
 
 
@@ -336,12 +367,10 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
     /**
      * sets that cell is vertical merged
-     *
-     * @param boolean $merged
      */
-    public function setVerticalMerged($merged = true)
+    public function setVerticalMerged()
     {
-        $this->_verticalMerged = $merged;
+        $this->_verticalMerged = true;
     }
 
 
@@ -357,17 +386,23 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
 
     /**
+     * sets vertical merge start
+     */
+    public function setVerticalMergeStart()
+    {
+        $this->_verticalMergeStart = true;
+        $this->_verticalMerged = true;
+    }
+
+
+    /**
      * checks, if cell is first cell of a vertical cell range merge
      *
      * @return boolean
      */
     public function isVerticalMergedFirstInRange()
     {
-        if ($this->_rowIndex == 1) {
-            return true;
-        }
-        $cellBefore = $this->_table->getCell($this->_rowIndex - 1, $this->_columnIndex);
-        return !$cellBefore->isVerticalMerged();
+        return $this->_verticalMergeStart;
     }
 
 
@@ -507,6 +542,67 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
 
     /**
+     * sets cell paddings
+     *
+     * @param   integer $paddingLeft
+     * @param   integer $paddingTop
+     * @param   integer $paddingRight
+     * @param   integer $paddingBottom
+     */
+    public function setCellPaddings($paddingLeft, $paddingTop, $paddingRight, $paddingBottom)
+    {
+        $this->_paddingLeft     = $paddingLeft;
+        $this->_paddingTop      = $paddingTop;
+        $this->_paddingRight    = $paddingRight;
+        $this->_paddingBottom   = $paddingBottom;
+    }
+
+
+    /**
+     * sets cell padding left
+     *
+     * @param integer $padding
+     */
+    public function setPaddingLeft($padding)
+    {
+        $this->_paddingLeft = $padding;
+    }
+
+
+    /**
+     * sets cell padding right
+     *
+     * @param integer $padding
+     */
+    public function setPaddingRight($padding)
+    {
+        $this->_paddingRight = $padding;
+    }
+
+
+    /**
+     * sets cell padding top
+     *
+     * @param integer $padding
+     */
+    public function setPaddingTop($padding)
+    {
+        $this->_paddingTop = $padding;
+    }
+
+
+    /**
+     * sets cell padding bottom
+     *
+     * @param integer $padding
+     */
+    public function setPaddingBottom($padding)
+    {
+        $this->_paddingBottom = $padding;
+    }
+
+
+    /**
      * renders cell definition
      */
     public function renderDefinition()
@@ -551,6 +647,20 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
                 break;
         }
 
+        // NOTE: microsoft and all other rtf readers I know confound left with top cell padding
+        if ($this->_paddingLeft) {
+            $stream->write('\clpadft3\clpadt' . PHPRtfLite_Unit::getUnitInTwips($this->_paddingLeft) . ' ');
+        }
+        if ($this->_paddingTop) {
+            $stream->write('\clpadfl3\clpadl' . PHPRtfLite_Unit::getUnitInTwips($this->_paddingTop) . ' ');
+        }
+        if ($this->_paddingBottom) {
+            $stream->write('\clpadfb3\clpadb' . PHPRtfLite_Unit::getUnitInTwips($this->_paddingBottom) . ' ');
+        }
+        if ($this->_paddingRight) {
+            $stream->write('\clpadfr3\clpadr' . PHPRtfLite_Unit::getUnitInTwips($this->_paddingRight) . ' ');
+        }
+
         $border = $this->getBorder();
         if ($border) {
             $stream->write($border->getContent('\cl'));
@@ -582,7 +692,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
                     $stream->write('{\*\nesttableprops ');
                     $row = $this->_table->getRow($this->_rowIndex);
                     $this->_table->renderRowDefinition($row);
-                    $stream->write('\nestrow}{\nonesttables\par}');
+                    $stream->write('\nestrow}');
                 }
             }
         }

@@ -57,13 +57,13 @@ abstract class PHPRtfLite_List
      * indent to list character in centimeter
      * @var float
      */
-    protected $_listIndent = PHPRtfLite::TWIPS_IN_CM;
+    protected $_listIndent = PHPRtfLite_Unit::UNIT_CM;
 
     /**
      * indent to text in centimeter
      * @var float
      */
-    protected $_textIndent = PHPRtfLite::TWIPS_IN_CM;
+    protected $_textIndent = PHPRtfLite_Unit::UNIT_CM;
 
     /**
      * @var array
@@ -156,7 +156,7 @@ abstract class PHPRtfLite_List
      */
     public function setListIndent($indent)
     {
-        $this->_listIndent = round($indent * PHPRtfLite::TWIPS_IN_CM);
+        $this->_listIndent = PHPRtfLite_Unit::getUnitInTwips($indent);
     }
 
 
@@ -167,7 +167,7 @@ abstract class PHPRtfLite_List
      */
     public function setTextIndent($indent)
     {
-        $this->_textIndent = round($indent * PHPRtfLite::TWIPS_IN_CM);
+        $this->_textIndent = PHPRtfLite_Unit::getUnitInTwips($indent);
     }
 
 

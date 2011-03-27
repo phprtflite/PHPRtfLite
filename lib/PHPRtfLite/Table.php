@@ -94,14 +94,20 @@ class PHPRtfLite_Table
      */
     protected $_nestDepth = 1;
 
-    
+    /**
+     * flag for preventing an empty paragraph after table
+     * @var boolean
+     */
+    protected $_preventEmptyParagraph = false;
+
+
     /**
      * constructor
      *
      * @param PHPRtfLite_Container
      * @param string
      */
-    public function __construct(PHPRtfLite_Container $container, $alignment = self::ALIGN_LEFT, $nestDepth = 1)
+    public function __construct(PHPRtfLite_Container_Base $container, $alignment = self::ALIGN_LEFT, $nestDepth = 1)
     {
         $this->_container = $container;
         $this->_alignment = $alignment;
@@ -223,6 +229,28 @@ class PHPRtfLite_Table
     {
         return $this->_alignment;
     }
+
+
+    /**
+     * prevents adding an empty paragraph after table
+     *
+     * @param boolean
+     */
+    public function preventEmptyParagraph($value = true)
+    {
+    	$this->_preventEmptyParagraph = $value;
+    }
+
+
+    /**
+     * returns true, if no empty paragraph should be added after table
+     *
+     * @return boolean
+     */
+	public function getPreventEmptyParagraph()
+    {
+		return $this->_preventEmptyParagraph;
+	}
 
 
     /**
@@ -373,9 +401,7 @@ class PHPRtfLite_Table
                                 PHPRtfLite_ParFormat $parFormat = null,
                                 $convertTagsToRtf = true)
     {
-        if ($this->checkIfCellExists($rowIndex, $columnIndex)) {
-            $this->getCell($rowIndex, $columnIndex)->writeText($text, $font, $parFormat, $convertTagsToRtf);
-        }
+        $this->getCell($rowIndex, $columnIndex)->writeText($text, $font, $parFormat, $convertTagsToRtf);
     }
 
 
@@ -397,9 +423,7 @@ class PHPRtfLite_Table
                                    $width = null,
                                    $height = null)
     {
-        if ($this->checkIfCellExists($rowIndex, $columnIndex)) {
-            $this->getCell($rowIndex, $columnIndex)->addImage($file, $parFormat, $width, $height);
-        }
+        $this->getCell($rowIndex, $columnIndex)->addImage($file, $parFormat, $width, $height);
     }
 
 
@@ -702,12 +726,17 @@ class PHPRtfLite_Table
 
             for ($i = $start; $i <= $end; $i++) {
                 $cell = $this->getCell($j, $i);
-                $cell->setVerticalMerged(true);
+                if ($j == $startRow) {
+                    $cell->setVerticalMergeStart();
+                }
+                else {
+                    $cell->setVerticalMerged();
+                }
   
                 $width += $this->getColumn($i)->getWidth();
 
                 if ($i != $start) {
-                    $cell->setHorizontalMerged(true);
+                    $cell->setHorizontalMerged();
                     $cell->setWidth(null);
                 }
             }
@@ -794,7 +823,7 @@ class PHPRtfLite_Table
      */
     public function checkIfCellExists($rowIndex, $columnIndex)
     {
-        return ($this->checkRowIndex($rowIndex) && $this->checkColumnIndex($columnIndex));
+        return $this->checkRowIndex($rowIndex) && $this->checkColumnIndex($columnIndex);
     }
 
 
@@ -810,13 +839,13 @@ class PHPRtfLite_Table
         }
 
         $stream = $this->getRtf()->getStream();
-        $stream->write('\trowd' . "\r\n");
 
         foreach ($this->_rows as $row) {
-            $this->renderRowCells($row);
-            $stream->write("\r\n" . '{');
+            $stream->write('\trowd');
             $this->renderRowDefinition($row);
-            $stream->write('\row}' . "\r\n");
+            $stream->write("\r\n");
+            $this->renderRowCells($row);
+            $stream->write("\r\n" . '\row' . "\r\n");
         }
 
         $stream->write('\pard\itap0' . "\r\n");
@@ -852,7 +881,7 @@ class PHPRtfLite_Table
 
         $rowHeight = $row->getHeight();
         if ($rowHeight) {
-            $stream->write('\trrh' . round($rowHeight * PHPRtfLite::TWIPS_IN_CM));
+            $stream->write('\trrh' . PHPRtfLite_Unit::getUnitInTwips($rowHeight));
         }
 
         if ($this->isPreventPageBreak()) {
@@ -864,7 +893,7 @@ class PHPRtfLite_Table
         }
 
         if ($this->getLeftPosition() != '') {
-            $stream->write('\trleft' . round($this->getLeftPosition() * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\trleft' . PHPRtfLite_Unit::getUnitInTwips($this->getLeftPosition()) . ' ');
         }
 
         $width = 0;
@@ -876,7 +905,7 @@ class PHPRtfLite_Table
                 $cell->renderDefinition();
 
                 // cell width
-                $width += round($cell->getWidth() * PHPRtfLite::TWIPS_IN_CM);
+                $width += PHPRtfLite_Unit::getUnitInTwips($cell->getWidth());
                 $stream->write('\cellx' . $width);
             }
         }
@@ -891,7 +920,6 @@ class PHPRtfLite_Table
     protected function renderRowCells(PHPRtfLite_Table_Row $row)
     {
         $rowIndex = $row->getRowIndex();
-        $stream = $this->getRtf()->getStream();
 
         foreach ($this->getColumns() as $columnIndex => $column) {
             $cell = $this->getCell($rowIndex, $columnIndex + 1);

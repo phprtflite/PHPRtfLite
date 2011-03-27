@@ -33,8 +33,6 @@ class PHPRtfLite
 
     const SPACE_IN_POINTS           = 20;
     const SPACE_IN_LINES            = 240;
-    const TWIPS_IN_CM               = 567;
-    const CM_IN_POINTS              = 0.026434;
 
     /**
      * constants defining view modes
@@ -76,55 +74,49 @@ class PHPRtfLite
      * charset of text inputs for rtf document, default is UTF-8
      * @var string
      */
-    protected $_charset     = 'UTF-8';
+    private $_charset     = 'UTF-8';
 
     /**
      * paper width
      * @var integer
      */
-    protected $_paperWidth   = 21;
+    private $_paperWidth   = 21;
 
     /**
      * paper height
      * @var integer
      */
-    protected $_paperHeight  = 29;
+    private $_paperHeight  = 29;
 
     /**
      * left margin
-     * @var integer
+     * @var float
      */
-    protected $_marginLeft  = 3;
+    private $_marginLeft  = 3;
 
     /**
      * right margin
-     * @var integer
+     * @var float
      */
-    protected $_marginRight = 3;
+    private $_marginRight = 3;
 
     /**
      * top margin
-     * @var integer
+     * @var float
      */
-    protected $_marginTop   = 1;
+    private $_marginTop   = 1;
 
     /**
      * bottom margin
-     * @var integer
+     * @var float
      */
-    protected $_marginBottom = 2;
+    private $_marginBottom = 2;
 
     /**
      * flag, if true, even and odd pages are using different layouts
      * @var boolean
      */
-    protected $_useOddEvenDifferent = false;
-
-    /**
-     * rtf code
-     * @var string
-     */
-    protected $_content;
+    private $_useOddEvenDifferent = false;
 
     /**
      * font table instance
@@ -148,61 +140,67 @@ class PHPRtfLite
      * default tab width
      * @var float
      */
-    protected $_defaultTabWidth = 2.29;
+    private $_defaultTabWidth = 2.29;
 
     /**
      * view mode
      * @var string
      */
-    protected $_viewMode;
+    private $_viewMode;
 
     /**
      * zoom level
      * @var integer
      */
-    protected $_zoomLevel;
+    private $_zoomLevel;
 
     /**
      * zoom mode
      * @var integer
      */
-    protected $_zoomMode;
+    private $_zoomMode;
 
     /**
      * gutter
      * @var float
      */
-    protected $_gutter;
+    private $_gutter;
 
     /**
      * flag, if true margins will be the opposite for odd and even pages
      * @var boolean
      */
-    protected $_useMirrorMargins = false;
+    private $_useMirrorMargins = false;
 
     /**
      * start with page number
      * @var integer
      */
-    protected $_pageNumberStart = 1;
+    private $_pageNumberStart = 1;
 
     /**
      * flag, if true first page has special layout
      * @var boolean
      */
-    protected $_titlepg         = false;
+    private $_titlepg         = false;
 
     /**
      * rtf border
      * @var PHPRtfLite_Border
      */
-    protected $_border;
+    private $_border;
 
     /**
      * flag, if true use landscape layout
      * @var boolean
      */
-    protected $_isLandscape     = false;
+    private $_isLandscape = false;
+
+    /**
+     * using hyphnation
+     * @var boolean
+     */
+    private $_isHyphenation = false;
 
     /**
      * document head definition for notes
@@ -229,6 +227,7 @@ class PHPRtfLite
         }
         $this->_stream = $stream;
     }
+
 
     /**
      * registers autoloader for PHPRtfLite classes
@@ -847,7 +846,7 @@ class PHPRtfLite
 
 
     /**
-     * sets landscape orientation of paper
+     * sets landscape orientation for the document
      */
     public function setLandscape()
     {
@@ -862,6 +861,15 @@ class PHPRtfLite
     public function isLandscape()
     {
         return $this->_isLandscape;
+    }
+
+
+    /**
+     * sets using hyphenation
+     */
+    public function setHyphenation()
+    {
+        $this->_isHyphenation = true;
     }
 
 
@@ -1225,20 +1233,24 @@ class PHPRtfLite
 
         $this->_stream->write($this->getInfoPart());
 
-        //page properties
+        // page properties
         if ($this->_isLandscape) {
             $this->_stream->write('\landscape ');
         }
-        $this->_stream->write('\deftab' . round(self::TWIPS_IN_CM * $this->_defaultTabWidth) . ' ');
-        $this->_stream->write('\paperw' . round(self::TWIPS_IN_CM * $this->_paperWidth)  .' ');
-        $this->_stream->write('\paperh' . round(self::TWIPS_IN_CM * $this->_paperHeight) . ' ');
-        $this->_stream->write('\margl' . round(self::TWIPS_IN_CM * $this->_marginLeft) . ' ');
-        $this->_stream->write('\margr' . round(self::TWIPS_IN_CM * $this->_marginRight) . ' ');
-        $this->_stream->write('\margt' . round(self::TWIPS_IN_CM * $this->_marginTop) . ' ');
-        $this->_stream->write('\margb' . round(self::TWIPS_IN_CM * $this->_marginBottom) . ' ');
+        // hyphenation
+        if ($this->_isHyphenation) {
+            $this->_stream->write('\hyphauto1');
+        }
+        $this->_stream->write('\deftab' . PHPRtfLite_Unit::getUnitInTwips($this->_defaultTabWidth) . ' ');
+        $this->_stream->write('\paperw' . PHPRtfLite_Unit::getUnitInTwips($this->_paperWidth)  .' ');
+        $this->_stream->write('\paperh' . PHPRtfLite_Unit::getUnitInTwips($this->_paperHeight) . ' ');
+        $this->_stream->write('\margl' . PHPRtfLite_Unit::getUnitInTwips($this->_marginLeft) . ' ');
+        $this->_stream->write('\margr' . PHPRtfLite_Unit::getUnitInTwips($this->_marginRight) . ' ');
+        $this->_stream->write('\margt' . PHPRtfLite_Unit::getUnitInTwips($this->_marginTop) . ' ');
+        $this->_stream->write('\margb' . PHPRtfLite_Unit::getUnitInTwips($this->_marginBottom) . ' ');
 
         if (null !== $this->_gutter) {
-            $this->_stream->write('\gutter' . round($this->_gutter * self::TWIPS_IN_CM) . ' ');
+            $this->_stream->write('\gutter' . PHPRtfLite_Unit::getUnitInTwips($this->_gutter) . ' ');
         }
 
         if (true == $this->_useMirrorMargins) {
@@ -1263,6 +1275,9 @@ class PHPRtfLite
         elseif ($this->_border) {
             $this->_stream->write($this->_border->getContent('\pg'));
         }
+
+        // page numbering start
+        $this->_stream->write('\pgnstart' . $this->_pageNumberStart);
 
         //headers and footers properties
         if ($this->_useOddEvenDifferent) {
@@ -1289,7 +1304,7 @@ class PHPRtfLite
         //sections
         foreach ($this->_sections as $key => $section) {
             if ($key != 0) {
-                $this->_stream->write('\sect \sectd ');
+                $this->_stream->write('\sect\sectd ');
             }
             $section->render();
         }

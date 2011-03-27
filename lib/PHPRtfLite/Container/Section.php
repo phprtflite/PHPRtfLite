@@ -39,18 +39,6 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
     protected $_border;
 
     /**
-     * vertical alignment
-     * @var string
-     */
-    protected $_verticalAlignment;
-
-    /**
-     * flag, if true, even and odd pages are using different layouts
-     * @var boolean
-     */
-    protected $_useOddEvenDifferent = false;
-
-    /**
      * number of columns within the section
      * @var integer
      */
@@ -82,37 +70,37 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
     /**
      * paper width
-     * @var integer
+     * @var float
      */
     protected $_paperWidth;
 
     /**
      * paper height
-     * @var integer
+     * @var float
      */
     protected $_paperHeight;
 
     /**
      * left margin
-     * @var integer
+     * @var float
      */
     protected $_marginLeft;
 
     /**
      * right margin
-     * @var integer
+     * @var float
      */
     protected $_marginRight;
 
     /**
      * top margin
-     * @var integer
+     * @var float
      */
     protected $_marginTop;
 
     /**
      * bottom margin
-     * @var integer
+     * @var float
      */
     protected $_marginBottom;
 
@@ -182,26 +170,6 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
     public function getPaperHeight()
     {
         return $this->_paperHeight;
-    }
-
-
-    /**
-     * gets if odd and even headers/footers are different
-     *
-     * @return boolean
-     */
-    public function isOddEvenDifferent()
-    {
-        return $this->_useOddEvenDifferent;
-    }
-
-
-    /**
-     * sets if odd and even headers/footers are different
-     */
-    public function setOddEvenDifferent($different = true)
-    {
-         $this->_useOddEvenDifferent = $different;
     }
 
 
@@ -532,36 +500,6 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
 
     /**
-     * sets vertical alignment of text within the section
-     *
-     * @param string $alignment, represented by class constants VERTICAL_ALIGN_*<br>
-     *   Possible values: <br>
-     *     VERTICAL_ALIGN_TOP    = 'top';
-     *     VERTICAL_ALIGN_BOTTOM = 'bottom';
-     *     VERTICAL_ALIGN_CENTER = 'center';
-     * 'top' => top (default)<br>
-     * 'center' => center <br>
-     * 'bottom' => bottom <br>
-     * @todo bottom justify don't work
-     */
-    public function setVerticalAlignment($alignment)
-    {
-        $this->_verticalAlignment = $alignment;
-    }
-
-
-    /**
-     * sets vertical alignment of text within the section
-     *
-     * @return string
-     */
-    public function getVerticalAlignment()
-    {
-        return $this->_verticalAlignment;
-    }
-
-
-    /**
      * creates header for sections.
      *
      * @param string $type Represented by class constants PHPRtfLite_Container_Header::TYPE_*
@@ -674,21 +612,21 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
         if (empty($this->_columnWidths)) {
             if ($this->_spaceBetweenColumns) {
-                  $stream->write('\colsx' . round($this->_spaceBetweenColumns * PHPRtfLite::TWIPS_IN_CM) . ' ');
+                  $stream->write('\colsx' . PHPRtfLite_Unit::getUnitInTwips($this->_spaceBetweenColumns) . ' ');
             }
         }
         else {
             $width = 0;
             foreach ($this->_columnWidths as $value) {
-                $width += $value * PHPRtfLite::TWIPS_IN_CM;
+                $width += PHPRtfLite_Unit::getUnitInTwips($value);
             }
 
             $printableWidth = $this->_rtf->getPaperWidth() - $this->_rtf->getMarginLeft() - $this->_rtf->getMarginRight();
-            $space = round(($printableWidth * PHPRtfLite::TWIPS_IN_CM - $width) / (count($this->_columnWidths) - 1));
+            $space = round((PHPRtfLite_Unit::getUnitInTwips($printableWidth) - $width) / (count($this->_columnWidths) - 1));
 
             $i = 1;
             foreach ($this->_columnWidths as $key => $value) {
-                $stream->write('\colno' . $i . '\colw' . ($value * PHPRtfLite::TWIPS_IN_CM));
+                $stream->write('\colno' . $i . '\colw' . PHPRtfLite_Unit::getUnitInTwips($value));
                 if (!empty($this->_columnWidths[$key])) {
                     $stream->write('\colsr' . $space);
                 }
@@ -703,55 +641,35 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
         /*---Page part---*/
         if ($this->_paperWidth) {
-            $stream->write('\pgwsxn' . round($this->_paperWidth * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\pgwsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_paperWidth) . ' ');
         }
 
         if ($this->_paperHeight) {
-            $stream->write('\pghsxn' . round($this->_paperHeight * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\pghsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_paperHeight) . ' ');
         }
 
         if ($this->_marginLeft) {
-            $stream->write('\marglsxn' . round($this->_marginLeft * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\marglsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginLeft) . ' ');
         }
 
         if ($this->_marginRight) {
-            $stream->write('\margrsxn' . round($this->_marginRight * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\margrsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginRight) . ' ');
         }
 
         if ($this->_marginTop) {
-            $stream->write('\margtsxn' . round($this->_marginTop * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\margtsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginTop) . ' ');
         }
 
         if ($this->_marginBottom) {
-            $stream->write('\margbsxn' . round($this->_marginBottom * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\margbsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginBottom) . ' ');
         }
 
         if ($this->_gutter) {
-            $stream->write('\guttersxn' . round($this->_gutter * PHPRtfLite::TWIPS_IN_CM) . ' ');
+            $stream->write('\guttersxn' . PHPRtfLite_Unit::getUnitInTwips($this->_gutter) . ' ');
         }
 
         if ($this->_useMirrorMargins) {
             $stream->write('\margmirsxn ');
-        }
-
-        if ($this->_verticalAlignment) {
-            switch ($this->_verticalAlignment) {
-                case 'center':
-                    $stream->write('\vertalc ');
-                    break;
-
-                case 'bottom':
-                    $stream->write('\vertalb ');
-                    break;
-
-                case 'justify':
-                    $stream->write('\vertalj ');
-                    break;
-
-                default:
-                    $stream->write('\vertalt ');
-                    break;
-            }
         }
 
         $stream->write("\r\n");

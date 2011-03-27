@@ -39,8 +39,6 @@ class PHPRtfLite_Table_Nested extends PHPRtfLite_Table
             return;
         }
 
-        $stream = $this->getRtf()->getStream();
-
         foreach ($this->_rows as $row) {
             $this->renderRowCells($row);
         }

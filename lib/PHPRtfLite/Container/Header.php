@@ -154,12 +154,18 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container_Base
         $stream = $this->_rtf->getStream();
         
         if (isset($this->_offsetHeight)) {
-            $stream->write('\\' . $this->getRtfType() . 'y' . round(PHPRtfLite::TWIPS_IN_CM * $this->_offsetHeight));
+            $stream->write('\\' . $this->getRtfType() . 'y' . PHPRtfLite_Unit::getUnitInTwips($this->_offsetHeight));
         }
 
         $stream->write('{\\' . $this->getTypeAsRtfCode() . ' ');
+
         parent::render();
-        $stream->write('\par}' . "\r\n");
+
+        $containerElements = $this->getElements();
+        if ($containerElements[count($containerElements)-1] instanceof PHPRtfLite_Element) {
+        	$stream->write('\par');
+        }
+        $stream->write('}' . "\r\n");
     }
 
 }

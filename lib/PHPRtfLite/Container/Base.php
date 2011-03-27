@@ -31,22 +31,6 @@ abstract class PHPRtfLite_Container_Base
 {
 
     /**
-     * constants for text alignment
-     */
-    const TEXT_ALIGN_LEFT       = 'left';
-    const TEXT_ALIGN_RIGHT      = 'right';
-    const TEXT_ALIGN_CENTER     = 'center';
-    const TEXT_ALIGN_JUSTIFY    = 'justify';
-
-    /**
-     * constants for vertical alignment
-     */
-    const VERTICAL_ALIGN_TOP    = 'top';
-    const VERTICAL_ALIGN_BOTTOM = 'bottom';
-    const VERTICAL_ALIGN_CENTER = 'center';
-
-
-    /**
      * @var PHPRtfLite
      */
     protected $_rtf;
@@ -157,7 +141,6 @@ abstract class PHPRtfLite_Container_Base
      * @param PHPRtfLite_Font       $font               font of text
      * @param PHPRtfLite_ParFormat  $parFormat          paragraph format, if null, text is written in the same paragraph.
      * @param boolean               $convertTagsToRtf   if false, then html style tags are not replaced with rtf code
-     * @todo  refactor this method
      */
     public function writeText($text,
                               PHPRtfLite_Font $font = null,
@@ -189,7 +172,9 @@ abstract class PHPRtfLite_Container_Base
     {
         $element = new PHPRtfLite_Element_Hyperlink($this->_rtf, $text, $font, $parFormat);
         $element->setHyperlink($hyperlink);
-        $element->setConvertTagsToRtf();
+        if ($convertTagsToRtf) {
+            $element->setConvertTagsToRtf();
+        }
         $this->_elements[] = $element;
     }
 
@@ -197,15 +182,15 @@ abstract class PHPRtfLite_Container_Base
     /**
      * adds table to element container.
      *
-     * @param  string $alignment Alingment of table. Represented by class constants TEXT_ALIGN_*<br>
+     * @param  string $alignment Alingment of table. Represented by class constants PHPRtfLite_Table::ALIGN_*<br>
      *    Possible values:<br>
-     *      PHPRtfLite_Container::TEXT_ALIGN_LEFT   => 'left',<br>
-     *      PHPRtfLite_Container::TEXT_ALIGN_CENTER => 'center',<br>
-     *      PHPRtfLite_Container::TEXT_ALIGN_RIGHT  => 'right'<br>
+     *      PHPRtfLite_Table::ALIGN_LEFT   => 'left',<br>
+     *      PHPRtfLite_Table::ALIGN_CENTER => 'center',<br>
+     *      PHPRtfLite_Table::ALIGN_RIGHT  => 'right'<br>
      *
      * @return PHPRtfLite_Table
      */
-    public function addTable($alignment = self::TEXT_ALIGN_LEFT)
+    public function addTable($alignment = PHPRtfLite_Table::ALIGN_LEFT)
     {
         $table = new PHPRtfLite_Table($this, $alignment);
         $this->_elements[] = $table;
@@ -250,12 +235,9 @@ abstract class PHPRtfLite_Container_Base
 
         foreach ($this->_elements as $key => $element) {
             if ($this instanceof PHPRtfLite_Table_Cell && !($element instanceof PHPRtfLite_Table)) {
-                $prevElement = isset($this->_elements[$key - 1]) ? $this->_elements[$key - 1] : false;
                 // table cell initialization
-                if (!$prevElement || $prevElement instanceof PHPRtfLite_Table) {
-                    $stream->write('\pard\intbl\itap' . $this->getTable()->getNestDepth() . "\r\n");
-                    $stream->write($this->getCellAlignment());
-                }
+                $stream->write('\pard\intbl\itap' . $this->getTable()->getNestDepth() . "\r\n");
+                $stream->write($this->getCellAlignment());
             }
 
             $parFormat = null;
@@ -307,7 +289,7 @@ abstract class PHPRtfLite_Container_Base
             $isNextElementTable = $nextElement instanceof PHPRtfLite_Table;
 
             if ($element instanceof PHPRtfLite_Table && $element->getNestDepth() == 1) {
-                return !$isNextElementTable;
+                return (!$isNextElementTable && !$element->getPreventEmptyParagraph());
             }
             else if ($element instanceof PHPRtfLite_Element) {
                 return (!$element->isEmptyParagraph() && ($isNextElementTable || $nextElement->getParFormat()));

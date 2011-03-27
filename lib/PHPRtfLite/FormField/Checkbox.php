@@ -92,7 +92,7 @@ class PHPRtfLite_FormField_Checkbox extends PHPRtfLite_FormField
      */
     protected function getRtfCode()
     {
-        return '{\fftype1\ffhps' . $this->_size . '\ffdefres' . ($this->_checked ? '1' : '0') . '}';
+        return '{\fftype1\ffres25\ffhps' . $this->_size . '\ffdefres' . ($this->_checked ? '1' : '0') . '}';
     }
 
 }

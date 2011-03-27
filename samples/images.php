@@ -24,7 +24,7 @@ $header->addImage($dir . '/sources/rtf_thumb.jpg', $parFormat);
 $header->writeText('Image in header.', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 
 $sect = $rtf->addSection();
-$sect->writeText('Images with PhpRtf.', new PHPRtfLite_Font(14), new PHPRtfLite_ParFormat('center'));
+$sect->writeText('Images with PHPRtfLite.', new PHPRtfLite_Font(14), new PHPRtfLite_ParFormat('center'));
 
 $sect->writeText('<br>Here is .jpg image. <tab>', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 $sect->addImage($dir . '/sources/rtf_thumb.jpg', null);

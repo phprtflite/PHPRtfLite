@@ -49,6 +49,17 @@ class PHPRtfLite_FormField_Dropdown extends PHPRtfLite_FormField
 
 
     /**
+     * sets dropdown items
+     *
+     * @param array $items array of strings
+     */
+    public function setItems($items)
+    {
+        $this->_items = $items;
+    }
+
+
+    /**
      * gets form field type
      *
      * @return string

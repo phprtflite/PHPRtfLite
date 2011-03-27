@@ -8,7 +8,7 @@ PHPRtfLite::registerAutoloader();
 
 $rtf = new PHPRtfLite();
 $sect = $rtf->addSection();
-$sect->writeText('<i>Hello <b>World</b></i>.', new PHPRtfLite_Font(12), new PHPRtfLite_ParFormat('center'));
+$sect->writeText('<i>Hello <b>world</b></i>.', new PHPRtfLite_Font(12), new PHPRtfLite_ParFormat(PHPRtfLite_ParFormat::TEXT_ALIGN_CENTER));
 
 // save rtf document
 $rtf->save($dir . '/generated/hello_world.rtf');
