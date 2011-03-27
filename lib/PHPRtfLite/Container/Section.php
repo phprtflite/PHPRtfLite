@@ -39,12 +39,6 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
     protected $_border;
 
     /**
-     * flag, if true, even and odd pages are using different layouts
-     * @var boolean
-     */
-    protected $_useOddEvenDifferent = false;
-
-    /**
      * number of columns within the section
      * @var integer
      */
@@ -176,26 +170,6 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
     public function getPaperHeight()
     {
         return $this->_paperHeight;
-    }
-
-
-    /**
-     * gets if odd and even headers/footers are different
-     *
-     * @return boolean
-     */
-    public function isOddEvenDifferent()
-    {
-        return $this->_useOddEvenDifferent;
-    }
-
-
-    /**
-     * sets if odd and even headers/footers are different
-     */
-    public function setOddEvenDifferent($different = true)
-    {
-         $this->_useOddEvenDifferent = $different;
     }
 
 
