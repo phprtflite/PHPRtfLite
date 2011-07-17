@@ -1205,7 +1205,7 @@ class PHPRtfLite
         // escape backslashes
         $text = str_replace('\\', '\\\\', $text);
         // convert breaks into rtf break
-        $text = str_replace(array("\r\n", "\n", "\r"), '\par ', $text);
+        $text = str_replace(array("\r\n", "\n", "\r"), '\line ', $text);
 
         return $text;
     }
