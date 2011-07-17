@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
@@ -22,7 +22,6 @@
 
 /**
  * Class for creating rtf documents.
- * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -30,6 +29,8 @@
  */
 class PHPRtfLite
 {
+
+    const VERSION                   = '1.1.1';
 
     const SPACE_IN_POINTS           = 20;
     const SPACE_IN_LINES            = 240;
@@ -126,7 +127,7 @@ class PHPRtfLite
 
     /**
      * color table instance
-     * @var PHPRtfLite_DocHead_ColorTable 
+     * @var PHPRtfLite_DocHead_ColorTable
      */
     protected $_colorTable;
 
@@ -239,7 +240,7 @@ class PHPRtfLite
         $baseClassDir = dirname(__FILE__);
         require_once $baseClassDir . '/PHPRtfLite/Autoloader.php';
         PHPRtfLite_Autoloader::setBaseDir($baseClassDir);
-        
+
         return spl_autoload_register(array('PHPRtfLite_Autoloader', 'autoload'));
     }
 
@@ -268,7 +269,7 @@ class PHPRtfLite
 
     /**
      * gets charset for rtf text inputs
-     * 
+     *
      * @return string
      */
     public function getCharset()
@@ -885,7 +886,7 @@ class PHPRtfLite
 
     /**
      * gets border of document
-     * 
+     *
      * @return PHPRtfLite_Border
      */
     public function getBorder()
@@ -927,7 +928,7 @@ class PHPRtfLite
 
     /**
      * gets if odd and even headers/footers are different
-     * 
+     *
      * @return boolean
      */
     public function isOddEvenDifferent()
@@ -1068,7 +1069,7 @@ class PHPRtfLite
 
     /**
      * gets rtf document code
-     * 
+     *
      * @return string
      */
     public function getContent()
@@ -1205,7 +1206,7 @@ class PHPRtfLite
         // escape backslashes
         $text = str_replace('\\', '\\\\', $text);
         // convert breaks into rtf break
-        $text = str_replace(array("\r\n", "\n", "\r"), '\par ', $text);
+        $text = str_replace(array("\r\n", "\n", "\r"), '\line ', $text);
 
         return $text;
     }
