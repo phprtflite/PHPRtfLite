@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011s Steffen Zeidler <sigma_z@web.de>
@@ -106,7 +106,7 @@ class PHPRtfLite_Utf8
         foreach ($unicode as $value) {
             if ($value != 65279) {
                 $entities .= $value > 127
-                             ? '\uc0\u' . $value . ' '
+                             ? '\uc0\u' . $value
                              : chr($value);
             }
         }
