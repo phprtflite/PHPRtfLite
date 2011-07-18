@@ -240,6 +240,9 @@ class PHPRtfLite_Element
         if ($this->isEmptyParagraph()) {
             $stream->write('\par');
         }
+        else if ($this->_font && empty($text)) {
+            $stream->write('\~');
+        }
         else {
             $stream->write($text);
         }

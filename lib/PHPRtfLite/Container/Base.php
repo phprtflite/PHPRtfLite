@@ -289,7 +289,7 @@ abstract class PHPRtfLite_Container_Base
             $isNextElementTable = $nextElement instanceof PHPRtfLite_Table;
 
             if ($element instanceof PHPRtfLite_Table && $element->getNestDepth() == 1) {
-                return (!$isNextElementTable && !$element->getPreventEmptyParagraph());
+                return !$element->getPreventEmptyParagraph();
             }
             else if ($element instanceof PHPRtfLite_Element) {
                 return (!$element->isEmptyParagraph() && ($isNextElementTable || $nextElement->getParFormat()));
