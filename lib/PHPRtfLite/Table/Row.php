@@ -22,7 +22,7 @@
 
 /**
  * Class for creating rows of table in rtf documents.
- * @version     1.1.0
+ * @version     1.1.1
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
@@ -57,7 +57,7 @@ class PHPRtfLite_Table_Row
 
     /**
      * constructor
-     * 
+     *
      * @param PHPRtfLite_Table  $table
      * @param integer           $rowIndex
      * @param float             $height
@@ -105,6 +105,21 @@ class PHPRtfLite_Table_Row
         }
 
         return $this->_cells[$columnIndex - 1];
+    }
+
+
+    /**
+     * sets default font for all cells in the row
+     *
+     * @param PHPRtfLite_Font $font
+     */
+    public function setFont(PHPRtfLite_Font $font)
+    {
+        $columns = $this->_table->getColumns();
+        foreach ($columns as $i => $column) {
+            $cell = $this->_table->getCell($this->_rowIndex, $column->getColumnIndex());
+            $cell->setFont($font);
+        }
     }
 
 

@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
@@ -22,7 +22,7 @@
 
 /**
  * Class for creating sections within the rtf document.
- * @version     1.1.0
+ * @version     1.1.1
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -175,7 +175,7 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
     /**
      * sets the margins of pages in section.
-     * 
+     *
      * @param float $marginLeft Margin left
      * @param float $marginTop Margin top
      * @param float $marginRight Margin right
@@ -443,7 +443,7 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
             $this->_numberOfColumns = count($columnWidths);
             $layoutWidth = $this->getLayoutWidth();
             $usedWidth = array_sum($columnWidths);
-            
+
             if ($usedWidth <= $layoutWidth) {
                 $this->_columnWidths = $columnWidths;
             }
@@ -515,7 +515,7 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
     {
         $header = new PHPRtfLite_Container_Header($this->_rtf, $type);
         $this->_headers[$type] = $header;
-        
+
         return $header;
     }
 

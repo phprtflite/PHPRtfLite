@@ -22,7 +22,6 @@
 
 /**
  * Class for creating rtf documents.
- * @version     1.1.0
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -30,6 +29,8 @@
  */
 class PHPRtfLite
 {
+
+    const VERSION = '1.1.1';
 
     const SPACE_IN_POINTS           = 20;
     const SPACE_IN_LINES            = 240;
@@ -853,6 +854,7 @@ class PHPRtfLite
         $this->_isLandscape = true;
     }
 
+
     /**
      * returns true, if landscape layout should be used
      *
@@ -1233,17 +1235,22 @@ class PHPRtfLite
 
         $this->_stream->write($this->getInfoPart());
 
+        $paperWidth = $this->_paperWidth;
+        $paperHeight = $this->_paperHeight;
+
         // page properties
-        if ($this->_isLandscape) {
-            $this->_stream->write('\landscape ');
+        if ($this->_isLandscape && $paperWidth < $paperHeight) {
+            $paperWidth = $paperHeight;
+            $paperHeight = $paperWidth;
         }
+        $this->_stream->write('\paperw' . PHPRtfLite_Unit::getUnitInTwips($paperWidth)  .' ');
+        $this->_stream->write('\paperh' . PHPRtfLite_Unit::getUnitInTwips($paperHeight) . ' ');
+
         // hyphenation
         if ($this->_isHyphenation) {
             $this->_stream->write('\hyphauto1');
         }
         $this->_stream->write('\deftab' . PHPRtfLite_Unit::getUnitInTwips($this->_defaultTabWidth) . ' ');
-        $this->_stream->write('\paperw' . PHPRtfLite_Unit::getUnitInTwips($this->_paperWidth)  .' ');
-        $this->_stream->write('\paperh' . PHPRtfLite_Unit::getUnitInTwips($this->_paperHeight) . ' ');
         $this->_stream->write('\margl' . PHPRtfLite_Unit::getUnitInTwips($this->_marginLeft) . ' ');
         $this->_stream->write('\margr' . PHPRtfLite_Unit::getUnitInTwips($this->_marginRight) . ' ');
         $this->_stream->write('\margt' . PHPRtfLite_Unit::getUnitInTwips($this->_marginTop) . ' ');

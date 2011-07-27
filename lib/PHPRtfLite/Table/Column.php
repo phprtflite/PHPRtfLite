@@ -21,7 +21,7 @@
 
 /**
  * Class for creating columns of table in rtf documents.
- * @version     1.1.0
+ * @version     1.1.1
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
@@ -36,15 +36,31 @@ class PHPRtfLite_Table_Column
      */
     protected $_width;
 
+    /**
+     * table
+     * @var PHPRtfLite_Table
+     */
+    protected $_table;
+
+    /**
+     * column index
+     * @var integer
+     */
+    protected $_columnIndex;
+
 
     /**
      * constructor
      *
-     * @param float $width
+     * @param   PHPRtfLite_Table    $table
+     * @param   integer             $columnIndex
+     * @param   float               $width
      */
-    public function __construct($width)
+    public function __construct(PHPRtfLite_Table $table, $columnIndex, $width)
     {
+        $this->_table = $table;
         $this->_width = $width;
+        $this->_columnIndex = $columnIndex;
     }
 
 
@@ -61,12 +77,38 @@ class PHPRtfLite_Table_Column
 
     /**
      * gets column width
-     * 
+     *
      * @return float
      */
     public function getWidth()
     {
         return $this->_width;
+    }
+
+
+    /**
+     * sets default font for all cells in the row
+     *
+     * @param PHPRtfLite_Font $font
+     */
+    public function setFont(PHPRtfLite_Font $font)
+    {
+        $rows = $this->_table->getRows();
+        foreach ($rows as $row) {
+            $cell = $this->_table->getCell($row->getRowIndex(), $this->_columnIndex);
+            $cell->setFont($font);
+        }
+    }
+
+
+    /**
+     * gets column index
+     *
+     * @return integer
+     */
+    public function getColumnIndex()
+    {
+        return $this->_columnIndex;
     }
 
 }

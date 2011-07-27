@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
@@ -22,7 +22,7 @@
 
 /**
  * Class for creating cells of table in rtf documents.
- * @version     1.1.0
+ * @version     1.1.1
  * @author      Denis Slaveckij <info@phprtf.com>, Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
@@ -116,7 +116,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
      * @var boolean
      */
     protected $_horizontalMerged = false;
-    
+
     /**
      * true, if cell is merged vertically
      * @var boolean
@@ -250,7 +250,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
     /**
      * sets font to a cell
      * The method PHPRtfLite_Table->writeToCell() overrides it with another Font.
-     * 
+     *
      * @param   PHPRtfLite_Font $font
      */
     public function setFont(PHPRtfLite_Font $font)
@@ -262,7 +262,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
     /**
      * gets font of cell
-     * 
+     *
      * @return PHPRtfLite_Font
      */
     public function getFont()
@@ -313,7 +313,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
     /**
      * gets rotation direction of cell
-     * 
+     *
      * @return string
      */
     public function getRotateTo()
@@ -499,8 +499,8 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
     /**
      * sets cell border
-     * 
-     * @param PHPRtfLite_Border $border 
+     *
+     * @param PHPRtfLite_Border $border
      */
     protected function setCellBorder(PHPRtfLite_Border $border)
     {
