@@ -21,7 +21,7 @@
 
 /**
  * Base class for rtf containers.
- * @version     1.1.0
+ * @version     1.1.1
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
@@ -228,9 +228,15 @@ abstract class PHPRtfLite_Container_Base
     {
         $stream = $this->_rtf->getStream();
 
-        if (count($this->_elements) == 0) {
-            $this->addEmptyParagraph();
+        if ($this instanceof PHPRtfLite_Table_Cell && $this->countElements() == 0) {
+            $stream->write('{');
+            $font = $this->getCellFont($this);
+            if ($font) {
+                $stream->write($font->getContent());
+            }
+            $stream->write('{\~}}');
         }
+
         $lastKey = $this->countElements() - 1;
 
         foreach ($this->_elements as $key => $element) {

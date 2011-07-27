@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
@@ -22,7 +22,7 @@
 
 /**
  * Class for creating tables for rtf documents.
- * @version     1.1.0
+ * @version     1.1.1
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -117,7 +117,7 @@ class PHPRtfLite_Table
 
     /**
      * gets nested depth
-     * 
+     *
      * @return integer
      */
     public function getNestDepth()
@@ -191,7 +191,7 @@ class PHPRtfLite_Table
 
     /**
      * gets left position of table
-     * 
+     *
      * @return  float
      */
     public function getLeftPosition()
@@ -211,7 +211,7 @@ class PHPRtfLite_Table
 
     /**
      * Returns true, if first row should be used as header. First row will be repeated at the top of each page.
-     * 
+     *
      * @return boolean
      */
     public function isFirstRowHeader()
@@ -222,7 +222,7 @@ class PHPRtfLite_Table
 
     /**
      * gets alignment
-     * 
+     *
      * @return string
      */
     public function getAlignment()
@@ -329,9 +329,9 @@ class PHPRtfLite_Table
      */
     public function addColumn($width)
     {
-        $column = new PHPRtfLite_Table_Column($width);
+        $column = new PHPRtfLite_Table_Column($this, $this->getColumnsCount() + 1, $width);
         $this->_columns[] = $column;
-        
+
         return $column;
     }
 
@@ -401,7 +401,11 @@ class PHPRtfLite_Table
                                 PHPRtfLite_ParFormat $parFormat = null,
                                 $convertTagsToRtf = true)
     {
-        $this->getCell($rowIndex, $columnIndex)->writeText($text, $font, $parFormat, $convertTagsToRtf);
+        $cell = $this->getCell($rowIndex, $columnIndex);
+        if (is_null($font)) {
+            $font = $cell->getFont();
+        }
+        $cell->writeText($text, $font, $parFormat, $convertTagsToRtf);
     }
 
 
@@ -530,7 +534,7 @@ class PHPRtfLite_Table
                 = PHPRtfLite_Table::getValidCellRange($startRow, $startColumn, $endRow, $endColumn);
 
         if ($this->checkIfCellExists($startRow, $startColumn)
-            && $this->checkIfCellExists($endRow, $endColumn)) 
+            && $this->checkIfCellExists($endRow, $endColumn))
         {
             $cells = $this->getCellsByCellRange($startRow, $startColumn, $endRow, $endColumn);
             foreach ($cells as $cell) {
@@ -567,7 +571,7 @@ class PHPRtfLite_Table
 
     /**
      * rotates cells of a given cell range
-     * 
+     *
      * @param   string  $rotateTo       direction of rotation<br>
      *   Possible values (represented by PHPRtfLite_Table_Cell::ROTATE_*):<br>
      *     PHPRtfLite_Table_Cell::ROTATE_RIGHT  => 'right'<br>
@@ -583,7 +587,7 @@ class PHPRtfLite_Table
                 = PHPRtfLite_Table::getValidCellRange($startRow, $startColumn, $endRow, $endColumn);
 
         if ($this->checkIfCellExists($startRow, $startColumn)
-            && $this->checkIfCellExists($endRow, $endColumn)) 
+            && $this->checkIfCellExists($endRow, $endColumn))
         {
             $cells = $this->getCellsByCellRange($startRow, $startColumn, $endRow, $endColumn);
             foreach ($cells as $cell) {
@@ -624,7 +628,7 @@ class PHPRtfLite_Table
 
     /**
      * sets border to cells of a given cell range
-     * 
+     *
      * @param   PHPRtfLite_Border   $border         border
      * @param   integer             $startRow       start row
      * @param   integer             $startColumn    start column
@@ -708,7 +712,7 @@ class PHPRtfLite_Table
         for ($j = $startRow; $j <= $endRow; $j++) {
             $start = $startColumn;
             $cell = $this->getCell($j, $start);
-            
+
             while ($cell->isHorizontalMerged()) {
                 $start--;
                 $cell = $this->getCell($j, $start);
@@ -732,7 +736,7 @@ class PHPRtfLite_Table
                 else {
                     $cell->setVerticalMerged();
                 }
-  
+
                 $width += $this->getColumn($i)->getWidth();
 
                 if ($i != $start) {
@@ -748,7 +752,7 @@ class PHPRtfLite_Table
 
     /**
      * gets table rows
-     * 
+     *
      * @return array instances of PHPRtfLite_Table_Row
      */
     public function getRows()
@@ -816,7 +820,7 @@ class PHPRtfLite_Table
 
     /**
      * returns true, if rowIndex and columnIndex do exists in table
-     * 
+     *
      * @param  integer $rowIndex
      * @param  integer $columnIndex
      * @return boolean

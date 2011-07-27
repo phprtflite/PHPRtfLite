@@ -21,7 +21,7 @@
 
 /**
  * class for creating elements used in containers like sections, footers and headers.
- * @version     1.1.0
+ * @version     1.1.1
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
@@ -116,7 +116,7 @@ class PHPRtfLite_Element
      * @param  string $text
      * @return string
      */
-    public static function convertTagsToRtf($text)
+    public static function convertTagsToRtf($text, $charset)
     {
         $search = array(
             // bold
@@ -177,6 +177,7 @@ class PHPRtfLite_Element
         );
 
         $text = preg_replace($search, $replace, $text);
+        $text = html_entity_decode($text, ENT_COMPAT, $charset);
 
         return $text;
     }
@@ -225,11 +226,12 @@ class PHPRtfLite_Element
         $text = $this->_text;
 
         if (!$this->_isTextRtfCode) {
+            $charset = $this->_rtf->getCharset();
             $text = PHPRtfLite::quoteRtfCode($text);
             if ($this->_convertTagsToRtf) {
-                $text = self::convertTagsToRtf($text);
+                $text = self::convertTagsToRtf($text, $charset);
             }
-            $text = PHPRtfLite_Utf8::getUnicodeEntities($text, $this->_rtf->getCharset());
+            $text = PHPRtfLite_Utf8::getUnicodeEntities($text, $charset);
         }
 
         $stream->write($this->getOpeningToken());
@@ -239,9 +241,6 @@ class PHPRtfLite_Element
         }
         if ($this->isEmptyParagraph()) {
             $stream->write('\par');
-        }
-        else if ($this->_font && empty($text)) {
-            $stream->write('\~');
         }
         else {
             $stream->write($text);

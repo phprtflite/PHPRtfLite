@@ -22,7 +22,7 @@
 
 /**
  * Abstract class for rtf lists (numberings and enumerations).
- * @version     1.1.0
+ * @version     1.1.1
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -104,9 +104,13 @@ abstract class PHPRtfLite_List
      * @param   string                  $text
      * @param   PHPRtfLite_Font         $font
      * @param   PHPRtfLite_ParFormat    $parFormat
+     * @param   boolean                 $convertTagsToRtf
      * @return  PHPRtfLite_List
      */
-    public function addItem($text, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
+    public function addItem($text,
+            PHPRtfLite_Font $font = null,
+            PHPRtfLite_ParFormat $parFormat = null,
+            $convertTagsToRtf = true)
     {
         if ($font === null) {
             $font = $this->_font;
@@ -116,8 +120,11 @@ abstract class PHPRtfLite_List
         }
 
         $element = new PHPRtfLite_Element($this->_rtf, $text, $font, $parFormat);
+        if ($convertTagsToRtf) {
+            $element->setConvertTagsToRtf();
+        }
         $this->_items[] = $element;
-        
+
         return $this;
     }
 
@@ -235,7 +242,7 @@ abstract class PHPRtfLite_List
 
             // renders item
             $item->render();
-            
+
             if (false == ($item instanceof PHPRtfLite_List)) {
                 $stream->write('\par\pard' . "\r\n");
             }
