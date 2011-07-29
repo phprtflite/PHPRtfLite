@@ -45,7 +45,7 @@ Cell formatting
 Cell font
 ~~~~~~~~~~~~~~~~~~~~
 
-Setting the font for a cell or a cell range.
+Setting the font for a cell or a cell, cell range, column or row.
 
 .. code-block:: php
 
@@ -58,6 +58,15 @@ Setting the font for a cell or a cell range.
     // set "Times New Roman" with green color to a cell range
     $fontGreen = new PHPRtfLite_Font(12, 'Times New Roman', '#0f0');
     $table->setFontForCellRange($fontGreen, 1, 1, 4, 2);
+
+    // set "Times New Roman" with blue color to a column
+    $fontBlue = new PHPRtfLite_Font(12, 'Times New Roman', '#00f');
+    $table->getColumn(1)->setFont($fontBlue);
+    
+    // set "Tahoma" with yellow color to a row
+    $fontYellow = new PHPRtfLite_Font(12, 'Tahoma', '#ff0');
+    $table->getRow(1)->setFont($fontYellow);
+
 
     
 Cell alignment

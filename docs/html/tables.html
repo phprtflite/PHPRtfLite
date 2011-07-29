@@ -83,7 +83,7 @@
 <h3>Cell formatting<a class="headerlink" href="#cell-formatting" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="cell-font">
 <h4>Cell font<a class="headerlink" href="#cell-font" title="Permalink to this headline">¶</a></h4>
-<p>Setting the font for a cell or a cell range.</p>
+<p>Setting the font for a cell or a cell, cell range, column or row.</p>
 <div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
 <span class="c1">// set &quot;Arial&quot; with red color to a single cell</span>
 <span class="nv">$fontRed</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PHPRtfLite_Font</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;#f00&#39;</span><span class="p">);</span>
@@ -93,6 +93,14 @@
 <span class="c1">// set &quot;Times New Roman&quot; with green color to a cell range</span>
 <span class="nv">$fontGreen</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PHPRtfLite_Font</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span> <span class="s1">&#39;#0f0&#39;</span><span class="p">);</span>
 <span class="nv">$table</span><span class="o">-&gt;</span><span class="na">setFontForCellRange</span><span class="p">(</span><span class="nv">$fontGreen</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+
+<span class="c1">// set &quot;Times New Roman&quot; with blue color to a column</span>
+<span class="nv">$fontBlue</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PHPRtfLite_Font</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;Times New Roman&#39;</span><span class="p">,</span> <span class="s1">&#39;#00f&#39;</span><span class="p">);</span>
+<span class="nv">$table</span><span class="o">-&gt;</span><span class="na">getColumn</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">setFont</span><span class="p">(</span><span class="nv">$fontBlue</span><span class="p">);</span>
+
+<span class="c1">// set &quot;Tahoma&quot; with yellow color to a row</span>
+<span class="nv">$fontYellow</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PHPRtfLite_Font</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;Tahoma&#39;</span><span class="p">,</span> <span class="s1">&#39;#ff0&#39;</span><span class="p">);</span>
+<span class="nv">$table</span><span class="o">-&gt;</span><span class="na">getRow</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">setFont</span><span class="p">(</span><span class="nv">$fontYellow</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
