@@ -93,21 +93,27 @@ abstract class PHPRtfLite_Container_Base
     /**
      * adds element with rtf code directly (no converting will be made by PHPRtfLite)
      *
-     * @param string $text
+     * @param   string                  $text
+     * @param   PHPRtfLite_Font         $font
+     * @param   PHPRtfLite_ParFormat    $font
+     * @return  PHPRtfLite_Element
      */
-    public function writeRtfCode($text)
+    public function writeRtfCode($text, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
     {
-        $element = new PHPRtfLite_Element($this->_rtf);
+        $element = new PHPRtfLite_Element($this->_rtf, '', $font, $parFormat);
         $element->writeRtfCode($text);
         $this->_elements[] = $element;
+
+        return $element;
     }
 
 
     /**
      * adds empty paragraph to container.
      *
-     * @param PHPRtfLite_Font       $font
-     * @param PHPRtfLite_ParFormat  $parFormat
+     * @param   PHPRtfLite_Font       $font
+     * @param   PHPRtfLite_ParFormat  $parFormat
+     * @return  PHPRtfLite_Element
      */
     public function addEmptyParagraph(PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
     {
@@ -116,6 +122,8 @@ abstract class PHPRtfLite_Container_Base
         }
         $element = new PHPRtfLite_Element($this->_rtf, '', $font, $parFormat);
         $this->_elements[] = $element;
+
+        return  $element;
     }
 
 
@@ -138,9 +146,10 @@ abstract class PHPRtfLite_Container_Base
      *   line - line break; <br>
      *   page - page break; <br>
      *   sect - section break; <br>
-     * @param PHPRtfLite_Font       $font               font of text
-     * @param PHPRtfLite_ParFormat  $parFormat          paragraph format, if null, text is written in the same paragraph.
-     * @param boolean               $convertTagsToRtf   if false, then html style tags are not replaced with rtf code
+     * @param   PHPRtfLite_Font         $font               font of text
+     * @param   PHPRtfLite_ParFormat    $parFormat          paragraph format, if null, text is written in the same paragraph.
+     * @param   boolean                 $convertTagsToRtf   if false, then html style tags are not replaced with rtf code
+     * @return  PHPRtfLite_Element
      */
     public function writeText($text,
                               PHPRtfLite_Font $font = null,
@@ -152,6 +161,8 @@ abstract class PHPRtfLite_Container_Base
             $element->setConvertTagsToRtf();
         }
         $this->_elements[] = $element;
+
+        return $element;
     }
 
 
@@ -163,6 +174,7 @@ abstract class PHPRtfLite_Container_Base
      * @param PHPRtfLite_Font       $font
      * @param PHPRtfLite_ParFormat  $parFormat
      * @param boolean               $convertTagsToRtf   if false, then html style tags are not replaced with rtf code
+     * @return  PHPRtfLite_Element
      */
     public function writeHyperLink($hyperlink,
                                    $text,
@@ -176,6 +188,8 @@ abstract class PHPRtfLite_Container_Base
             $element->setConvertTagsToRtf();
         }
         $this->_elements[] = $element;
+
+        return $element;
     }
 
 

@@ -393,6 +393,7 @@ class PHPRtfLite_Table
      * @param   PHPRtfLite_Font         $font               Font of text
      * @param   PHPRtfLite_ParFormat    $parFormat          Paragraph format
      * @param   boolean                 $convertTagsToRtf   If false, then html style tags are not replaced with rtf code.
+     * @return  PHPRtfLite_Element
      */
     public function writeToCell($rowIndex,
                                 $columnIndex,
@@ -405,7 +406,7 @@ class PHPRtfLite_Table
         if (is_null($font)) {
             $font = $cell->getFont();
         }
-        $cell->writeText($text, $font, $parFormat, $convertTagsToRtf);
+        return $cell->writeText($text, $font, $parFormat, $convertTagsToRtf);
     }
 
 
