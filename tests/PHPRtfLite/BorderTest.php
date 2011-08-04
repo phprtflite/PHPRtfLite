@@ -1,7 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../lib/PHPRtfLite.php';
-
 
 /**
  * Test class for PHPRtfLite_Border
@@ -12,7 +9,7 @@ class PHPRtfLite_BorderTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPRtfLite_Border
      */
-    protected $_border;
+    private $_border;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -20,9 +17,6 @@ class PHPRtfLite_BorderTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        // register PHPRtfLite class loader
-        PHPRtfLite::registerAutoloader();
-
         $rtf = new PHPRtfLite;
         $this->_border = new PHPRtfLite_Border($rtf);
     }
@@ -48,7 +42,7 @@ class PHPRtfLite_BorderTest extends PHPUnit_Framework_TestCase
     {
         $borderFormat = new PHPRtfLite_Border_Format(1.5, '#ff0', PHPRtfLite_Border_Format::TYPE_SINGLE);
         $this->_border->setBorders($borderFormat);
-        
+
         $this->assertType('PHPRtfLite_Border_Format', $this->_border->getBorderTop());
         $this->assertType('PHPRtfLite_Border_Format', $this->_border->getBorderBottom());
         $this->assertType('PHPRtfLite_Border_Format', $this->_border->getBorderRight());

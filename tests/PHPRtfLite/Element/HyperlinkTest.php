@@ -1,7 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../../lib/PHPRtfLite.php';
-require_once dirname(__FILE__) . '/../../Mocks/StreamOutputMock.php';
 
 /**
  * Test class for PHPRtfLite_Element_Hyperlink
@@ -20,8 +17,9 @@ class PHPRtfLite_Element_HyperlinkTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $streamMock = new PHPRtfLite_StreamOutputMock;
-        $this->_rtf = new PHPRtfLite($streamMock);
+        $this->_rtf = new PHPRtfLite();
+        $writer = new PHPRtfLite_Writer_String();
+        $this->_rtf->setWriter($writer);
     }
 
     /**
@@ -33,7 +31,7 @@ class PHPRtfLite_Element_HyperlinkTest extends PHPUnit_Framework_TestCase
         $hyperlink->setHyperlink('http://www.phprtf.com/');
         $hyperlink->render();
         $expected = '{\field {\*\fldinst {HYPERLINK "http://www.phprtf.com/"}}{\fldrslt {My link text!}}}';
-        $this->assertEquals($expected, trim($this->_rtf->getStream()->content));
+        $this->assertEquals($expected, trim($this->_rtf->getWriter()->getContent()));
     }
 
 }

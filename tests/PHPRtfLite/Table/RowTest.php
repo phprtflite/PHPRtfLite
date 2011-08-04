@@ -11,7 +11,7 @@ class PHPRtfLite_Table_RowTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPRtfLite_Table
      */
-    protected $_table;
+    private $_table;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -19,9 +19,6 @@ class PHPRtfLite_Table_RowTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        // register PHPRtfLite class loader
-        PHPRtfLite::registerAutoloader();
-
         $rtf = new PHPRtfLite;
         $this->_table = $rtf->addSection()->addTable();
     }

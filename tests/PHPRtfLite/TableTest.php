@@ -1,7 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../lib/PHPRtfLite.php';
-
 
 /**
  * Test class for PHPRtfLite.
@@ -11,7 +8,7 @@ class PHPRtfLite_TableTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPRtfLite_Table
      */
-    protected $_table;
+    private $_table;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -19,9 +16,6 @@ class PHPRtfLite_TableTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        // register PHPRtfLite class loader
-        PHPRtfLite::registerAutoloader();
-
         $rtf = new PHPRtfLite;
         $this->_table = $rtf->addSection()->addTable();
     }
@@ -270,7 +264,7 @@ class PHPRtfLite_TableTest extends PHPUnit_Framework_TestCase
         $this->_table->addRows(3);
         $this->_table->addColumnsList(array(5, 5, 5, 4));
         $this->assertTrue($this->_table->checkIfCellExists(1, 1));
-        
+
         return $this->_table;
     }
 

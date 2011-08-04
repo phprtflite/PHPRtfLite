@@ -1,6 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../lib/PHPRtfLite.php';
 
 /**
  * Test class for PHPRtfLite_ParFormat.
@@ -11,7 +9,7 @@ class PHPRtfLite_ParFormatTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPRtfLite_ParFormat
      */
-    protected $_parFormat;
+    private $_parFormat;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -19,9 +17,6 @@ class PHPRtfLite_ParFormatTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        // register PHPRtfLite class loader
-        PHPRtfLite::registerAutoloader();
-
         $this->_parFormat = new PHPRtfLite_ParFormat();
     }
 

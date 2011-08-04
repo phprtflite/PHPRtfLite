@@ -22,7 +22,7 @@
 
 /**
  * defines color table for the rtf document head
- * @version     1.1.0
+ * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
@@ -122,7 +122,7 @@ class PHPRtfLite_DocHead_ColorTable
             $rtfColor = self::convertHexColorToRtf($hexColor);
             $content .= $rtfColor . ';';
         }
-        
+
         $content .= '}' . "\r\n";
 
         return $content;

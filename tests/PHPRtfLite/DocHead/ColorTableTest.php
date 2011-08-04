@@ -1,7 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../../lib/PHPRtfLite.php';
-
 
 /**
  * Test class for PHPRtfLite_DocHead_ColorTable
@@ -37,8 +34,6 @@ class PHPRtfLite_DocHead_ColorTableTest extends PHPUnit_Framework_TestCase
      */
     public function provideGetColorIndex()
     {
-        // register PHPRtfLite class loader
-        PHPRtfLite::registerAutoloader();
         $colorTable = new PHPRtfLite_DocHead_ColorTable();
         return array(
             array($colorTable, '#ccc', 2),

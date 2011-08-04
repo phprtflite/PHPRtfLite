@@ -86,6 +86,8 @@ abstract class PHPRtfLite_Image
      */
     protected $_imageRtfType;
 
+    protected $_isMissing = false;
+
 
     /**
      * constructor
@@ -199,6 +201,18 @@ abstract class PHPRtfLite_Image
     public function getBorder()
     {
         return $this->_border;
+    }
+
+
+    public function isMissing()
+    {
+        return $this->_isMissing;
+    }
+
+
+    public function setIsMissing()
+    {
+        $this->_isMissing = true;
     }
 
 
@@ -375,6 +389,7 @@ abstract class PHPRtfLite_Image
         $stream = fopen('data://text/plain;base64,' . self::getMissingImage(), 'rb');
         $image = new PHPRtfLite_Image_Gd($rtf, $stream, $width, $height);
         $image->setImageType(self::TYPE_PNG);
+        $image->setIsMissing();
         return $image;
     }
 
@@ -398,7 +413,7 @@ abstract class PHPRtfLite_Image
         fseek($this->_stream, $startFrom);
         $rtfImageType = $this->getImageTypeAsRtf();
 
-        $rtfStream = $this->_rtf->getStream();
+        $rtfStream = $this->_rtf->getWriter();
         $rtfStream->write('{\*\shppict {\pict');
 
         if ($this->_border) {

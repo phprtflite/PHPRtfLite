@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
@@ -22,7 +22,7 @@
 
 /**
  * Abstract class for creating containers like sections, footers and headers.
- * @version     1.1.0
+ * @version     1.2
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -38,7 +38,7 @@ abstract class PHPRtfLite_Container extends PHPRtfLite_Container_Base
      * @param string                $noteText
      * @param PHPRtfLite_Font       $font
      * @param PHPRtfLite_ParFormat  $parFormat
-     * 
+     *
      * @return PHPRtfLite_Footnote
      */
     public function addFootnote($noteText, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)

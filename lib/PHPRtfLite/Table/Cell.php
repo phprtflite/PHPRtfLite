@@ -22,7 +22,7 @@
 
 /**
  * Class for creating cells of table in rtf documents.
- * @version     1.1.1
+ * @version     1.2
  * @author      Denis Slaveckij <info@phprtf.com>, Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
@@ -607,7 +607,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
      */
     public function renderDefinition()
     {
-        $stream = $this->_rtf->getStream();
+        $stream = $this->_rtf->getWriter();
         if ($this->isVerticalMerged()) {
             if ($this->isVerticalMergedFirstInRange()) {
                 $stream->write('\clvmgf');
@@ -673,7 +673,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
      */
     public function render()
     {
-        $stream = $this->_rtf->getStream();
+        $stream = $this->_rtf->getWriter();
         $stream->write("\r\n");
 
         // renders container elements

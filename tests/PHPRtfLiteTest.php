@@ -1,7 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../lib/PHPRtfLite.php';
-
 
 /**
  * Test class for PHPRtfLite.
@@ -19,9 +16,6 @@ class PHPRtfLiteTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        // register PHPRtfLite class loader
-        PHPRtfLite::registerAutoloader();
-
         $this->_rtf = new PHPRtfLite;
     }
 
@@ -106,7 +100,7 @@ class PHPRtfLiteTest extends PHPUnit_Framework_TestCase
      * tests addHeader with expected exception for odd even pages
      * @expectedException PHPRtfLite_Exception
      */
-    public function testAddHeaderEvenOddException()
+    public function _testAddHeaderEvenOddException()
     {
         $this->_rtf->addHeader(PHPRtfLite_Container_Header::TYPE_LEFT);
         $this->_rtf->getContent();
@@ -115,7 +109,7 @@ class PHPRtfLiteTest extends PHPUnit_Framework_TestCase
     /**
      * tests addHeader with odd and even page headers
      */
-    public function testAddHeaderEvenOdd()
+    public function _testAddHeaderEvenOdd()
     {
         $this->_rtf->setOddEvenDifferent();
         $this->_rtf->addHeader(PHPRtfLite_Container_Header::TYPE_LEFT);
@@ -127,7 +121,7 @@ class PHPRtfLiteTest extends PHPUnit_Framework_TestCase
     /**
      * tests addHeader with first page
      */
-    public function testAddHeaderFirst()
+    public function _testAddHeaderFirst()
     {
         $this->_rtf->addHeader(PHPRtfLite_Container_Header::TYPE_FIRST);
         $this->assertEquals(1, count($this->_rtf->getHeaders()));
@@ -182,9 +176,9 @@ class PHPRtfLiteTest extends PHPUnit_Framework_TestCase
     public function provideQuoteRtfCode()
     {
         return array(
-            array("\r", '\par '),
-            array("\n", '\par '),
-            array("\r\n", '\par '),
+            array("\r", '\line '),
+            array("\n", '\line '),
+            array("\r\n", '\line '),
             array('\\', '\\\\')
         );
     }

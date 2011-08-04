@@ -1,6 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../../lib/PHPRtfLite.php';
 
 
 /**
@@ -27,9 +25,6 @@ class PHPRtfLite_Container_SectionTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        // register PHPRtfLite class loader
-        PHPRtfLite::registerAutoloader();
-
         $this->_rtf = new PHPRtfLite;
         $this->_section = new PHPRtfLite_Container_Section($this->_rtf);
     }
@@ -218,5 +213,5 @@ class PHPRtfLite_Container_SectionTest extends PHPUnit_Framework_TestCase
           'This test has not been implemented yet.'
         );
     }
-    
+
 }

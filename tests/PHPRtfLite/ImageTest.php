@@ -1,7 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../lib/PHPRtfLite.php';
-require_once dirname(__FILE__) . '/../Mocks/StreamOutputMock.php';
 
 /**
  * Test class for PHPRtfLite_Image.
@@ -12,7 +9,7 @@ class PHPRtfLite_ImageTest extends PHPUnit_Framework_TestCase
     /**
      * @var PHPRtfLite
      */
-    protected $_rtf;
+    private $_rtf;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -20,11 +17,9 @@ class PHPRtfLite_ImageTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        // register PHPRtfLite class loader
-        PHPRtfLite::registerAutoloader();
-
-        $streamMock = new PHPRtfLite_StreamOutputMock;
-        $this->_rtf = new PHPRtfLite($streamMock);
+        $this->_rtf = new PHPRtfLite();
+        $writer = new PHPRtfLite_Writer_String();
+        $this->_rtf->setWriter($writer);
     }
 
     /**
@@ -42,11 +37,9 @@ class PHPRtfLite_ImageTest extends PHPUnit_Framework_TestCase
         $image->setHeight(5);
         $image->setWidth(5);
         $image->render();
-        $expected = '{\pict\picwgoal2835\pichgoal2835\jpegblip '
-                  . self::getRtfThumbHexCode()
-                  . '}';
+        $expected = self::getRtfThumbHexCode(2835, 2835);
 
-        $this->assertEquals($expected, $this->_rtf->getStream()->content);
+        $this->assertEquals($expected, $this->_rtf->getWriter()->getContent());
     }
 
     /**
@@ -64,11 +57,9 @@ class PHPRtfLite_ImageTest extends PHPUnit_Framework_TestCase
         $image->setHeight(0.1);
         $image->setWidth(0.1);
         $image->render();
-        $expected = '{\pict\picwgoal57\pichgoal57\jpegblip '
-                  . self::getRtfThumbHexCode()
-                  . '}';
+        $expected = self::getRtfThumbHexCode(57, 57);
 
-        $this->assertEquals($expected, $this->_rtf->getStream()->content);
+        $this->assertEquals($expected, $this->_rtf->getWriter()->getContent());
     }
 
     /**
@@ -84,11 +75,9 @@ class PHPRtfLite_ImageTest extends PHPUnit_Framework_TestCase
         }
         $image = PHPRtfLite_Image::createFromFile($this->_rtf, $source);
         $image->render();
-        $expected = '{\pict\picwgoal510\pichgoal510\jpegblip '
-                  . self::getRtfThumbHexCode()
-                  . '}';
+        $expected = self::getRtfThumbHexCode(510, 510);
 
-        $this->assertEquals($expected, $this->_rtf->getStream()->content);
+        $this->assertEquals($expected, $this->_rtf->getWriter()->getContent());
     }
 
 
@@ -102,9 +91,11 @@ class PHPRtfLite_ImageTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public static function getRtfThumbHexCode()
+    public static function getRtfThumbHexCode($widthInTwips, $heightInTwips)
     {
-        return 'ffd8ffe000104a46494600010100000100010000ffdb004300090607080706090807080a0a090b0d160f0d0c'
+        return '{\*\shppict {\pict\jpegblip\picscalex100\picscaley100'
+             . '\picwgoal' . $widthInTwips . '\pichgoal' . $heightInTwips . ' '
+             . 'ffd8ffe000104a46494600010100000100010000ffdb004300090607080706090807080a0a090b0d160f0d0c'
              . '0c0d1b14151016201d2222201d1f1f2428342c242631271f1f2d3d2d3135373a3a3a232b3f443f384334393a'
              . '37ffdb0043010a0a0a0d0c0d1a0f0f1a37251f25373737373737373737373737373737373737373737373737'
              . '3737373737373737373737373737373737373737373737373737ffc000110800220022030122000211010311'
@@ -124,6 +115,6 @@ class PHPRtfLite_ImageTest extends PHPUnit_Framework_TestCase
              . 'ed1bf2fbf5a9b73ed3c1e3ba2d60e3b13755233fdfa4bbaf726df7da77d862dcb6a9e59adb5091c51d6ab333'
              . '18d8000176c927b600cf7d0586def505b3dd22f8068d1b7bd416cf748be01a340c34be6b5dbaa6a5e5a9a0a5'
              . '9a46232f242ac4fa3f491a34683af98ed1f5550fe193f4d1e63b47d5543f864fd3468d06d8228d208d123455'
-             . '550028500018f0d1a34683ffd9';
+             . '550028500018f0d1a34683ffd9}}';
     }
 }

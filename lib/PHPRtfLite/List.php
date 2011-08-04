@@ -22,7 +22,7 @@
 
 /**
  * Abstract class for rtf lists (numberings and enumerations).
- * @version     1.1.1
+ * @version     1.2
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -216,7 +216,7 @@ abstract class PHPRtfLite_List
      */
     public function render()
     {
-        $stream = $this->_rtf->getStream();
+        $stream = $this->_rtf->getWriter();
         $number = 0;
 
         foreach ($this->_items as $item) {

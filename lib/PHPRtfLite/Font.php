@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
@@ -22,7 +22,7 @@
 
 /**
  * Class for fonts in rtf documents.
- * @version     1.1.0
+ * @version     1.2
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -131,7 +131,7 @@ class PHPRtfLite_Font
 
     /**
      * sets rtf color table
-     * 
+     *
      * @param PHPRtfLite_DocHead_ColorTable $colorTable
      */
     public function setColorTable(PHPRtfLite_DocHead_ColorTable $colorTable)
@@ -148,7 +148,7 @@ class PHPRtfLite_Font
 
     /**
      * sets rtf font table
-     * 
+     *
      * @param PHPRtfLite_DocHead_FontTable $fontTable
      */
     public function setFontTable(PHPRtfLite_DocHead_FontTable $fontTable)
@@ -162,7 +162,7 @@ class PHPRtfLite_Font
 
     /**
      * gets font family
-     * 
+     *
      * @return string
      */
     public function getFontFamily()
@@ -301,7 +301,7 @@ class PHPRtfLite_Font
      *     ANIMATE_MARCHING_BLACK_ANTS  => 4    - marching black ants
      *     ANIMATE_MARCHING_RED_ANTS    => 5    - marching red ants
      *     ANIMATE_SHIMMER              => 6    - shimmer
-     */ 
+     */
     public function setAnimation($animation)
     {
         $this->_animation = $animation;
@@ -316,7 +316,7 @@ class PHPRtfLite_Font
     public function getContent()
     {
         $content = '';
-        
+
         if ($this->_size > 0) {
             $content .= '\fs' . ($this->_size * 2) . ' ';
         }

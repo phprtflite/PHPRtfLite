@@ -21,35 +21,64 @@
 */
 
 /**
- * Class for streaming the rtf output.
- * @version     1.1.0
+ * Class for writing the rtf output.
+ * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  */
-class PHPRtfLite_StreamOutput
+class PHPRtfLite_StreamOutput implements PHPRtfLite_Writer_Interface
 {
 
     /**
-     * file handler for stream
-     *
+     * filename
+     * @var string
+     */
+    private $_filename;
+
+    /**
+     * handler for stream
      * @var resource
      */
-    private $_fileHandler;
+    private $_handle;
 
-    
+
+    /**
+     * set filename
+     *
+     * @param string $filename
+     */
+    public function setFilename($filename)
+    {
+        $this->_filename = $filename;
+    }
+
+
+    /**
+     * gets filename
+     *
+     * @return  string
+     */
+    public function getFilename()
+    {
+        return $this->_filename;
+    }
+
+
     /**
      * opens file stream
-     * 
-     * @param   string  $filename
      */
-    public function open($filename)
+    public function open()
     {
-        $this->_fileHandler = fopen($filename, 'wb');
-        if (!$this->_fileHandler) {
-            throw new PHPRtfLite_Exception("Could not open file '$filename' for stream!");
+        if ($this->_handle !== null) {
+            return;
         }
-        flock($this->_fileHandler, LOCK_EX);
+
+        $this->_handle = fopen($this->_filename, 'wr', false);
+        if (!$this->_handle) {
+            throw new PHPRtfLite_Exception("Could not open rtf output stream (url: $url)!");
+        }
+        flock($this->_handle, LOCK_EX);
     }
 
 
@@ -58,9 +87,9 @@ class PHPRtfLite_StreamOutput
      */
     public function close()
     {
-        if ($this->_fileHandler !== null) {
-            fclose($this->_fileHandler);
-            $this->_fileHandler = null;
+        if ($this->_handle !== null) {
+            fclose($this->_handle);
+            $this->_handle = null;
         }
     }
 
@@ -68,15 +97,29 @@ class PHPRtfLite_StreamOutput
     /**
      * writes string to file handler
      *
-     * @param string $string
+     * @param string $data
      */
-    public function write($string)
+    public function write($data)
     {
-        if ($this->_fileHandler === null) {
-            $this->open();
+        if ($this->_handle === null) {
+            throw new PHPRtfLite_Exception('Can not write on an undefined handle! Forgot to call open()?');
         }
+        fwrite($this->_handle, $data);
+    }
 
-        fwrite($this->_fileHandler, $string);
+
+    /**
+     * gets written content
+     *
+     * @return type
+     */
+    public function getContent()
+    {
+        $this->close();
+        if (file_exists($this->_filename)) {
+            return file_get_contents($this->_filename);
+        }
+        return '';
     }
 
 }

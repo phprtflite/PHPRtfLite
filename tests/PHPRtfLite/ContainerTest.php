@@ -1,10 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../lib/PHPRtfLite.php';
-require_once dirname(__FILE__) . '/../Mocks/StreamOutputMock.php';
-
-// register PHPRtfLite class loader
-PHPRtfLite::registerAutoloader();
 
 /**
  * Test class for PHPRtfLite_Container
@@ -23,8 +17,9 @@ class PHPRtfLite_ContainerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $streamMock = new PHPRtfLite_StreamOutputMock;
-        $rtf = new PHPRtfLite($streamMock);
+        $rtf = new PHPRtfLite();
+        $writer = new PHPRtfLite_Writer_String();
+        $rtf->setWriter($writer);
 
         $this->_container = $this->getMockForAbstractClass('PHPRtfLite_Container',
                                                            array(),
@@ -40,7 +35,7 @@ class PHPRtfLite_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $this->_container->writeRtfCode('test text');
         $this->_container->render();
-        $this->assertEquals('{test text}', trim($this->_container->getRtf()->getStream()->content));
+        $this->assertEquals('{test text}', trim($this->_container->getRtf()->getWriter()->getContent()));
     }
 
     /**
@@ -50,7 +45,7 @@ class PHPRtfLite_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $this->_container->addEmptyParagraph();
         $this->_container->render();
-        $this->assertEquals('\pard \ql {\par}', trim($this->_container->getRtf()->getStream()->content));
+        $this->assertEquals('\pard \ql {\par}', trim($this->_container->getRtf()->getWriter()->getContent()));
     }
 
     /**
@@ -62,7 +57,7 @@ class PHPRtfLite_ContainerTest extends PHPUnit_Framework_TestCase
         $parFormat = new PHPRtfLite_ParFormat();
         $this->_container->addEmptyParagraph($font, $parFormat);
         $this->_container->render();
-        $this->assertEquals('\pard \ql {\fs20 \par}', trim($this->_container->getRtf()->getStream()->content));
+        $this->assertEquals('\pard \ql {\fs20 \par}', trim($this->_container->getRtf()->getWriter()->getContent()));
     }
 
     /**
@@ -74,7 +69,7 @@ class PHPRtfLite_ContainerTest extends PHPUnit_Framework_TestCase
     {
         $this->_container->writeText('Hello world!');
         $this->_container->render();
-        $this->assertEquals('{Hello world!}', trim($this->_container->getRtf()->getStream()->content));
+        $this->assertEquals('{Hello world!}', trim($this->_container->getRtf()->getWriter()->getContent()));
 
         return $this->_container;
     }
@@ -87,13 +82,12 @@ class PHPRtfLite_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testWriteTextAddEmptyParagraphWithFontAndParFormat(PHPRtfLite_Container $container)
     {
-        $container->getRtf()->getStream()->content = '';
         $font = new PHPRtfLite_Font();
         $parFormat = new PHPRtfLite_ParFormat();
         $container->addEmptyParagraph($font, $parFormat);
         $container->render();
         $this->assertEquals('{Hello world!}' . "\r\n" . '\par \pard \ql {\fs20 \par}',
-                            trim($container->getRtf()->getStream()->content));
+                            trim($container->getRtf()->getWriter()->getContent()));
     }
 
     /**
@@ -102,10 +96,10 @@ class PHPRtfLite_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testWriteText($input, $expected)
     {
-        #$this->_container->getRtf()->getStream()->content = '';
+        #$this->_container->getRtf()->getWriter()->content = '';
         $this->_container->writeText($input);
         $this->_container->render();
-        $this->assertEquals($expected, trim($this->_container->getRtf()->getStream()->content));
+        $this->assertEquals($expected, trim($this->_container->getRtf()->getWriter()->getContent()));
     }
 
     /**

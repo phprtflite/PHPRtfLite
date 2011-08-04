@@ -22,7 +22,7 @@
 
 /**
  * Class for creating sections within the rtf document.
- * @version     1.1.1
+ * @version     1.2
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -576,7 +576,7 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
      */
     public function render()
     {
-        $stream = $this->_rtf->getStream();
+        $stream = $this->_rtf->getWriter();
 
         //headers
         $headers = $this->_headers ? $this->_headers : $this->_rtf->getHeaders();

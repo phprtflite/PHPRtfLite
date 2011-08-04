@@ -213,21 +213,14 @@ class PHPRtfLite
      * output stream
      * @var PHPRtfLite_OutputStream
      */
-    private $_stream;
-
+    private $_writer;
 
     /**
-     * constructor
-     *
-     * @param PHPRtfLite_StreamOutput $stream
+     * flag, if true PHPRtfLite writes the output into a temporary file,
+     * which is slowing down a bit because of the io operations but uses less memory
+     * @var boolean
      */
-    public function __construct(PHPRtfLite_StreamOutput $stream = null)
-    {
-        if ($stream === null) {
-            $stream = new PHPRtfLite_StreamOutput();
-        }
-        $this->_stream = $stream;
-    }
+    private $_useTemporaryFile = false;
 
 
     /**
@@ -253,6 +246,18 @@ class PHPRtfLite
     public static function unregisterAutoloader()
     {
         return spl_autoload_unregister(array('PHPRtfLite_Autoloader', 'autoload'));
+    }
+
+
+    /**
+     * set that a temporary file should be used for creating the output
+     * NOTE: is slowing down the rendering because of the io operations, but uses less memory
+     *
+     * @param boolean $flag default is true
+     */
+    public function setUseTemporaryFile($flag = true)
+    {
+        $this->_useTemporaryFile = $flag;
     }
 
 
@@ -1075,6 +1080,10 @@ class PHPRtfLite
      */
     public function getContent()
     {
+        $this->createWriter();
+        $this->render();
+        return $this->_writer->getContent();
+        /*
         $file = sys_get_temp_dir() . '/' . md5(microtime(true));
         $this->save($file);
         $content = '';
@@ -1089,6 +1098,7 @@ class PHPRtfLite
         fclose($fh);
 
         return $content;
+         */
     }
 
 
@@ -1099,9 +1109,13 @@ class PHPRtfLite
      */
     public function save($file)
     {
+        $this->createWriter($file);
+        $this->render();
+        /*
         $this->_stream->open($file);
         $this->render();
         $this->_stream->close();
+         */
     }
 
 
@@ -1118,8 +1132,10 @@ class PHPRtfLite
             $filename .= '.rtf';
         }
 
+        /*
         $file = sys_get_temp_dir() . '/' . $filename;
         $this->save($file);
+         */
 
         if (false !== strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 5.5')) {
             header('Content-Disposition: filename="' . $filename . '"');
@@ -1132,7 +1148,10 @@ class PHPRtfLite
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
 
-        $this->printTempFileContent($file);
+        $this->createWriter();
+        $this->render();
+        echo $this->_writer->getContent();
+        //$this->printTempFileContent($file);
     }
 
 
@@ -1145,7 +1164,7 @@ class PHPRtfLite
     {
         $fh = fopen($file, 'rb');
         if (!$fh) {
-            throw new PHPRtfLite_Exception('Could not send file to browser. File could not read: ' . $file);
+            throw new PHPRtfLite_Exception('Could not send file to browser. File could not be read: ' . $file);
         }
         while (!feof($fh)) {
             echo fread($fh, 1024);
@@ -1214,13 +1233,46 @@ class PHPRtfLite
 
 
     /**
-     * gets output stream
+     * creates writer
      *
-     * @return PHPRtfLite_Stream
+     * @param string $file
      */
-    public function getStream()
+    private function createWriter($file = null)
     {
-        return $this->_stream;
+        if ($file || $this->_useTemporaryFile) {
+            if (!($this->_writer instanceof PHPRtfLite_StreamOutput_String)) {
+                $this->_writer = new PHPRtfLite_StreamOutput();
+            }
+            if (is_null($file)) {
+                $file = sys_get_temp_dir() . '/' . md5(microtime(true)) . '.rtf';
+            }
+            $this->_writer->setFilename($file);
+        }
+        else if (!($this->_writer instanceof PHPRtfLite_Writer_String)) {
+            $this->_writer = new PHPRtfLite_Writer_String();
+        }
+    }
+
+
+    /**
+     * sets writer
+     *
+     * @param  PHPRtfLite_Writer_Interface $writer
+     */
+    public function setWriter(PHPRtfLite_Writer_Interface $writer)
+    {
+        $this->_writer = $writer;
+    }
+
+
+    /**
+     * gets writer
+     *
+     * @return PHPRtfLite_Writer_Interface
+     */
+    public function getWriter()
+    {
+        return $this->_writer;
     }
 
 
@@ -1229,11 +1281,12 @@ class PHPRtfLite
      */
     protected function render()
     {
-        $this->_stream->write('{\rtf\ansi\deff0' . "\r\n");
-        $this->_stream->write($this->getFontTable()->getContent());
-        $this->_stream->write($this->getColorTable()->getContent());
+        $this->_writer->open();
+        $this->_writer->write('{\rtf\ansi\deff0' . "\r\n");
+        $this->_writer->write($this->getFontTable()->getContent());
+        $this->_writer->write($this->getColorTable()->getContent());
 
-        $this->_stream->write($this->getInfoPart());
+        $this->_writer->write($this->getInfoPart());
 
         $paperWidth = $this->_paperWidth;
         $paperHeight = $this->_paperHeight;
@@ -1243,59 +1296,59 @@ class PHPRtfLite
             $paperWidth = $paperHeight;
             $paperHeight = $paperWidth;
         }
-        $this->_stream->write('\paperw' . PHPRtfLite_Unit::getUnitInTwips($paperWidth)  .' ');
-        $this->_stream->write('\paperh' . PHPRtfLite_Unit::getUnitInTwips($paperHeight) . ' ');
+        $this->_writer->write('\paperw' . PHPRtfLite_Unit::getUnitInTwips($paperWidth)  .' ');
+        $this->_writer->write('\paperh' . PHPRtfLite_Unit::getUnitInTwips($paperHeight) . ' ');
 
         // hyphenation
         if ($this->_isHyphenation) {
-            $this->_stream->write('\hyphauto1');
+            $this->_writer->write('\hyphauto1');
         }
-        $this->_stream->write('\deftab' . PHPRtfLite_Unit::getUnitInTwips($this->_defaultTabWidth) . ' ');
-        $this->_stream->write('\margl' . PHPRtfLite_Unit::getUnitInTwips($this->_marginLeft) . ' ');
-        $this->_stream->write('\margr' . PHPRtfLite_Unit::getUnitInTwips($this->_marginRight) . ' ');
-        $this->_stream->write('\margt' . PHPRtfLite_Unit::getUnitInTwips($this->_marginTop) . ' ');
-        $this->_stream->write('\margb' . PHPRtfLite_Unit::getUnitInTwips($this->_marginBottom) . ' ');
+        $this->_writer->write('\deftab' . PHPRtfLite_Unit::getUnitInTwips($this->_defaultTabWidth) . ' ');
+        $this->_writer->write('\margl' . PHPRtfLite_Unit::getUnitInTwips($this->_marginLeft) . ' ');
+        $this->_writer->write('\margr' . PHPRtfLite_Unit::getUnitInTwips($this->_marginRight) . ' ');
+        $this->_writer->write('\margt' . PHPRtfLite_Unit::getUnitInTwips($this->_marginTop) . ' ');
+        $this->_writer->write('\margb' . PHPRtfLite_Unit::getUnitInTwips($this->_marginBottom) . ' ');
 
         if (null !== $this->_gutter) {
-            $this->_stream->write('\gutter' . PHPRtfLite_Unit::getUnitInTwips($this->_gutter) . ' ');
+            $this->_writer->write('\gutter' . PHPRtfLite_Unit::getUnitInTwips($this->_gutter) . ' ');
         }
 
         if (true == $this->_useMirrorMargins) {
-            $this->_stream->write('\margmirror ');
+            $this->_writer->write('\margmirror ');
         }
 
         if (null !== $this->_viewMode) {
-            $this->_stream->write('\viewkind' . $this->_viewMode . ' ');
+            $this->_writer->write('\viewkind' . $this->_viewMode . ' ');
         }
 
         if (null !== $this->_zoomMode) {
-            $this->_stream->write('\viewzk' . $this->_zoomMode . ' ');
+            $this->_writer->write('\viewzk' . $this->_zoomMode . ' ');
         }
 
         if (null !== $this->_zoomLevel) {
-            $this->_stream->write('\viewscale' . $this->_zoomLevel . ' ');
+            $this->_writer->write('\viewscale' . $this->_zoomLevel . ' ');
         }
 
         if (isset($this->_sections[0]) && $this->_sections[0]->getBorder()) {
-            $this->_stream->write($this->_sections[0]->getBorder()->getContent('\pg'));
+            $this->_writer->write($this->_sections[0]->getBorder()->getContent('\pg'));
         }
         elseif ($this->_border) {
-            $this->_stream->write($this->_border->getContent('\pg'));
+            $this->_writer->write($this->_border->getContent('\pg'));
         }
 
         // page numbering start
-        $this->_stream->write('\pgnstart' . $this->_pageNumberStart);
+        $this->_writer->write('\pgnstart' . $this->_pageNumberStart);
 
         //headers and footers properties
         if ($this->_useOddEvenDifferent) {
-            $this->_stream->write('\facingp ');
+            $this->_writer->write('\facingp ');
         }
         if ($this->_titlepg) {
-            $this->_stream->write('\titlepg ');
+            $this->_writer->write('\titlepg ');
         }
 
         // document header definition for footnotes and endnotes
-        $this->_stream->write($this->getNoteDocHead()->getContent());
+        $this->_writer->write($this->getNoteDocHead()->getContent());
 
         //headers and footers if there are no sections
         if (count($this->_sections) == 0) {
@@ -1311,12 +1364,13 @@ class PHPRtfLite
         //sections
         foreach ($this->_sections as $key => $section) {
             if ($key != 0) {
-                $this->_stream->write('\sect\sectd ');
+                $this->_writer->write('\sect\sectd ');
             }
             $section->render();
         }
 
-        $this->_stream->write('}');
+        $this->_writer->write('}');
+        $this->_writer->close();
     }
 
 }

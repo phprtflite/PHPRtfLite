@@ -22,7 +22,7 @@
 
 /**
  * Class for rtf numberings.
- * @version     1.1.0
+ * @version     1.2
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -60,7 +60,7 @@ class PHPRtfLite_List_Numbering extends PHPRtfLite_List
 
     /**
      * sets prefix
-     * 
+     *
      * @param   string  $prefix
      * @return  PHPRtfList_Numbering
      */
@@ -95,7 +95,7 @@ class PHPRtfLite_List_Numbering extends PHPRtfLite_List
         $this->_separator = $separator;
         return $this;
     }
-    
+
 
     /**
      * gets number

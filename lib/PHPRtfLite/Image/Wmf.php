@@ -1,6 +1,7 @@
 <?php
 /*
     PHPRtfLite
+    Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
@@ -21,6 +22,7 @@
 
 /**
  * Class for displaying wmf images in rtf documents.
+ * @since       1.2
  * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler

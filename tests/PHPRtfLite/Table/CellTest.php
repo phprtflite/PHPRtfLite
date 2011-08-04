@@ -1,28 +1,10 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../../lib/PHPRtfLite.php';
-
 
 /**
  * Test class for PHPRtfLite_Table_Cell
  */
 class PHPRtfLite_Table_CellTest extends PHPUnit_Framework_TestCase
 {
-
-    /**
-     * @var PHPRtfLite_Table
-     */
-    protected $_table;
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
-    {
-        // register PHPRtfLite class loader
-        PHPRtfLite::registerAutoloader();
-    }
 
     /**
      * tests setBorder on cell 1x1

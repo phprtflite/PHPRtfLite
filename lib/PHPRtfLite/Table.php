@@ -22,7 +22,7 @@
 
 /**
  * Class for creating tables for rtf documents.
- * @version     1.1.1
+ * @version     1.2
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -869,7 +869,7 @@ class PHPRtfLite_Table
             return;
         }
 
-        $stream = $this->getRtf()->getStream();
+        $stream = $this->getRtf()->getWriter();
 
         foreach ($this->_rows as $row) {
             $stream->write('\trowd');
@@ -891,7 +891,7 @@ class PHPRtfLite_Table
     public function renderRowDefinition(PHPRtfLite_Table_Row $row)
     {
         $rowIndex = $row->getRowIndex();
-        $stream = $this->getRtf()->getStream();
+        $stream = $this->getRtf()->getWriter();
         $stream->write('\trowd');
 
         if ($this->_alignment) {

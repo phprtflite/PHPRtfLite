@@ -21,7 +21,7 @@
 
 /**
  * class for check box form fields in rtf documents.
- * @version     1.1.0
+ * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite

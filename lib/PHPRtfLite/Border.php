@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
@@ -22,7 +22,7 @@
 
 /**
  * Class for creating borders within rtf documents.
- * @version     1.1.0
+ * @version     1.2
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -136,7 +136,7 @@ class PHPRtfLite_Border
                                $left = true, $top = true, $right = true, $bottom = true)
     {
         $borderFormat->setColorTable($this->_rtf->getColorTable());
-        
+
         if ($left) {
             $this->_borderLeft  = $borderFormat;
         }
@@ -203,7 +203,7 @@ class PHPRtfLite_Border
 
     /**
      * sets border format for top border
-     * 
+     *
      * @param PHPRtfLite_Border_Format $borderFormat
      */
     public function setBorderTop(PHPRtfLite_Border_Format $borderFormat)

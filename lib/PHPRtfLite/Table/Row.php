@@ -22,7 +22,7 @@
 
 /**
  * Class for creating rows of table in rtf documents.
- * @version     1.1.1
+ * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite

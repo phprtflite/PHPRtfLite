@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
     PHPRtfLite
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
@@ -21,7 +21,7 @@
 
 /**
  * Class for autoloading PHPRtfLite classes.
- * @version     1.1.0
+ * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
@@ -69,7 +69,7 @@ class PHPRtfLite_Autoloader
 
         require $classFile;
 
-        if (!class_exists($className)) {
+        if (!class_exists($className) && !interface_exists($className)) {
             throw new Exception("Class $className could not be found!");
         }
     }

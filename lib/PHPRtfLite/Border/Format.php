@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
@@ -22,7 +22,7 @@
 
 /**
  * Class for border format.
- * @version     1.1.0
+ * @version     1.2
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011s Steffen Zeidler
@@ -66,7 +66,7 @@ class PHPRtfLite_Border_Format
      * @var integer
      */
     protected $_space;
-    
+
 
     /**
      * constructor
@@ -115,7 +115,7 @@ class PHPRtfLite_Border_Format
 
     /**
      * gets border format type
-     * 
+     *
      * @return string
      */
     public function getType()
@@ -129,7 +129,7 @@ class PHPRtfLite_Border_Format
      *
      * @return string
      */
-    public function getColor() 
+    public function getColor()
     {
         return $this->_color;
     }

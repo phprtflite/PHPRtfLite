@@ -1,7 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../../lib/PHPRtfLite.php';
-
 
 /**
  * Test class for PHPRtfLite_DocHead_FontTable
@@ -37,8 +34,6 @@ class PHPRtfLite_DocHead_FontTableTest extends PHPUnit_Framework_TestCase
      */
     public function provideGetFontIndex()
     {
-        // register PHPRtfLite class loader
-        PHPRtfLite::registerAutoloader();
         $fontTable = new PHPRtfLite_DocHead_FontTable();
         return array(
             array($fontTable, 'Verdana', 1),

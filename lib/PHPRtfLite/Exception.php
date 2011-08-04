@@ -21,7 +21,7 @@
 
 /**
  * Class for exceptions within the PHPRtfLite package.
- * @version     1.1.0
+ * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite

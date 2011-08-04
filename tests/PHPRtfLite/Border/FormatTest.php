@@ -1,6 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../../lib/PHPRtfLite.php';
 
 
 /**
@@ -8,16 +6,6 @@ require_once dirname(__FILE__) . '/../../../lib/PHPRtfLite.php';
  */
 class PHPRtfLite_Border_FormatTest extends PHPUnit_Framework_TestCase
 {
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
-    {
-        // register PHPRtfLite class loader
-        PHPRtfLite::registerAutoloader();
-    }
 
     public function testGetContentWithTypeSingle()
     {

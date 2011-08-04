@@ -1,6 +1,7 @@
 <?php
 /*
     PHPRtfLite
+    Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
@@ -20,53 +21,73 @@
 */
 
 /**
- * class for creating elements used in containers like sections, footers and headers.
+ * Class for writing the rtf output into a string.
+ * @since       1.2
  * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
- * @subpackage  PHPRtfLite_Element
  */
-class PHPRtfLite_Element_Hyperlink extends PHPRtfLite_Element
+class PHPRtfLite_Writer_String implements PHPRtfLite_Writer_Interface
 {
 
     /**
+     * falg, true if handle is closed
+     * @var boolean
+     */
+    private $_closed = true;
+    /**
+     * content
      * @var string
      */
-    protected $_hyperlink = '';
+    private $_content = '';
 
 
     /**
-     * sets hyperling
-     *
-     * @param string $hyperlink
+     * opens the handle
      */
-    public function setHyperlink($hyperlink)
+    public function open()
     {
-        $this->_hyperlink = $hyperlink;
+        $this->_closed = false;
+        $this->_content = '';
     }
 
 
     /**
-     * gets opening token
-     *
-     * @return string
+     * closes the handle
      */
-    protected function getOpeningToken()
+    public function close()
     {
-        $hyperlink = PHPRtfLite::quoteRtfCode($this->_hyperlink);
-        return '{\field {\*\fldinst {HYPERLINK "' . $hyperlink . '"}}{\\fldrslt {';
+        $this->_closed = true;
     }
 
 
     /**
-     * gets closing token
+     * gets written content
      *
      * @return string
      */
-    protected function getClosingToken()
+    public function getContent()
     {
-        return '}}}';
+        $this->close();
+        return $this->_content;
+    }
+
+
+    /**
+     * write content - internal use
+     * NOTE: Re-opens the handle if it's closed and empties content.
+     *       May be not the best behavior, yet, but it is as it is.
+     *       It is used for PHPRtfLite's output generation.
+     *
+     * @param string $data
+     */
+    public function write($data)
+    {
+        if ($this->_closed) {
+            $this->open();
+        }
+        $this->_content .= $data;
     }
 
 }

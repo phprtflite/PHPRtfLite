@@ -1,7 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../../lib/PHPRtfLite.php';
-require_once dirname(__FILE__) . '/../../Mocks/StreamOutputMock.php';
 
 /**
  * Test class for PHPRtfLite_Container_Header.
@@ -19,11 +16,9 @@ class PHPRtfLite_Container_HeaderTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        // register PHPRtfLite class loader
-        PHPRtfLite::registerAutoloader();
-
-        $streamMock = new PHPRtfLite_StreamOutputMock;
-        $this->_rtf = new PHPRtfLite($streamMock);
+        $this->_rtf = new PHPRtfLite();
+        $writer = new PHPRtfLite_Writer_String();
+        $this->_rtf->setWriter($writer);
     }
 
     /**
@@ -36,8 +31,8 @@ class PHPRtfLite_Container_HeaderTest extends PHPUnit_Framework_TestCase
         $header->render();
         $this->assertEquals('{\header {hello world and see my rtf header!}'
                           . "\r\n\par}\r\n",
-                            $this->_rtf->getStream()->content);
+                            $this->_rtf->getWriter()->getContent());
     }
 
- 
+
 }

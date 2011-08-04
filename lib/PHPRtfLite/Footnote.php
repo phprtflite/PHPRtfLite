@@ -22,7 +22,7 @@
 
 /**
  * class for creating footnotes in rtf documents.
- * @version     1.1.0
+ * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite_Footnote
@@ -226,7 +226,7 @@ class PHPRtfLite_Footnote
      */
     public function render()
     {
-        $stream = $this->_rtf->getStream();
+        $stream = $this->_rtf->getWriter();
 
         $stream->write('\chftn '
                     . '{' . $this->getTypeAsRtfCode()
@@ -238,7 +238,7 @@ class PHPRtfLite_Footnote
         if ($this->_font) {
             $stream->write($this->_font->getContent());
         }
-        
+
         $stream->write('{\up6\chftn}' . "\r\n"
                      . PHPRtfLite::quoteRtfCode($this->_text)
                      . '} ');

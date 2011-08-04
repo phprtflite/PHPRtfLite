@@ -21,7 +21,7 @@
 
 /**
  * class for creating elements used in containers like sections, footers and headers.
- * @version     1.1.1
+ * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
@@ -222,7 +222,7 @@ class PHPRtfLite_Element
      */
     public function render()
     {
-        $stream = $this->_rtf->getStream();
+        $stream = $this->_rtf->getWriter();
         $text = $this->_text;
 
         if (!$this->_isTextRtfCode) {

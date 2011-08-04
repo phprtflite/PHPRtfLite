@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
@@ -22,7 +22,7 @@
 
 /**
  * paragraph formatting class for rtf documents.
- * @version     1.1.0
+ * @version     1.2
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
@@ -163,7 +163,7 @@ class PHPRtfLite_ParFormat
 
     /**
      * gets first line indention in centimeter
-     * 
+     *
      * @return float
      */
     public function getIndentFirstLine()
@@ -306,7 +306,7 @@ class PHPRtfLite_ParFormat
 
     /**
      * sets rtf color table
-     * 
+     *
      * @param PHPRtfLite_DocHead_ColorTable $colorTable
      */
     public function setColorTable(PHPRtfLite_DocHead_ColorTable $colorTable)

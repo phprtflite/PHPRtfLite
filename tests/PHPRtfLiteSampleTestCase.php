@@ -1,7 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../lib/PHPRtfLite.php';
-
 /**
  * PHPRtfLiteSampleTest
  *
@@ -13,6 +10,7 @@ abstract class PHPRtfLiteSampleTestCase extends PHPUnit_Framework_TestCase
 {
 
     abstract protected function getSampleFile();
+
 
     protected function tearDown()
     {

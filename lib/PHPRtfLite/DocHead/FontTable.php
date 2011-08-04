@@ -22,7 +22,7 @@
 
 /**
  * defines font table for the rtf document head
- * @version     1.1.0
+ * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
@@ -37,7 +37,7 @@ class PHPRtfLite_DocHead_FontTable
      */
     protected $_fontFamilies = array('Times New Roman');
 
-    
+
     /**
      * adds font family to the font table
      *

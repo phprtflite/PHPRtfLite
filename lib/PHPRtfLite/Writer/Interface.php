@@ -1,6 +1,7 @@
 <?php
 /*
     PHPRtfLite
+    Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
 
     This file is part of PHPRtfLite.
@@ -20,28 +21,33 @@
 */
 
 /**
- * Class for creating cells of table in rtf documents.
+ * Interface for writing the rtf output.
+ * @since       1.2
  * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
- * @subpackage  PHPRtfLite_Table
  */
-class PHPRtfLite_Table_Nested extends PHPRtfLite_Table
+interface PHPRtfLite_Writer_Interface
 {
 
     /**
-     * renders nested table
+     * opens handle
      */
-    public function render()
-    {
-        if (empty($this->_rows) || empty($this->_columns)) {
-            return;
-        }
-
-        foreach ($this->_rows as $row) {
-            $this->renderRowCells($row);
-        }
-    }
+    public function open();
+    /**
+     * closes handle
+     */
+    public function close();
+    /**
+     * writes data
+     * @param string $data
+     */
+    public function write($data);
+    /**
+     * gets written content
+     * @return string
+     */
+    public function getContent();
 
 }
