@@ -226,10 +226,47 @@ abstract class PHPRtfLite_Container_Base
      */
     public function addImage($fileName, PHPRtfLite_ParFormat $parFormat = null, $width = null, $height = null)
     {
-        $image = new PHPRtfLite_Image($this->_rtf, $fileName, $parFormat, $width, $height);
+        $image = PHPRtfLite_Image::createFromFile($this->_rtf, $fileName, $width, $height);
+        if ($parFormat) {
+            $image->setParFormat($parFormat);
+        }
         $this->_elements[] = $image;
 
         return $image;
+    }
+
+
+    /**
+     * adds image to element container.
+     *
+     * @param string                $fileName   name of image file.
+     * @param PHPRtfLite_ParFormat  $parFormat  paragraph format, ff null image will appear in the same paragraph.
+     * @param float                 $width      if null image is displayed by it's height.
+     * @param float                 $height     if null image is displayed by it's width.
+     *   If boths parameters are null, image is displayed as it is.
+     *
+     * @return PHPRtfLite_Image
+     */
+    public function addImageFromString($string, $type, PHPRtfLite_ParFormat $parFormat = null, $width = null, $height = null)
+    {
+        $image = PHPRtfLite_Image::createFromString($this->_rtf, $string, $type, $width, $height);
+        if ($parFormat) {
+            $image->setParFormat($parFormat);
+        }
+        $this->_elements[] = $image;
+
+        return $image;
+    }
+
+
+    /**
+     * adds element
+     *
+     * @param $element
+     */
+    public function addElement($element)
+    {
+        $this->_elements[] = $element;
     }
 
 

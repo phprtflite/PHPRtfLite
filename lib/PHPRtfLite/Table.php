@@ -428,7 +428,33 @@ class PHPRtfLite_Table
                                    $width = null,
                                    $height = null)
     {
-        $this->getCell($rowIndex, $columnIndex)->addImage($file, $parFormat, $width, $height);
+        $cell = $this->getCell($rowIndex, $columnIndex);
+        return $cell->addImage($file, $parFormat, $width, $height);
+    }
+
+
+    /**
+     * adds image to cell
+     *
+     * @param   integer                 $rowIndex       row index of cell
+     * @param   integer                 $columnIndex    column index of cell
+     * @param   string                  $file           image file.
+     * @param   PHPRtfLite_ParFormat    $parFormat      paragraph format
+     * @param   float                   $width          if null image is displayed by it's original height.
+     * @param   float                   $height         if null image is displayed by it's original width. If boths parameters are null, image is displayed as it is.
+     * @return  PHPRtfLite_Image
+     */
+    public function addImageFromStringToCell(
+                            $rowIndex,
+                            $columnIndex,
+                            $string,
+                            $type,
+                            PHPRtfLite_ParFormat $parFormat = null,
+                            $width = null,
+                            $height = null)
+    {
+        $cell = $this->getCell($rowIndex, $columnIndex);
+        return $cell->addImageFromString($string, $type, $parFormat, $width, $height);
     }
 
 

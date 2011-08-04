@@ -17,62 +17,34 @@
 
     You should have received a copy of the GNU Lesser General Public License
     along with PHPRtfLite.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 /**
- * unit class for working with twips in rtf.
- * @version     1.1.0
+ * Class for displaying images supported by gd library in rtf documents.
+ * @version     1.2
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2010-2011 Steffen Zeidler
+ * @package     PHPRtfLite
+ * @subpackage  PHPRtfLite_Image
  */
-class PHPRtfLite_Unit
+class PHPRtfLite_Image_Gd extends PHPRtfLite_Image
 {
 
-    const UNIT_TWIPS        = 1;
-    const UNIT_CM           = 567;
-    const UNIT_INCH         = 1440;
-    const UNIT_POINT        = 14.988078;
-
-
     /**
+     * sets image type
      *
-     * @var float
+     * @param string $imageType
      */
-    private static $_unit = self::UNIT_CM;
-
-
-    /**
-     * sets global unit
-     *
-     * @param string $unit
-     */
-    public static function setGlobalUnit($unit)
+    protected function setImageType($imageType)
     {
-        self::$_unit = $unit;
-    }
-
-
-    /**
-     * gets unit in twips
-     *
-     * @param  float $value
-     * @return integer
-     */
-    public static function getUnitInTwips($value)
-    {
-        return round($value * self::$_unit);
-    }
-
-
-    /**
-     * gets points in twips
-     *
-     * @param  float $value
-     * @return integer
-     */
-    public static function getPointsInTwips($value)
-    {
-        return round($value * self::UNIT_POINT);
+        switch ($imageType) {
+            case self::TYPE_JPEG:
+                $this->_imageRtfType = '\jpegblip';
+                break;
+            default:
+                $this->_imageRtfType = '\\' . $imageType . 'blip';
+                break;
+        }
     }
 
 }

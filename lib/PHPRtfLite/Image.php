@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
     PHPRtfLite
     Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
     Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
@@ -18,103 +18,98 @@
 
     You should have received a copy of the GNU Lesser General Public License
     along with PHPRtfLite.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 /**
  * Class for displaying images in rtf documents.
- * @version     1.1.0
+ * @version     1.2
  * @author      Denis Slaveckij <info@phprtf.com>
  * @author      Steffen Zeidler <sigma_z@web.de>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
  * @package     PHPRtfLite
  */
-class PHPRtfLite_Image
+abstract class PHPRtfLite_Image
 {
 
     /**
+     * class constants for image type
+     */
+    const TYPE_JPEG = 'jpeg';
+    const TYPE_PNG  = 'png';
+    const TYPE_WMF  = 'wmf';
+
+    /**
+     * rtf document
      * @var PHPRtfLite
      */
     protected $_rtf;
-
     /**
+     * stream as php resource
+     * @var resource
+     */
+    protected $_stream;
+    /**
+     * par format
      * @var PHPRtfLite_ParFormat
      */
     protected $_parFormat;
 
     /**
-     * @var string
-     */
-    protected $_file;
-
-    /**
-     * @var float
-     */
-    protected $_defaultWidth;
-
-    /**
-     * @var float
-     */
-    protected $_defaultHeight;
-
-    /**
-     * @var float
-     */
-    protected $_height;
-
-    /**
-     * @var float
-     */
-    protected $_width;
-
-    /**
+     * rtf border
      * @var PHPRtfLite_Border
      */
     protected $_border;
 
-    
+    /**
+     * resize to width
+     * @var float
+     */
+    protected $_width;
+    /**
+     * resize to height
+     * @var float
+     */
+    protected $_height;
+    /**
+     * original image width
+     * @var float
+     */
+    protected $_imageWidth;
+    /**
+     * original image height
+     * @var integer
+     */
+    protected $_imageHeight;
+    /**
+     * image rtf type
+     * @var string
+     */
+    protected $_imageRtfType;
+
+
     /**
      * constructor
-     * 
-     * @param PHPRtfLite    $rtf
-     * @param string        $imageFile image file incl. path
-     * @param float         $width
-     * @param flaot         $height
+     *
+     * @param PHPRtfLite            $rtf
+     * @param resource              $stream
+     * @param float                 $width  optional
+     * @param float                 $height optional
      */
-    public function __construct(PHPRtfLite $rtf,
-                                $imageFile,
-                                PHPRtfLite_ParFormat $parFormat = null,
-                                $width = null,
-                                $height = null)
+    public function __construct(PHPRtfLite $rtf, $stream, $width = null, $height = null)
     {
-        $this->_rtf = $rtf;
-        $this->_parFormat = $parFormat;
-        if ($parFormat) {
-            $parFormat->setColorTable($this->_rtf->getColorTable());
-        }
-
-        if (file_exists($imageFile)) {
-            $this->_file = $imageFile;
-
-            list($this->_defaultWidth, $this->_defaultHeight) = getimagesize($imageFile);
-            
-            $this->_width = $width;
-            $this->_height = $height;
-        }
-        else {
-            $this->_defaultWidth = 20;
-            $this->_defaultHeight = 20;
-        }
+        $this->_rtf         = $rtf;
+        $this->_stream      = $stream;
+        $this->_width       = $width;
+        $this->_height      = $height;
     }
 
 
     /**
-     * checks, if image file is available or missing
-     *
-     * @return boolean
+     * destructor - closes stream
      */
-    public function isMissing()
+    public function __destruct()
     {
-        return $this->_file === null;
+        fclose($this->_stream);
     }
 
 
@@ -132,7 +127,7 @@ class PHPRtfLite_Image
 
     /**
      * gets paragraph format for image
-     * 
+     *
      * @return PHPRtfLite_ParFormat
      */
     public function getParFormat()
@@ -154,7 +149,7 @@ class PHPRtfLite_Image
 
     /**
      * gets image width
-     * 
+     *
      * @return float
      */
     public function getWidth()
@@ -176,7 +171,7 @@ class PHPRtfLite_Image
 
     /**
      * gets image height
-     * 
+     *
      * @return float
      */
     public function getHeight()
@@ -186,7 +181,7 @@ class PHPRtfLite_Image
 
 
     /**
-     * sets border of paragraph
+     * sets border
      *
      * @param PHPRtfLite_Border $border
      */
@@ -197,7 +192,7 @@ class PHPRtfLite_Image
 
 
     /**
-     * gets border of paragraph
+     * gets border
      *
      * @return PHPRtfLite_Border
      */
@@ -209,20 +204,23 @@ class PHPRtfLite_Image
 
     /**
      * gets rtf image width
-     * 
+     *
      * @return integer
      */
-    private function getImageWidth()
+    private function getImageRtfWidth()
     {
         if ($this->_width > 0) {
             return PHPRtfLite_Unit::getUnitInTwips($this->_width);
         }
-        else if ($this->_height > 0) {
-            $width = ($this->_defaultWidth / $this->_defaultHeight) * $this->_height;
+
+        $imageWidth = $this->_imageWidth ? $this->_imageWidth : 100;
+        if ($this->_height > 0) {
+            $imageHeight = $this->_imageHeight ? $this->_imageHeight : 100;
+            $width = ($imageWidth / $imageHeight) * $this->_height;
             return PHPRtfLite_Unit::getUnitInTwips($width);
         }
 
-        return PHPRtfLite_Unit::getPointsInTwips($this->_defaultWidth);
+        return PHPRtfLite_Unit::getPointsInTwips($imageWidth);
     }
 
 
@@ -231,111 +229,205 @@ class PHPRtfLite_Image
      *
      * @return integer
      */
-    private function getImageHeight()
+    private function getImageRtfHeight()
     {
         if ($this->_height > 0) {
             return PHPRtfLite_Unit::getUnitInTwips($this->_height);
         }
-        else if ($this->_width > 0) {
-            $height = ($this->_defaultHeight /$this->_defaultWidth) * $this->_width;
+
+        $imageHeight = $this->_imageHeight ? $this->_imageHeight : 100;
+        if ($this->_width > 0) {
+            $imageWidth = $this->_imageWidth ? $this->_imageWidth : 100;
+            $height = ($imageHeight /$imageWidth) * $this->_width;
             return PHPRtfLite_Unit::getUnitInTwips($height);
         }
 
-        return PHPRtfLite_Unit::getPointsInTwips($this->_defaultHeight);
+        return PHPRtfLite_Unit::getPointsInTwips($imageHeight);
     }
 
 
     /**
      * adds rtf image code to show that the file is missing
      */
-    private function addMissingFileToStream()
+    private static function getMissingImage()
     {
-        $stream = $this->_rtf->getStream();
-        $stream->write('89504e470d0a1a0a0000000d494844520000001400000014080200000002eb8a5a00000001735247');
-        $stream->write('4200aece1ce9000000097048597300000b1300000b1301009a9c180000000774494d4507d80c1a0a');
-        $stream->write('1a1a8835e86f0000001974455874436f6d6d656e74004372656174656420776974682047494d5057');
-        $stream->write('810e170000007d4944415438cbad93b10dc0200c049d17127364ff79523347ba74c809fe3782b8c4');
-        $stream->write('3e3d70705cb65ec5ccce7b856cd5b011ece056add53ccdcf606c0b9226f793877c5ff417f44a667c');
-        $stream->write('4806db1e794606f08717640c8fa3ec21fce4595861fea0ad687f487d0a1e333e198f94143cb424dd');
-        $stream->write('2a33189bd9f25cf437d4f500102731b5b67102460000000049454e44ae426082');
+        $string = 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAA'
+                . 'CxMBAJqcGAAAAAd0SU1FB9gMGgoaGog16G8AAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBX'
+                . 'gQ4XAAAAfUlEQVQ4y62TsQ3AIAwEnRcSc2T/eVIzR7p0yAn+N4K4xD49cHBctl7FzM57hWzVsBHs4Fat'
+                . '1TzNz2BsC5Im95OHfF/0F/RKZnxIBtseeUYG8IcXZAyPo+wh/ORZWGH+oK1of0h9Ch4zPhmPlBQ8tCTd'
+                . 'KjMYm9nyXPQ31PUAECcxtbZxAkYAAAAASUVORK5CYII=';
+
+        return $string;
     }
 
 
     /**
-     * gets file as hex encoded
+     * sets image original width
      *
-     * @return string hex code
+     * @param float $width
      */
-    private function addImageAsHexToStream()
+    protected function setImageWidth($width)
     {
-        // if file does not exist, show missing image
-        if ($this->_file === null) {
-            $this->addMissingFileToStream();
-        }
+        $this->_imageWidth = $width;
+    }
 
-        $fh = @fopen($this->_file, 'rb');
-        if (!$fh) {
-            $this->addMissingFileToStream();
-        }
-        else {
-            $stream = $this->_rtf->getStream();
+    /**
+     * sets image original height
+     *
+     * @param float $height
+     */
+    protected function setImageHeight($height)
+    {
+        $this->_imageHeight = $height;
+    }
 
-            while (!feof($fh)) {
-                $stringBuffer = fread($fh, 1024);
-                $stringHex = '';
-                for ($i = 0; $i < strlen($stringBuffer); $i++) {
-                    $hex = dechex(ord($stringBuffer[$i]));
-                    if (strlen($hex) == 1) {
-                        $hex = '0' . $hex;
-                    }
-                    $stringHex .= $hex;
+
+    /**
+     * creates rtf image from file
+     *
+     * @param   PHPRtfLite              $rtf
+     * @param   string                  $file
+     * @param   float                   $width  optional
+     * @param   float                   $height optional
+     * @return  PHPRtfLite_Image
+     */
+    public static function createFromFile(PHPRtfLite $rtf, $file, $width = null, $height = null)
+    {
+        if (file_exists($file) && is_readable($file)) {
+            $stream = fopen($file, 'rb');
+            $pathInfo = pathinfo($file);
+            $type = isset($pathInfo['extension']) ? strtolower($pathInfo['extension']) : 'jpeg';
+            $image = self::create($rtf, $stream, $type, $width, $height);
+
+            if ($type != self::TYPE_WMF) {
+                list($width, $height, $imageType) = getimagesize($file);
+                $imageType = image_type_to_extension($imageType, false);
+                $image->setImageWidth($width);
+                $image->setImageHeight($height);
+                if ($type != $imageType) {
+                    $image->setImageType($imageType);
                 }
-                $stream->write($stringHex);
             }
+            return $image;
+        }
 
-            fclose($fh);
+        return self::createMissingImage($rtf, $width, $height);
+    }
+
+
+    /**
+     * creates rtf image from string
+     *
+     * @param   PHPRtfLite              $rtf
+     * @param   string                  $string
+     * @param   string                  $type   (represented by class constants)
+     * @param   float                   $width  optional
+     * @param   float                   $height optional
+     * @return  PHPRtfLite_Image
+     */
+    public static function createFromString(PHPRtfLite $rtf, $string, $type, $width = null, $height = null)
+    {
+        $stream = fopen('data://text/plain;base64,' . base64_encode($string), 'rb');
+        $image = self::create($rtf, $stream, $type, $width, $height);
+        if ($type != self::TYPE_WMF) {
+            $imageResource = imagecreatefromstring($string);
+            $image->setImageWidth(imagesx($imageResource));
+            $image->setImageHeight(imagesy($imageResource));
+        }
+        return $image;
+    }
+
+
+    /**
+     * factory method
+     * creates rtf image from stream
+     *
+     * @param   PHPRtfLite              $rtf
+     * @param   resource                $stream
+     * @param   string                  $type   (represented by class constants)
+     * @param   float                   $width  optional
+     * @param   float                   $height optional
+     * @return  PHPRtfLite_Image
+     */
+    private static function create(PHPRtfLite $rtf, $stream, $type, $width, $height)
+    {
+        switch ($type) {
+            case self::TYPE_WMF:
+                return new PHPRtfLite_Image_Wmf($rtf, $stream, $width, $height);
+            default:
+                $image = new PHPRtfLite_Image_Gd($rtf, $stream, $width, $height);
+                $image->setImageType($type);
+                return $image;
         }
     }
 
 
     /**
-     * gets rtf code of image
+     * creates a missing image instance
      *
-     * @return string rtf code
+     * @param   PHPRtfLite  $rtf
+     * @param   float       $width
+     * @param   float       $height
+     * @return  PHPRtfLite_Image_Gd
+     */
+    private static function createMissingImage($rtf, $width, $height)
+    {
+        $stream = fopen('data://text/plain;base64,' . self::getMissingImage(), 'rb');
+        $image = new PHPRtfLite_Image_Gd($rtf, $stream, $width, $height);
+        $image->setImageType(self::TYPE_PNG);
+        return $image;
+    }
+
+
+    /**
+     * renders rtf image for rtf document
      */
     public function render()
     {
-        $stream = $this->_rtf->getStream();
+        $this->writeIntoRtfStream();
+    }
 
-        $stream->write('{\pict');
+
+    /**
+     * writes image into rtf stream
+     *
+     * @param integer $startFrom
+     */
+    protected function writeIntoRtfStream($startFrom = 0)
+    {
+        fseek($this->_stream, $startFrom);
+        $rtfImageType = $this->getImageTypeAsRtf();
+
+        $rtfStream = $this->_rtf->getStream();
+        $rtfStream->write('{\*\shppict {\pict');
 
         if ($this->_border) {
-            $stream->write($this->_border->getContent());
+            $rtfStream->write($this->_border->getContent());
         }
 
-        $stream->write('\picwgoal' . $this->getImageWidth());
-        $stream->write('\pichgoal' . $this->getImageHeight());
+        $rtfStream->write($rtfImageType . '\picscalex100\picscaley100');
+        $rtfStream->write('\picwgoal' . $this->getImageRtfWidth());
+        $rtfStream->write('\pichgoal' . $this->getImageRtfHeight());
+        $rtfStream->write(' ');
 
-        if ($this->_file) {
-            $pathInfo = pathinfo($this->_file);
-            $extension = isset($pathInfo['extension'])
-                         ? strtolower($pathInfo['extension'])
-                         : '';
-        }
-        else {
-            $extension = 'png';
+        while (!feof($this->_stream)) {
+            $stringBuffer = fread($this->_stream, 1024);
+            $stringHex = bin2hex($stringBuffer);
+            $rtfStream->write($stringHex);
         }
 
-        if ($extension == 'png') {
-            $stream->write('\pngblip ');
-        }
-        else {
-            $stream->write('\jpegblip ');
-        }
+        $rtfStream->write('}}');
+    }
 
-        $this->addImageAsHexToStream();
 
-        $stream->write('}');
+    /**
+     * gets image rtf type
+     *
+     * @return string
+     */
+    protected function getImageTypeAsRtf()
+    {
+        return $this->_imageRtfType;
     }
 
 }

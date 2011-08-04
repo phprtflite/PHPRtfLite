@@ -38,7 +38,7 @@ class PHPRtfLite_ImageTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('Source image file could not be found!');
             return;
         }
-        $image = new PHPRtfLite_Image($this->_rtf, $source);
+        $image = PHPRtfLite_Image::createFromFile($this->_rtf, $source);
         $image->setHeight(5);
         $image->setWidth(5);
         $image->render();
@@ -60,7 +60,7 @@ class PHPRtfLite_ImageTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('Source image file could not be found!');
             return;
         }
-        $image = new PHPRtfLite_Image($this->_rtf, $source);
+        $image = PHPRtfLite_Image::createFromFile($this->_rtf, $source);
         $image->setHeight(0.1);
         $image->setWidth(0.1);
         $image->render();
@@ -82,7 +82,7 @@ class PHPRtfLite_ImageTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('Source image file could not be found!');
             return;
         }
-        $image = new PHPRtfLite_Image($this->_rtf, $source);
+        $image = PHPRtfLite_Image::createFromFile($this->_rtf, $source);
         $image->render();
         $expected = '{\pict\picwgoal510\pichgoal510\jpegblip '
                   . self::getRtfThumbHexCode()
@@ -97,7 +97,7 @@ class PHPRtfLite_ImageTest extends PHPUnit_Framework_TestCase
      */
     public function testRenderMissingImageFile()
     {
-        $image = new PHPRtfLite_Image($this->_rtf, '');
+        $image = PHPRtfLite_Image::createFromFile($this->_rtf, '');
         $this->assertTrue($image->isMissing());
     }
 
