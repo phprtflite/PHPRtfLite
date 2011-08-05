@@ -37,7 +37,7 @@ class PHPRtfLite_Element
     /**
      * @var boolean
      */
-    protected $_isTextRtfCode       = false;
+    protected $_isRtfCode       = false;
     /**
      * @var boolean
      */
@@ -61,7 +61,7 @@ class PHPRtfLite_Element
      * @param PHPRtfLite_ParFormat  $parFormat
      */
     public function __construct(PHPRtfLite $rtf,
-                                $text = '',
+                                $text,
                                 PHPRtfLite_Font $font = null,
                                 PHPRtfLite_ParFormat $parFormat = null)
     {
@@ -96,6 +96,26 @@ class PHPRtfLite_Element
     public function setConvertTagsToRtf()
     {
         $this->_convertTagsToRtf = true;
+    }
+
+
+    /**
+     * sets rtf code
+     */
+    public function setIsRtfCode()
+    {
+        $this->_isRtfCode = true;
+    }
+
+
+    /**
+     * returns true, if text is rtf code
+     *
+     * @return boolean
+     */
+    public function isRtfCode()
+    {
+        return $this->_isRtfCode;
     }
 
 
@@ -184,18 +204,6 @@ class PHPRtfLite_Element
 
 
     /**
-     * sets rtf code directly for this element without extra converting
-     *
-     * @param string $text
-     */
-    public function writeRtfCode($text)
-    {
-        $this->_text = $text;
-        $this->_isTextRtfCode = true;
-    }
-
-
-    /**
      * gets opening token
      *
      * @return string
@@ -225,7 +233,7 @@ class PHPRtfLite_Element
         $stream = $this->_rtf->getWriter();
         $text = $this->_text;
 
-        if (!$this->_isTextRtfCode) {
+        if (!$this->_isRtfCode) {
             $charset = $this->_rtf->getCharset();
             $text = PHPRtfLite::quoteRtfCode($text);
             if ($this->_convertTagsToRtf) {

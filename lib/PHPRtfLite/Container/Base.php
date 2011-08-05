@@ -91,17 +91,35 @@ abstract class PHPRtfLite_Container_Base
 
 
     /**
-     * adds element with rtf code directly (no converting will be made by PHPRtfLite)
+     * adds element with rtf code directly
+     * (no converting will be made by PHPRtfLite)
      *
-     * @param   string                  $text
+     * @param   string                  $code
      * @param   PHPRtfLite_Font         $font
      * @param   PHPRtfLite_ParFormat    $font
      * @return  PHPRtfLite_Element
      */
-    public function writeRtfCode($text, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
+    public function writeRtfCode($code, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
     {
-        $element = new PHPRtfLite_Element($this->_rtf, '', $font, $parFormat);
-        $element->writeRtfCode($text);
+        $element = new PHPRtfLite_Element($this->_rtf, $code, $font, $parFormat);
+        $element->setIsRtfCode();
+        $this->_elements[] = $element;
+
+        return $element;
+    }
+
+
+    /**
+     * adds element with plain rtf code directly
+     * (no converting will be made by PHPRtfLite - even no opening and closing curly brackets)
+     *
+     * @param   string                  $code
+     * @return  PHPRtfLite_Element
+     */
+    public function writePlainRtfCode($code)
+    {
+        $element = new PHPRtfLite_Element_Plain($this->_rtf, $code);
+        $element->setIsRtfCode();
         $this->_elements[] = $element;
 
         return $element;
@@ -291,6 +309,11 @@ abstract class PHPRtfLite_Container_Base
         $lastKey = $this->countElements() - 1;
 
         foreach ($this->_elements as $key => $element) {
+            if ($element instanceof PHPRtfLite_Element_Plain) {
+                $element->render();
+                continue;
+            }
+
             if ($this instanceof PHPRtfLite_Table_Cell && !($element instanceof PHPRtfLite_Table)) {
                 // table cell initialization
                 $stream->write('\pard\intbl\itap' . $this->getTable()->getNestDepth() . "\r\n");
