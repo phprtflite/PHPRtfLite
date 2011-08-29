@@ -1221,10 +1221,26 @@ class PHPRtfLite
      * @param  string $text
      * @return string
      */
-    public static function quoteRtfCode($text)
+    public static function quoteRtfCode($text, $convertNewlines = true)
     {
         // escape backslashes
         $text = str_replace('\\', '\\\\', $text);
+        if ($convertNewlines) {
+            $text = self::convertNewlinesToRtfCode($text);
+        }
+
+        return $text;
+    }
+
+
+    /**
+     * convert new lines to rtf line breaks
+     *
+     * @param  string $text
+     * @return string
+     */
+    public static function convertNewlinesToRtfCode($text)
+    {
         // convert breaks into rtf break
         $text = str_replace(array("\r\n", "\n", "\r"), '\line ', $text);
 
@@ -1292,10 +1308,14 @@ class PHPRtfLite
         $paperHeight = $this->_paperHeight;
 
         // page properties
-        if ($this->_isLandscape && $paperWidth < $paperHeight) {
-            $paperWidth = $paperHeight;
-            $paperHeight = $paperWidth;
+        if ($this->_isLandscape) {
+            $this->_stream->write('\landscape ');
+            if ($paperWidth < $paperHeight) {
+                $paperWidth = $paperHeight;
+                $paperHeight = $paperWidth;
+            }
         }
+
         $this->_writer->write('\paperw' . PHPRtfLite_Unit::getUnitInTwips($paperWidth)  .' ');
         $this->_writer->write('\paperh' . PHPRtfLite_Unit::getUnitInTwips($paperHeight) . ' ');
 

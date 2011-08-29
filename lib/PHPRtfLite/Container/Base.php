@@ -258,6 +258,7 @@ abstract class PHPRtfLite_Container_Base
      * adds image to element container.
      *
      * @param string                $fileName   name of image file.
+     * @param string                $type       class constants of PHPRtfLite_Image: TYPE_JPEG, TYPE_PNG, TYPE_WMF
      * @param PHPRtfLite_ParFormat  $parFormat  paragraph format, ff null image will appear in the same paragraph.
      * @param float                 $width      if null image is displayed by it's height.
      * @param float                 $height     if null image is displayed by it's width.
@@ -265,7 +266,13 @@ abstract class PHPRtfLite_Container_Base
      *
      * @return PHPRtfLite_Image
      */
-    public function addImageFromString($string, $type, PHPRtfLite_ParFormat $parFormat = null, $width = null, $height = null)
+    public function addImageFromString(
+                        $string,
+                        $type,
+                        PHPRtfLite_ParFormat $parFormat = null,
+                        $width = null,
+                        $height = null
+                    )
     {
         $image = PHPRtfLite_Image::createFromString($this->_rtf, $string, $type, $width, $height);
         if ($parFormat) {
@@ -309,15 +316,15 @@ abstract class PHPRtfLite_Container_Base
         $lastKey = $this->countElements() - 1;
 
         foreach ($this->_elements as $key => $element) {
+            if ($this instanceof PHPRtfLite_Table_Cell && !($element instanceof PHPRtfLite_Table)) {
+                // table cell initialization
+                $stream->write('\intbl\itap' . $this->getTable()->getNestDepth() . "\r\n");
+                $stream->write($this->getCellAlignment());
+            }
+
             if ($element instanceof PHPRtfLite_Element_Plain) {
                 $element->render();
                 continue;
-            }
-
-            if ($this instanceof PHPRtfLite_Table_Cell && !($element instanceof PHPRtfLite_Table)) {
-                // table cell initialization
-                $stream->write('\pard\intbl\itap' . $this->getTable()->getNestDepth() . "\r\n");
-                $stream->write($this->getCellAlignment());
             }
 
             $parFormat = null;

@@ -85,7 +85,10 @@ abstract class PHPRtfLite_Image
      * @var string
      */
     protected $_imageRtfType;
-
+    /**
+     * flag, true if image file is missing
+     * @var type
+     */
     protected $_isMissing = false;
 
 
