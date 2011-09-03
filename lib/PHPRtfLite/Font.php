@@ -172,6 +172,39 @@ class PHPRtfLite_Font
 
 
     /**
+     * gets font size
+     *
+     * @return integer
+     */
+    public function getSize()
+    {
+        return $this->_size;
+    }
+
+
+    /**
+     * gets font color
+     *
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->_color;
+    }
+
+
+    /**
+     * gets background color
+     *
+     * @return string
+     */
+    public function getBackgroundColor()
+    {
+        return $this->_backgroundColor;
+    }
+
+
+    /**
      * sets text bold
      *
      * @param boolean $bold

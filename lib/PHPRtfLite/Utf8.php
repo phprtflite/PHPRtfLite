@@ -106,7 +106,7 @@ class PHPRtfLite_Utf8
         foreach ($unicode as $value) {
             if ($value != 65279) {
                 $entities .= $value > 127
-                             ? '\uc0\u' . $value
+                             ? '\uc0\u' . $value . ' '
                              : chr($value);
             }
         }

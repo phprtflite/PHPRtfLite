@@ -232,8 +232,14 @@ abstract class PHPRtfLite_List
                 $number++;
                 $listCharFontIndex  = $this->getListCharFontIndex();
                 $listCharacter      = $this->getListCharacter($number);
-                $listCharDefinition = '{\*\pn\pnlvlblt\pnf' . $listCharFontIndex
-                                    . '\pnindent0{\pntxtb ' . $listCharacter . '}}';
+                $listCharDefinition = '{\*\pn\pnlvlblt' . '\pnf' . $listCharFontIndex;
+                if ($this->_font) {
+                    $listCharDefinition .= '\pnfs' . ($this->_font->getSize() * 2);
+                    if (($color = $this->_font->getColor())) {
+                        $listCharDefinition .= '\pncf' . $this->_rtf->getColorTable()->getColorIndex($color);
+                    }
+                }
+                $listCharDefinition .= '\pnindent0{\pntxtb ' . $listCharacter . '}}';
 
                 $textIndent = $this->_listIndent + $this->_textIndent;
                 $stream->write('\nowidctlpar\fi-' . $this->_listIndent . '\li' . $textIndent . "\r\n");
