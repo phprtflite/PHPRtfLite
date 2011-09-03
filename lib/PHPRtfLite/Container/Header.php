@@ -162,7 +162,7 @@ class PHPRtfLite_Container_Header extends PHPRtfLite_Container_Base
         parent::render();
 
         $containerElements = $this->getElements();
-        if ($containerElements[count($containerElements)-1] instanceof PHPRtfLite_Element) {
+        if ($containerElements && $containerElements[count($containerElements)-1] instanceof PHPRtfLite_Element) {
         	$stream->write('\par');
         }
         $stream->write('}' . "\r\n");

@@ -679,12 +679,14 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
         // renders container elements
         parent::render();
 
-        if ($this->_table->isNestedTable()) {
-            $containerElements = $this->getElements();
-            $numOfContainerElements = count($containerElements);
+        $containerElements = $this->getElements();
+        $numOfContainerElements = count($containerElements);
 
+        if ($this->_table->isNestedTable()) {
             // if last container element is not a nested table, close cell
-            if (!($containerElements[$numOfContainerElements - 1] instanceof PHPRtfLite_Table_Nested)) {
+            if ($numOfContainerElements == 0
+                || !($containerElements[$numOfContainerElements - 1] instanceof PHPRtfLite_Table_Nested))
+            {
                 $stream->write('{\nestcell{\nonesttables\par}\pard}' . "\r\n");
 
                 // if last cell of row, close row
@@ -697,6 +699,11 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
             }
         }
         else {
+            if ($numOfContainerElements > 0
+                && $containerElements[$numOfContainerElements - 1] instanceof PHPRtfLite_Table_Nested)
+            {
+                $stream->write('\intbl\itap1\~');
+            }
             // closing tag for cell definition
             $stream->write('\cell\pard');
         }
