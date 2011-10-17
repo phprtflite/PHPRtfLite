@@ -384,6 +384,9 @@ abstract class PHPRtfLite_Container_Base
             else if ($element instanceof PHPRtfLite_Image) {
                 return ($isNextElementTable || $nextElement->getParFormat());
             }
+            else if ($nextElement instanceof PHPRtfLite_List) {
+                return true;
+            }
         }
 
         return false;

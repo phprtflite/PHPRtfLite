@@ -1311,8 +1311,9 @@ class PHPRtfLite
         if ($this->_isLandscape) {
             $this->_writer->write('\landscape ');
             if ($paperWidth < $paperHeight) {
-                $paperWidth = $paperHeight;
+                $tmp = $paperHeight;
                 $paperHeight = $paperWidth;
+                $paperWidth = $tmp;
             }
         }
 
