@@ -1242,8 +1242,9 @@ class PHPRtfLite
         if ($this->_isLandscape) {
             $this->_stream->write('\landscape ');
             if ($paperWidth < $paperHeight) {
-                $paperWidth = $paperHeight;
+                $tmp = $paperHeight;
                 $paperHeight = $paperWidth;
+                $paperWidth = $tmp;
             }
         }
         $this->_stream->write('\paperw' . PHPRtfLite_Unit::getUnitInTwips($paperWidth)  .' ');
