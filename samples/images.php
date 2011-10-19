@@ -62,6 +62,7 @@ $img = $cell->addImage($dir . '/sources/cats.jpg', null, 3, 5);
 $sect->writeText('<page/><b>Borders of images</b>', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 $table = $sect->addTable();
 $table->addRows(2, 4.5);
+$table->addRows(2, 6);
 $table->addColumnsList(array(7.5, 6.5));
 
 $table->writeToCell(1, 1, '<br> Sample borders', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
@@ -73,7 +74,7 @@ $img->setBorder($border);
 
 $table->writeToCell(2, 1, '<br> Borders with space', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
 $cell = $table->getCell(2, 2);
-$cell->writeText('<br>   ', new PHPRtfLite_Font(), new PHPRtfLite_ParFormat());
+
 $img = $cell->addImage($dir . '/sources/cats.jpg', null);
 
 $borderFormatBlue = new PHPRtfLite_Border_Format(2, '#0000ff', 'simple', 0.5);
@@ -85,7 +86,16 @@ $border->setBorderRight($borderFormatRed);
 $border->setBorderBottom($borderFormatBlue);
 $img->setBorder($border);
 
-$sect->writeRtfCode('\par ');
+$table->writeToCell(3, 1, '<br> Image centered by ParFormat', new PHPRtfLite_Font());
+$cell = $table->getCell(3, 2);
+$parFormatCenter = new PHPRtfLite_ParFormat(PHPRtfLite_ParFormat::TEXT_ALIGN_CENTER);
+$img = $cell->addImage($dir . '/sources/cats.jpg', $parFormatCenter);
+
+$table->writeToCell(4, 1, '<br> Image centered horizontal and vertically by cell', new PHPRtfLite_Font());
+$cell = $table->getCell(4, 2);
+$cell->setTextAlignment(PHPRtfLite_Table_Cell::TEXT_ALIGN_CENTER);
+$cell->setVerticalAlignment(PHPRtfLite_Table_Cell::VERTICAL_ALIGN_CENTER);
+$img = $cell->addImage($dir . '/sources/cats.jpg');
 
 $sect->writeText('<b>Images in paragraph</b><br><br>', new PHPRtfLite_Font(), $parGreyLeft);
 $img = $sect->addImage($dir . '/sources/html.png', $parGreyCenter);
