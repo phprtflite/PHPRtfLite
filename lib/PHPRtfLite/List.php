@@ -222,7 +222,7 @@ abstract class PHPRtfLite_List
         foreach ($this->_items as $item) {
             // item is a list
             if ($item instanceof PHPRtfLite_List) {
-                if ($item instanceof PHPRtfLite_List_Numbering) {
+                if ($this instanceof PHPRtfLite_List_Numbering) {
                     $item->setPrefix($this->_prefix . $this->getNumber($number) . $this->_separator);
                     $item->setSuffix($this->_suffix);
                 }

@@ -67,6 +67,17 @@ abstract class PHPRtfLite_Container extends PHPRtfLite_Container_Base
 
 
     /**
+     * adds list (enumeration/numbering)
+     *
+     * @param PHPRtfLite_List $list
+     */
+    public function addList(PHPRtfLite_List $list)
+    {
+        $this->_elements[] = $list;
+    }
+
+
+    /**
      * adds enumeration
      *
      * @param PHPRtfLite_List_Enumeration $enum
