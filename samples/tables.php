@@ -67,4 +67,4 @@ $cell->setPaddingBottom(1);
 
 
 // save rtf document
-$rtf->save($dir . '/generated/tables.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

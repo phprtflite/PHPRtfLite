@@ -11,4 +11,4 @@ $sect = $rtf->addSection();
 $sect->writeText('<i>Hello <b>world</b></i>.', new PHPRtfLite_Font(12), new PHPRtfLite_ParFormat(PHPRtfLite_ParFormat::TEXT_ALIGN_CENTER));
 
 // save rtf document
-$rtf->save($dir . '/generated/hello_world.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

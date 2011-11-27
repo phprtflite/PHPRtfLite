@@ -77,6 +77,9 @@ class PHPRtfLite_Footnote
     const NUMTYPE_CHINESE_ZODIAC_2  = 19;
     const NUMTYPE_CHINESE_ZODIAC_3  = 20;
 
+    const TYPE_SUPER    = 'super';
+    const TYPE_SUB      = 'sub';
+    const TYPE_NORMAL   = 'normal';
 
     /**
      * footnote/endnote text
@@ -101,6 +104,12 @@ class PHPRtfLite_Footnote
      * @var PHPRtfLite
      */
     protected $_rtf;
+
+    /**
+     * type setting type (superscript/subscript/normal)
+     * @var string
+     */
+    protected $_typeSettingType = self::TYPE_SUPER;
 
     /**
      * default font
@@ -210,6 +219,12 @@ class PHPRtfLite_Footnote
     }
 
 
+    public function setTypeSettingType($type)
+    {
+        $this->_typeSettingType = $type;
+    }
+
+
     /**
      * gets type as rtf code
      *
@@ -228,9 +243,15 @@ class PHPRtfLite_Footnote
     {
         $stream = $this->_rtf->getWriter();
 
-        $stream->write('\chftn '
-                    . '{' . $this->getTypeAsRtfCode()
-                    . '\pard\plain \lin283\fi-283 ');
+        $typeSetting = $this->_typeSettingType != self::TYPE_NORMAL
+                ? '\\' . $this->_typeSettingType
+                : '';
+
+        $stream->write(
+                '{' . $typeSetting . '\chftn}'
+                . '{' . $this->getTypeAsRtfCode()
+                . '\pard\plain\lin283\fi-283 '
+        );
 
         if ($this->_parFormat) {
             $stream->write($this->_parFormat->getContent());

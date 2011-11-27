@@ -58,4 +58,4 @@ $textfield->setDefaultValue('Lorem ipsum.');
 
 
 // save rtf document
-$rtf->save($dir . '/generated/formfields.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

@@ -78,4 +78,4 @@ BackColor: #ffcc99
 Border: red', new PHPRtfLite_Font(8, 'Verdana'), $par);
 
 // save rtf document
-$rtf->save($dir . '/generated/paragraphs_in_tables.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

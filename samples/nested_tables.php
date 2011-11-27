@@ -47,4 +47,4 @@ $nestedTable->writeToCell(2, 1, 'nested cell');
 $table->writeToCell(1, 2, 'default cell II');
 
 // save rtf document
-$rtf->save($dir . '/generated/nested_tables.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

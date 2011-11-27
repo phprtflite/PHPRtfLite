@@ -99,4 +99,4 @@ $sect->writeText('" ."', new PHPRtfLite_Font(11, 'Courier New', '#AA0000'), null
 $sect->writeText(';', new PHPRtfLite_Font(11, 'Courier New', '#000000'), null);
 
 // save rtf document
-$rtf->save($dir . '/generated/paragraphs_fonts.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

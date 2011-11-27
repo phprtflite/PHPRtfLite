@@ -113,4 +113,4 @@ $sect->setColumnWidths(array(3, 3, 8));
 writeSectionText($sect, $arial14, $times12, $text, $text2, $text3);
 
 // save rtf document
-$rtf->save($dir . '/generated/document_sections.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

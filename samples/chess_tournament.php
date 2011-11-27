@@ -170,4 +170,4 @@ $table->writeToCell(2, 10, '2-st place', $font1, null);
 $table->writeToCell(3, 10, '3-d place', $font1, null);
 
 // save rtf document
-$rtf->save($dir . '/generated/chess_tournament.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

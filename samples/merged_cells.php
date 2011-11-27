@@ -28,4 +28,4 @@ $border = PHPRtfLite_Border::create($rtf, 1, '#00ff00');
 $table->setBorderForCellRange($border, 3, 3, 5, 5);
 
 // save rtf document
-$rtf->save($dir . '/generated/merged_cells.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

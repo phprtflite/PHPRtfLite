@@ -1183,7 +1183,7 @@ class PHPRtfLite
         $part = '{\info'."\r\n";
 
         foreach ($this->_properties as $key => $value) {
-            $value = PHPRtfLite_Utf8::getUnicodeEntities($value);
+            $value = PHPRtfLite_Utf8::getUnicodeEntities($value, $this->_charset);
             $part .= '{\\' . $key . ' ' . $value . '}'."\r\n";
         }
 

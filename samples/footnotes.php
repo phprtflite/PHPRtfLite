@@ -60,4 +60,4 @@ $sect->writeText($sectionText, $font);
 $sect->addFootnote('This is a footnote');
 
 // save rtf document
-$rtf->save($dir . '/generated/footnotes.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

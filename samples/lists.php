@@ -43,4 +43,4 @@ $numList->addItem('foobar');
 $sect->addNumbering($numList);
 
 // save rtf document
-$rtf->save($dir . '/generated/lists.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

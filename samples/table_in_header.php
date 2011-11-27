@@ -40,4 +40,4 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eleifend sem da
 Sed ut arcu metus. Cras lorem dolor, pharetra ut congue vel, pellentesque ac arcu. Praesent non lectus nulla. Nam mollis velit a dui lobortis tincidunt. Duis sed ipsum elit. Pellentesque urna risus, commodo in fringilla sit amet, euismod sit amet lectus. Nulla purus elit, porttitor ac viverra nec, consectetur at arcu. Pellentesque eget magna eget justo euismod mattis ut nec odio. Proin gravida est eu augue ullamcorper eu mollis orci convallis. Curabitur adipiscing lacus vitae ante accumsan ut ornare elit ultricies. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.');
 
 // save rtf document
-$rtf->save($dir . '/generated/table_in_header.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

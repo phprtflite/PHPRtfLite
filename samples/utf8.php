@@ -19,4 +19,4 @@ $sect = $rtf->addSection();
 $sect->writeText(file_get_contents($dir . '/sources/utf8.txt'), $times12, null);
 
 // save rft document
-$rtf->save($dir . '/generated/utf8.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

@@ -102,4 +102,4 @@ $img = $sect->addImage($dir . '/sources/html.png', $parGreyCenter);
 $img->setWidth(1.5);
 
 // save rtf document
-$rtf->save($dir . '/generated/images.rtf');
+$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');

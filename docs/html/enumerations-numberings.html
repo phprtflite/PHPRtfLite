@@ -69,12 +69,12 @@
 
 <span class="nv">$section</span> <span class="o">=</span> <span class="nv">$rtf</span><span class="o">-&gt;</span><span class="na">addSection</span><span class="p">();</span>
 <span class="c1">// add enumeration to a section</span>
-<span class="nv">$section</span><span class="o">-&gt;</span><span class="na">addEnumeration</span><span class="p">(</span><span class="nv">$enum</span><span class="p">);</span>
+<span class="nv">$section</span><span class="o">-&gt;</span><span class="na">addList</span><span class="p">(</span><span class="nv">$enum</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>For enumerations the following types are supported:</p>
 <ul class="simple">
-<li>TYPE_BULLET   uses bullets as enumeration characters</li>
+<li>TYPE_BULLET   uses bullets as enumeration characters (default)</li>
 <li>TYPE_ARROW    uses arrows as enumeration characters</li>
 <li>TYPE_CIRCLE   uses circles as enumeration characters</li>
 <li>TYPE_SQUARE   uses squares as enumeration characters</li>
@@ -103,16 +103,16 @@
 
 <span class="nv">$section</span> <span class="o">=</span> <span class="nv">$rtf</span><span class="o">-&gt;</span><span class="na">addSection</span><span class="p">();</span>
 <span class="c1">// add numbering to a section</span>
-<span class="nv">$section</span><span class="o">-&gt;</span><span class="na">addNumbering</span><span class="p">(</span><span class="nv">$numList</span><span class="p">);</span>
+<span class="nv">$section</span><span class="o">-&gt;</span><span class="na">addList</span><span class="p">(</span><span class="nv">$numList</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>For numberings the following types are supported:</p>
 <ul class="simple">
+<li>TYPE_ARABIC_NUM   counting in arabic numbers (default)</li>
 <li>TYPE_ALPHA_UPPER  counting in alphanumeric characters in upper case</li>
 <li>TYPE_ALPHA_LOWER  counting in alphanumeric characters in lower case</li>
 <li>TYPE_ROMAN_UPPER  counting in roman characters in upper case</li>
 <li>TYPE_ROMAN_LOWER  counting in roman characters in lower case</li>
-<li>TYPE_ARABIC_NUM   counting in arabic numbers</li>
 </ul>
 <p>Arabic numbering is the default type.</p>
 </div>
