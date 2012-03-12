@@ -1,8 +1,8 @@
 <?php
 /*
     PHPRtfLite
-    Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010-2011s Steffen Zeidler <sigma_z@web.de>
+    Copyright 2007-2008 Denis Slaveckij <sinedas@gmail.com>
+    Copyright 2010-2012s Steffen Zeidler <sigma_z@sigma-scripts.de>
 
     This file is part of PHPRtfLite.
 
@@ -23,9 +23,9 @@
 /**
  * UTF8 class with static functions that converts utf8 characters into rtf utf8 entities.
  * @version     1.2
- * @author      Denis Slaveckij <info@phprtf.com>
- * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2007-2008 Denis Slaveckij, 2010-2011 Steffen Zeidler
+ * @author      Denis Slaveckij <sinedas@gmail.com>
+ * @author      Steffen Zeidler <sigma_z@sigma-scripts.de>
+ * @copyright   2007-2008 Denis Slaveckij, 2010-2012 Steffen Zeidler
  * @package     PHPRtfLite
  */
 class PHPRtfLite_Utf8

@@ -1,7 +1,7 @@
 <?php
 /*
     PHPRtfLite
-    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2012 Steffen Zeidler <sigma_z@sigma-scripts.de>
 
     This file is part of PHPRtfLite.
 
@@ -22,8 +22,8 @@
 /**
  * unit class for working with twips in rtf.
  * @version     1.2
- * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2010-2011 Steffen Zeidler
+ * @author      Steffen Zeidler <sigma_z@sigma-scripts.de>
+ * @copyright   2010-2012 Steffen Zeidler
  */
 class PHPRtfLite_Unit
 {

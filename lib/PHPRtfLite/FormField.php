@@ -1,7 +1,7 @@
 <?php
 /*
     PHPRtfLite
-    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2010-2012 Steffen Zeidler <sigma_z@sigma-scripts.de>
 
     This file is part of PHPRtfLite.
 
@@ -22,8 +22,8 @@
 /**
  * abstract class for form fields in rtf documents.
  * @version     1.2
- * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2010-2011 Steffen Zeidler
+ * @author      Steffen Zeidler <sigma_z@sigma-scripts.de>
+ * @copyright   2010-2012 Steffen Zeidler
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_FormField
  */

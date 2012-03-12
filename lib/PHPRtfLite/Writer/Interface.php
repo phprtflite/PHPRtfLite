@@ -1,8 +1,8 @@
 <?php
 /*
     PHPRtfLite
-    Copyright 2007-2008 Denis Slaveckij <info@phprtf.com>
-    Copyright 2010-2011 Steffen Zeidler <sigma_z@web.de>
+    Copyright 2007-2008 Denis Slaveckij <sinedas@gmail.com>
+    Copyright 2010-2012 Steffen Zeidler <sigma_z@sigma-scripts.de>
 
     This file is part of PHPRtfLite.
 
@@ -24,8 +24,8 @@
  * Interface for writing the rtf output.
  * @since       1.2
  * @version     1.2
- * @author      Steffen Zeidler <sigma_z@web.de>
- * @copyright   2010-2011 Steffen Zeidler
+ * @author      Steffen Zeidler <sigma_z@sigma-scripts.de>
+ * @copyright   2010-2012 Steffen Zeidler
  * @package     PHPRtfLite
  */
 interface PHPRtfLite_Writer_Interface
