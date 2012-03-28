@@ -30,10 +30,10 @@
 class PHPRtfLite
 {
 
-    const VERSION                   = '1.1.1';
+    const VERSION                   = '1.3.0';
 
-    const SPACE_IN_POINTS           = 20;
-    const SPACE_IN_LINES            = 240;
+    const SPACE_IN_POINTS           = 20;   // used for twips conversion
+    const SPACE_IN_LINES            = 240;  // used for twips conversion
 
     /**
      * constants defining view modes
@@ -130,6 +130,12 @@ class PHPRtfLite
      * @var PHPRtfLite_DocHead_ColorTable
      */
     protected $_colorTable;
+
+    /**
+     * default font
+     * @var PHPRtfLite_Font
+     */
+    protected $_defaultFont;
 
     /**
      * rtf properties
@@ -286,7 +292,7 @@ class PHPRtfLite
     /**
      * sets document information properties
      *
-     * @param string $property Property of document. Possible properties: <br>
+     * @param string $name Property of document. Possible properties: <br>
      *   'title' => title of the document (value string)<br>
      *   'subject' => subject of the document (value string)<br>
      *   'author' => author of the document (value string)<br>
@@ -468,6 +474,8 @@ class PHPRtfLite
 
     /**
      * sets restart endnote number on each page
+     *
+     * @return bool
      */
     public function isRestartFootnoteNumberEachPage()
     {
@@ -754,7 +762,7 @@ class PHPRtfLite
     /**
      * sets the beginning page number
      *
-     * @param integer $startPage Beginning page number (if not defined, Word uses 1)
+     * @param integer $pageNumber Beginning page number (if not defined, Word uses 1)
      */
     public function setPageNumberStart($pageNumber)
     {
@@ -1063,6 +1071,29 @@ class PHPRtfLite
 
 
     /**
+     * sets default font
+     *
+     * @param PHPRtfLite_Font $font
+     */
+    public function setDefaultFont(PHPRtfLite_Font $font)
+    {
+        $this->_defaultFont = $font;
+        $this->registerFont($font);
+    }
+
+
+    /**
+     * gets default font
+     *
+     * @return PHPRtfLite_Font
+     */
+    public function getDefaultFont()
+    {
+        return $this->_defaultFont;
+    }
+
+
+    /**
      * registers the par format in color table
      *
      * @param PHPRtfLite_ParFormat $parFormat
@@ -1083,22 +1114,6 @@ class PHPRtfLite
         $this->createWriter();
         $this->render();
         return $this->_writer->getContent();
-        /*
-        $file = sys_get_temp_dir() . '/' . md5(microtime(true));
-        $this->save($file);
-        $content = '';
-
-        $fh = fopen($file, 'rb');
-        if (!$fh) {
-            throw new PHPRtfLite_Exception('Could not send file to browser. File could not read: ' . $file);
-        }
-        while (!feof($fh)) {
-            $content .= fread($fh, 1024);
-        }
-        fclose($fh);
-
-        return $content;
-         */
     }
 
 
@@ -1218,7 +1233,8 @@ class PHPRtfLite
     /**
      * quotes rtf code
      *
-     * @param  string $text
+     * @param  string   $text
+     * @param  boolean  $convertNewlines
      * @return string
      */
     public static function quoteRtfCode($text, $convertNewlines = true)
@@ -1298,7 +1314,16 @@ class PHPRtfLite
     protected function render()
     {
         $this->_writer->open();
-        $this->_writer->write('{\rtf\ansi\deff0' . "\r\n");
+
+        if ($this->_defaultFont) {
+            $defaultFontIndex = $this->getFontTable()->getFontIndex($this->_defaultFont->getFontFamily());
+        }
+        else {
+            $defaultFontIndex = 0;
+        }
+
+        $this->_writer->write('{\rtf\ansi\deff' . $defaultFontIndex . "\r\n");
+
         $this->_writer->write($this->getFontTable()->getContent());
         $this->_writer->write($this->getColorTable()->getContent());
 
@@ -1360,7 +1385,7 @@ class PHPRtfLite
         // page numbering start
         $this->_writer->write('\pgnstart' . $this->_pageNumberStart);
 
-        //headers and footers properties
+        // headers and footers properties
         if ($this->_useOddEvenDifferent) {
             $this->_writer->write('\facingp ');
         }
@@ -1371,7 +1396,12 @@ class PHPRtfLite
         // document header definition for footnotes and endnotes
         $this->_writer->write($this->getNoteDocHead()->getContent());
 
-        //headers and footers if there are no sections
+        // default font
+        if ($this->_defaultFont) {
+            $this->_writer->write($this->_defaultFont->getContent());
+        }
+
+        // headers and footers if there are no sections
         if (count($this->_sections) == 0) {
             foreach ($this->_headers as $header) {
                 $header->render();
@@ -1382,7 +1412,7 @@ class PHPRtfLite
             }
         }
 
-        //sections
+        // sections
         foreach ($this->_sections as $key => $section) {
             if ($key != 0) {
                 $this->_writer->write('\sect\sectd ');

@@ -219,7 +219,7 @@ class PHPRtfLite_ParFormat
     /**
      * sets the space before paragraph
      *
-     * @param   integer $spaceBefore space before
+     * @param   float $spaceBefore space before
      */
     public function setSpaceBefore($spaceBefore)
     {
@@ -263,7 +263,7 @@ class PHPRtfLite_ParFormat
     /**
      * sets line space
      *
-     * @param   integer     $spaceBetweenLines  space between lines
+     * @param   float     $spaceBetweenLines  space between lines
      */
     public function setSpaceBetweenLines($spaceBetweenLines)
     {

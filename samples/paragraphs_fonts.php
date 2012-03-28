@@ -44,8 +44,8 @@ $sect->writeText('Paragraphs, fonts and other', new PHPRtfLite_Font(14, 'Arial')
 $sect->addEmptyParagraph($fontSmall, $parBlack);
 $sect->writeText('Various fonts', $fontHead, $parHead);
 
-$sect->writeText('Times new Roman, 9pt, Red', new PHPRtfLite_Font(9, 'Times New Roman', '#ff0000'), $parSimple);
-$sect->writeText('Times new Roman, 10pt, Red, Pattern Yellow', new PHPRtfLite_Font(10, 'Times New Roman', '#ff0000', '#ffff00'), $parSimple);
+$sect->writeText('Times New Roman, 9pt, Red', new PHPRtfLite_Font(9, 'Times New Roman', '#ff0000'), $parSimple);
+$sect->writeText('Times New Roman, 10pt, Red, Pattern Yellow', new PHPRtfLite_Font(10, 'Times New Roman', '#ff0000', '#ffff00'), $parSimple);
 $sect->writeText('Tahoma, 10pt, Blue', new PHPRtfLite_Font(10, 'Tahoma', '#0000ff'), $parSimple);
 $sect->writeText('Verdana, 8pt, Green', new PHPRtfLite_Font(8, 'Verdana', '#00cc00'), $parSimple);
 

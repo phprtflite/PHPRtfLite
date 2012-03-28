@@ -128,6 +128,11 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
      */
     protected $_footers = array();
 
+    /**
+     * @var PHPRtfLite_Font
+     */
+    protected $_font;
+
 
     /**
      * sets the paper width of pages in section.
@@ -572,6 +577,25 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
 
     /**
+     * @param PHPRtfLite_Font $font
+     */
+    public function setFont(PHPRtfLite_Font $font)
+    {
+        $this->_font = $font;
+        $this->_rtf->registerFont($font);
+    }
+
+
+    /**
+     * @return PHPRtfLite_Font
+     */
+    public function getFont()
+    {
+        return $this->_font;
+    }
+
+
+    /**
      * renders rtf code of section
      */
     public function render()
@@ -670,6 +694,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
         if ($this->_useMirrorMargins) {
             $stream->write('\margmirsxn ');
+        }
+
+        if ($this->_font) {
+            $stream->write($this->_font->getContent());
         }
 
         $stream->write("\r\n");

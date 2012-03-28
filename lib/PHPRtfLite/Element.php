@@ -120,6 +120,17 @@ class PHPRtfLite_Element
 
 
     /**
+     * gets font
+     *
+     * @return PHPRtfLite_Font
+     */
+    public function getFont()
+    {
+        return $this->_font;
+    }
+
+
+    /**
      * gets par format
      *
      * @return PHPRtfLite_ParFormat
@@ -134,6 +145,7 @@ class PHPRtfLite_Element
      * converts text tags into rtf code
      *
      * @param  string $text
+     * @param  string $charset
      * @return string
      */
     public static function convertTagsToRtf($text, $charset)

@@ -257,7 +257,7 @@ abstract class PHPRtfLite_Container_Base
     /**
      * adds image to element container.
      *
-     * @param string                $fileName   name of image file.
+     * @param string                $string     name of image file.
      * @param string                $type       class constants of PHPRtfLite_Image: TYPE_JPEG, TYPE_PNG, TYPE_WMF
      * @param PHPRtfLite_ParFormat  $parFormat  paragraph format, ff null image will appear in the same paragraph.
      * @param float                 $width      if null image is displayed by it's height.
@@ -347,7 +347,7 @@ abstract class PHPRtfLite_Container_Base
 
             $element->render();
 
-            if ($this->needToAddParagraph($key)) {
+            if ($this->needToAddParagraphEnd($key)) {
                 $stream->write('\par ');
             }
 
@@ -368,7 +368,7 @@ abstract class PHPRtfLite_Container_Base
      * @param   integer $key
      * @return  boolean
      */
-    private function needToAddParagraph($key)
+    private function needToAddParagraphEnd($key)
     {
         if (isset($this->_elements[$key + 1])) {
             $nextElement = $this->_elements[$key + 1];

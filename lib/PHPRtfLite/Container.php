@@ -91,7 +91,7 @@ abstract class PHPRtfLite_Container extends PHPRtfLite_Container_Base
     /**
      * adds numbering
      *
-     * @param PHPRtfLite_List_Numbering $enum
+     * @param PHPRtfLite_List_Numbering $numList
      */
     public function addNumbering(PHPRtfLite_List_Numbering $numList)
     {

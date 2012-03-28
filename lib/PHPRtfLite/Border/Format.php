@@ -71,7 +71,7 @@ class PHPRtfLite_Border_Format
     /**
      * constructor
      *
-     * @param   integer     $size   size of border
+     * @param   float       $size   size of border
      * @param   string      $color  color of border (example '#ff0000' or '#f00')
      * @param   string      $type   represented by class constants PHPRtfLite_Border_Format::TYPE_*<br>
      *   Possible values:<br>
@@ -81,9 +81,9 @@ class PHPRtfLite_Border_Format
      *     TYPE_DOTDASH:    dotdash<br>
      * @param   float       $space  space between borders and the paragraph
      */
-    public function __construct($size = 0, $color = null, $type = null, $space = 0)
+    public function __construct($size = 0.0, $color = null, $type = null, $space = 0.0)
     {
-        $this->_size    = $size * PHPRtfLite::SPACE_IN_POINTS;
+        $this->_size    = round($size * PHPRtfLite::SPACE_IN_POINTS); // convert points to twips
         $this->_type    = $type;
         $this->_color   = $color;
         $this->_space   = PHPRtfLite_Unit::getUnitInTwips($space);
@@ -136,7 +136,7 @@ class PHPRtfLite_Border_Format
 
 
     /**
-     * gets size
+     * gets size in twips
      *
      * @return integer
      */
