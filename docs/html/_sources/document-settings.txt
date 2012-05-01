@@ -71,8 +71,8 @@ The paper width and height can be set for sections, too, which will overwrite th
 
     <?php
     $rtf = new PHPRtfLite();
-    $rtf->setPageWidth(14);  // in cm
-    $rtf->setPageHeight(25); // in cm
+    $rtf->setPaperWidth(14);  // in cm
+    $rtf->setPaperHeight(25); // in cm
 
     
 Units in RTF
