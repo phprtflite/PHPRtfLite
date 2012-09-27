@@ -55,19 +55,19 @@ class PHPRtfLite
 
     /**
      * rtf sections
-     * @var array
+     * @var PHPRtfLite_Container_Section[]
      */
     protected $_sections    = array();
 
     /**
      * rtf headers
-     * @var array
+     * @var PHPRtfLite_Container_Header[]
      */
     protected $_headers     = array();
 
     /**
      * rtf footers
-     * @var array
+     * @var PHPRtfLite_Container_Footer[]
      */
     protected $_footers     = array();
 
@@ -144,6 +144,16 @@ class PHPRtfLite
     protected $_properties      = array();
 
     /**
+     * @var bool
+     */
+    protected $_borderSurroundsHeader = false;
+
+    /**
+     * @var bool
+     */
+    protected $_borderSurroundsFooter = false;
+
+    /**
      * default tab width
      * @var float
      */
@@ -217,7 +227,7 @@ class PHPRtfLite
 
     /**
      * output stream
-     * @var PHPRtfLite_OutputStream
+     * @var PHPRtfLite_Writer_Interface
      */
     private $_writer;
 
@@ -910,6 +920,52 @@ class PHPRtfLite
 
 
     /**
+     * sets border surrounds header
+     *
+     * @param bool $borderSurroundsHeader
+     * @return PHPRtfLite
+     */
+    public function setBorderSurroundsHeader($borderSurroundsHeader = true)
+    {
+        $this->_borderSurroundsHeader = $borderSurroundsHeader;
+        return $this;
+    }
+
+
+    /**
+     * checks, if border surrounds header
+     *
+     * @return bool
+     */
+    public function borderSurroundsHeader()
+    {
+        return $this->_borderSurroundsHeader;
+    }
+
+
+    /**
+     * @param bool $borderSurroundsFooter
+     * @return PHPRtfLite
+     */
+    public function setBorderSurroundsFooter($borderSurroundsFooter = true)
+    {
+        $this->_borderSurroundsFooter = $borderSurroundsFooter;
+        return $this;
+    }
+
+
+    /**
+     * checks, if border surrounds footer
+     *
+     * @return bool
+     */
+    public function borderSurroundsFooter()
+    {
+        return $this->_borderSurroundsFooter;
+    }
+
+
+    /**
      * Sets borders to rtf document. Sections may override this border.
      *
      * @param PHPRtfLite_Border_Format  $borderFormat
@@ -1120,17 +1176,12 @@ class PHPRtfLite
     /**
      * saves rtf document to file
      *
-     * @param string Name of file
+     * @param string $file Name of file
      */
     public function save($file)
     {
         $this->createWriter($file);
         $this->render();
-        /*
-        $this->_stream->open($file);
-        $this->render();
-        $this->_stream->close();
-         */
     }
 
 
@@ -1147,11 +1198,6 @@ class PHPRtfLite
             $filename .= '.rtf';
         }
 
-        /*
-        $file = sys_get_temp_dir() . '/' . $filename;
-        $this->save($file);
-         */
-
         if (false !== strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 5.5')) {
             header('Content-Disposition: filename="' . $filename . '"');
         }
@@ -1166,25 +1212,6 @@ class PHPRtfLite
         $this->createWriter();
         $this->render();
         echo $this->_writer->getContent();
-        //$this->printTempFileContent($file);
-    }
-
-
-    /**
-     * prints content of the temporary stream file
-     *
-     * @param string $file
-     */
-    private function printTempFileContent($file)
-    {
-        $fh = fopen($file, 'rb');
-        if (!$fh) {
-            throw new PHPRtfLite_Exception('Could not send file to browser. File could not be read: ' . $file);
-        }
-        while (!feof($fh)) {
-            echo fread($fh, 1024);
-        }
-        fclose($fh);
     }
 
 
@@ -1272,7 +1299,7 @@ class PHPRtfLite
     private function createWriter($file = null)
     {
         if ($file || $this->_useTemporaryFile) {
-            if (!($this->_writer instanceof PHPRtfLite_StreamOutput_String)) {
+            if (!($this->_writer instanceof PHPRtfLite_StreamOutput)) {
                 $this->_writer = new PHPRtfLite_StreamOutput();
             }
             if (is_null($file)) {
@@ -1373,13 +1400,6 @@ class PHPRtfLite
 
         if (null !== $this->_zoomLevel) {
             $this->_writer->write('\viewscale' . $this->_zoomLevel . ' ');
-        }
-
-        if (isset($this->_sections[0]) && $this->_sections[0]->getBorder()) {
-            $this->_writer->write($this->_sections[0]->getBorder()->getContent('\pg'));
-        }
-        elseif ($this->_border) {
-            $this->_writer->write($this->_border->getContent('\pg'));
         }
 
         // page numbering start

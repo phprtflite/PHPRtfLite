@@ -178,9 +178,9 @@ class PHPRtfLite_Border_Format
      */
     public function getContent()
     {
-        $content = $this->getTypeAsRtfCode()
-                 . '\brdrw' . $this->_size
-                 . '\brsp' . $this->_space;
+        $content = ($this->_size > 0 ? $this->getTypeAsRtfCode() : '')
+            . '\brdrw' . $this->_size
+            . '\brsp' . $this->_space;
 
         if ($this->_color && $this->_colorTable) {
             $colorIndex = $this->_colorTable->getColorIndex($this->_color);

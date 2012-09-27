@@ -118,13 +118,13 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
     /**
      * rtf headers
-     * @var array
+     * @var PHPRtfLite_Container_Header[]
      */
     protected $_headers = array();
 
     /**
      * rtf footers
-     * @var array
+     * @var PHPRtfLite_Container_Footer[]
      */
     protected $_footers = array();
 
@@ -132,6 +132,16 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
      * @var PHPRtfLite_Font
      */
     protected $_font;
+
+    /**
+     * @var bool
+     */
+    protected $_borderSurroundsHeader = false;
+
+    /**
+     * @var bool
+     */
+    protected $_borderSurroundsFooter = false;
 
 
     /**
@@ -596,11 +606,57 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
 
     /**
+     * sets border surrounds header
+     *
+     * @param bool $borderSurroundsHeader
+     * @return PHPRtfLite
+     */
+    public function setBorderSurroundsHeader($borderSurroundsHeader = true)
+    {
+        $this->_borderSurroundsHeader = $borderSurroundsHeader;
+        return $this;
+    }
+
+
+    /**
+     * checks, if border surrounds header
+     *
+     * @return bool
+     */
+    public function borderSurroundsHeader()
+    {
+        return $this->_borderSurroundsHeader;
+    }
+
+
+    /**
+     * @param bool $borderSurroundsFooter
+     * @return PHPRtfLite
+     */
+    public function setBorderSurroundsFooter($borderSurroundsFooter = true)
+    {
+        $this->_borderSurroundsFooter = $borderSurroundsFooter;
+        return $this;
+    }
+
+
+    /**
+     * checks, if border surrounds footer
+     *
+     * @return bool
+     */
+    public function borderSurroundsFooter()
+    {
+        return $this->_borderSurroundsFooter;
+    }
+
+
+    /**
      * renders rtf code of section
      */
     public function render()
     {
-        $stream = $this->_rtf->getWriter();
+        $writer = $this->_rtf->getWriter();
 
         //headers
         $headers = $this->_headers ? $this->_headers : $this->_rtf->getHeaders();
@@ -619,24 +675,38 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         }
 
         //borders
-        $border = $this->_border ? $this->_border : $this->_rtf->getBorder();
-        if ($border) {
-            $stream->write($border->getContent('\pg'));
+        if ($this->_border) {
+            if ($this->_borderSurroundsHeader) {
+                $writer->write('\pgbrdrhead');
+            }
+            if ($this->_borderSurroundsFooter) {
+                $writer->write('\pgbrdrfoot');
+            }
+            $writer->write($this->_border->getContent('\pg'));
+        }
+        else if ($border = $this->_rtf->getBorder()) {
+            if ($this->_rtf->borderSurroundsHeader()) {
+                $writer->write('\pgbrdrhead');
+            }
+            if ($this->_rtf->borderSurroundsFooter()) {
+                $writer->write('\pgbrdrfoot');
+            }
+            $writer->write($border->getContent('\pg'));
         }
 
         //do not break within the section
         if ($this->_doNotBreak) {
-            $stream->write('\sbknone ');
+            $writer->write('\sbknone ');
         }
 
         //set column index, when using more than one column for this section
         if ($this->_numberOfColumns > 1) {
-            $stream->write('\cols' . $this->_numberOfColumns . ' ');
+            $writer->write('\cols' . $this->_numberOfColumns . ' ');
         }
 
         if (empty($this->_columnWidths)) {
             if ($this->_spaceBetweenColumns) {
-                  $stream->write('\colsx' . PHPRtfLite_Unit::getUnitInTwips($this->_spaceBetweenColumns) . ' ');
+                  $writer->write('\colsx' . PHPRtfLite_Unit::getUnitInTwips($this->_spaceBetweenColumns) . ' ');
             }
         }
         else {
@@ -650,59 +720,59 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
 
             $i = 1;
             foreach ($this->_columnWidths as $key => $value) {
-                $stream->write('\colno' . $i . '\colw' . PHPRtfLite_Unit::getUnitInTwips($value));
+                $writer->write('\colno' . $i . '\colw' . PHPRtfLite_Unit::getUnitInTwips($value));
                 if (!empty($this->_columnWidths[$key])) {
-                    $stream->write('\colsr' . $space);
+                    $writer->write('\colsr' . $space);
                 }
                 $i++;
             }
-            $stream->write(' ');
+            $writer->write(' ');
         }
 
         if ($this->_lineBetweenColumns) {
-            $stream->write('\linebetcol ');
+            $writer->write('\linebetcol ');
         }
 
         /*---Page part---*/
         if ($this->_paperWidth) {
-            $stream->write('\pgwsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_paperWidth) . ' ');
+            $writer->write('\pgwsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_paperWidth) . ' ');
         }
 
         if ($this->_paperHeight) {
-            $stream->write('\pghsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_paperHeight) . ' ');
+            $writer->write('\pghsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_paperHeight) . ' ');
         }
 
         if ($this->_marginLeft) {
-            $stream->write('\marglsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginLeft) . ' ');
+            $writer->write('\marglsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginLeft) . ' ');
         }
 
         if ($this->_marginRight) {
-            $stream->write('\margrsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginRight) . ' ');
+            $writer->write('\margrsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginRight) . ' ');
         }
 
         if ($this->_marginTop) {
-            $stream->write('\margtsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginTop) . ' ');
+            $writer->write('\margtsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginTop) . ' ');
         }
 
         if ($this->_marginBottom) {
-            $stream->write('\margbsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginBottom) . ' ');
+            $writer->write('\margbsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_marginBottom) . ' ');
         }
 
         if ($this->_gutter) {
-            $stream->write('\guttersxn' . PHPRtfLite_Unit::getUnitInTwips($this->_gutter) . ' ');
+            $writer->write('\guttersxn' . PHPRtfLite_Unit::getUnitInTwips($this->_gutter) . ' ');
         }
 
         if ($this->_useMirrorMargins) {
-            $stream->write('\margmirsxn ');
+            $writer->write('\margmirsxn ');
         }
 
         if ($this->_font) {
-            $stream->write($this->_font->getContent());
+            $writer->write($this->_font->getContent());
         }
 
-        $stream->write("\r\n");
+        $writer->write("\r\n");
         parent::render();
-        $stream->write("\r\n");
+        $writer->write("\r\n");
     }
 
 }
