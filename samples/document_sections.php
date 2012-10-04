@@ -6,9 +6,9 @@ require_once $dir . '/../lib/PHPRtfLite.php';
 PHPRtfLite::registerAutoloader();
 
 
-function writeSectionText($sect, $arial14, $times12, $text, $text2, $text3) {  	
+function writeSectionText(PHPRtfLite_Container_Section $sect, $arial14, $times12, $text, $text2, $text3) {
     $sect->writeText('Sample RTF document', $arial14, new PHPRtfLite_ParFormat());
-    $sect->writeText($text,$times12, new PHPRtfLite_ParFormat());
+    $sect->writeText($text, $times12, new PHPRtfLite_ParFormat());
 
     $sect->writeText('Character encoding', $arial14, new PHPRtfLite_ParFormat());
     $sect->writeText($text2, $times12, new PHPRtfLite_ParFormat());
@@ -67,6 +67,8 @@ $borderFormatBlue = new PHPRtfLite_Border_Format(1, '#0000ff');
 $borderFormatRed = new PHPRtfLite_Border_Format(2, '#ff0000');
 $border = new PHPRtfLite_Border($rtf, $borderFormatBlue, $borderFormatRed, $borderFormatBlue, $borderFormatRed);
 $rtf->setBorder($border);
+$rtf->setBorderSurroundsHeader();
+$rtf->setBorderSurroundsFooter();
 
 //headers
 $rtf->setOddEvenDifferent();
@@ -82,7 +84,7 @@ $sect = $rtf->addSection();
 $sect->setPaperHeight(16);
 $sect->setPaperWidth(25);
 
-//Borders overriden: No Borders
+//Borders overridden: No Borders
 $border = PHPRtfLite_Border::create($rtf, 0);
 $sect->setBorder($border);
 $sect->setSpaceBetweenColumns(1);
@@ -93,13 +95,16 @@ writeSectionText($sect, $arial14, $times12, $text, $text2, $text3);
 
 //section 2
 $sect = $rtf->addSection();
-//Header overriden
+$sect->setBorderSurroundsHeader();
+$sect->setBorderSurroundsFooter();
+
+//Header overridden
 $header = $sect->addHeader(PHPRtfLite_Container_Header::TYPE_RIGHT);
 $header->writeText("PHPRtfLite class library. Overriden right section header. This is page - <pagenum> -", $times12, $parFormat);
 $header = $sect->addHeader(PHPRtfLite_Container_Header::TYPE_LEFT);
 $header->writeText("PHPRtfLite class library. Overriden left section header. This is page - <pagenum> -", $times12, $parFormat);
-//Borders overriden: Green border
-$border = PHPRtfLite_Border::create($rtf, 1, '#00ff00', 'dash', 1);
+//Borders overridden: Green border
+$border = PHPRtfLite_Border::create($rtf, 1, '#00ff00', PHPRtfLite_Border_Format::TYPE_DASH, 1);
 $sect->setBorder($border);
 
 writeSectionText($sect, $arial14, $times12, $text, $text2, $text3);
