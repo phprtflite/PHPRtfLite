@@ -152,31 +152,34 @@ class PHPRtfLite_Element
     {
         $search = array(
             // bold
-            '/<STRONG[ ]*>(.*?)<\/STRONG[ ]*>/smi',
-            '/<B[ ]*>(.*?)<\/B[ ]*>/smi',
+            '|<STRONG\s*>(.*?)</STRONG\s*>|smi',
+            '|<B\s*>(.*?)</B\s*>|smi',
             // italic
-            '/<EM[ ]*>(.*?)<\/EM[ ]*>/smi',
-            '/<I[ ]*>(.*?)<\/I[ ]*>/smi',
+            '|<EM\s*>(.*?)</EM\s*>|smi',
+            '|<I\s*>(.*?)</I\s*>|smi',
             // underline
-            '/<U[ ]*>(.*?)<\/U[ ]*>/smi',
+            '|<U\s*>(.*?)</U\s*>|smi',
             // break
-            '/<BR[ ]*(\/)?[ ]*>/smi',
-            '/<LINE[ ]*(\/)?[ ]*>/smi',
+            '|<BR\s*(/)?\s*>|smi',
+            '|<LINE\s*(/)?\s*>|smi',
             // horizontal rule
-            '/<HR[ ]*(\/)?[ ]*>/smi',
-            '/<CHDATE[ ]*(\/)?[ ]*>/smi',
-            '/<CHDPL[ ]*(\/)?[ ]*>/smi',
-            '/<CHDPA[ ]*(\/)?[ ]*>/smi',
-            '/<CHTIME[ ]*(\/)?[ ]*>/smi',
-            '/<CHPGN[ ]*(\/)?[ ]*>/smi',
+            '|<HR\s*(/)?\s*>|smi',
+            '|<CHDATE\s*(/)?\s*>|smi',
+            '|<CHDPL\s*(/)?\s*>|smi',
+            '|<CHDPA\s*(/)?\s*>|smi',
+            '|<CHTIME\s*(/)?\s*>|smi',
+            '|<CHPGN\s*(/)?\s*>|smi',
             // tab
-            '/<TAB[ ]*(\/)?[ ]*>/smi',
+            '|<TAB\s*(/)?\s*>|smi',
             // bullet
-            '/<BULLET[ ]*(\/)?[ ]*>/smi',
-            '/<PAGENUM[ ]*(\/)?[ ]*>/smi',
-            '/<SECTNUM[ ]*(\/)?[ ]*>/smi',
-//            '/<PAGE[ ]*(\/)?[ ]*>/smi',
-//            '/<SECT[ ]*(\/)?[ ]*>/smi'
+            '|<BULLET\s*(/)?\s*>|smi',
+            '|<PAGENUM\s*(/)?\s*>|smi',
+            '|<PAGETOTAL\s*(/)?\s*>|smi',
+            '|<SECTNUM\s*(/)?\s*>|smi',
+            '|<SUP\s*>(.*?)</SUP\s*>|smi',
+            '|<SUB\s*>(.*?)</SUB\s*>|smi',
+//            '|<PAGE\s*(/)?\s*>|smi',
+//            '|<SECT\s*(/)?\s*>|smi'
         );
 
         $replace = array(
@@ -203,7 +206,10 @@ class PHPRtfLite_Element
             // bullet
             '\bullet ',
             '\chpgn ',
+            '{\field {\*\fldinst {NUMPAGES }}}',
             '\sectnum ',
+            '{\super \1\super0}',
+            '{\sub \1\sub0}',
 //            '\page ',
 //            '\sect '
         );

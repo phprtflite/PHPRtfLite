@@ -74,10 +74,10 @@ $rtf->setBorderSurroundsFooter();
 $rtf->setOddEvenDifferent();
 
 $header = $rtf->addHeader(PHPRtfLite_Container_Header::TYPE_LEFT);
-$header->writeText("PHPRtfLite class library. Left document header. This is page - <pagenum> -", $times12, $parFormat);
+$header->writeText("PHPRtfLite class library. Left document header. This is page - <pagenum> of <pagetotal> -", $times12, $parFormat);
 
 $header = $rtf->addHeader(PHPRtfLite_Container_Header::TYPE_RIGHT);
-$header->writeText("PHPRtfLite class library. Right document header. This is page - <pagenum> -", $times12, $parFormat);
+$header->writeText("PHPRtfLite class library. Right document header. This is page - <pagenum> of <pagetotal> -", $times12, $parFormat);
 
 //section 1
 $sect = $rtf->addSection();
@@ -100,9 +100,9 @@ $sect->setBorderSurroundsFooter();
 
 //Header overridden
 $header = $sect->addHeader(PHPRtfLite_Container_Header::TYPE_RIGHT);
-$header->writeText("PHPRtfLite class library. Overriden right section header. This is page - <pagenum> -", $times12, $parFormat);
+$header->writeText("PHPRtfLite class library. Overriden right section header. This is page - <pagenum> of <pagetotal> -", $times12, $parFormat);
 $header = $sect->addHeader(PHPRtfLite_Container_Header::TYPE_LEFT);
-$header->writeText("PHPRtfLite class library. Overriden left section header. This is page - <pagenum> -", $times12, $parFormat);
+$header->writeText("PHPRtfLite class library. Overriden left section header. This is page - <pagenum> of <pagetotal> -", $times12, $parFormat);
 //Borders overridden: Green border
 $border = PHPRtfLite_Border::create($rtf, 1, '#00ff00', PHPRtfLite_Border_Format::TYPE_DASH, 1);
 $sect->setBorder($border);

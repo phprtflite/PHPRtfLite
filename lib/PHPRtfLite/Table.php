@@ -497,7 +497,7 @@ class PHPRtfLite_Table
      * @param integer $startColumn
      * @param integer $endRow
      * @param integer $endColumn
-     * @return array
+     * @return PHPRtfLite_Table_Cell[]
      */
     private function getCellsByCellRange($startRow, $startColumn, $endRow, $endColumn)
     {

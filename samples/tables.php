@@ -3,7 +3,7 @@
 $dir = dirname(__FILE__);
 require_once $dir . '/../lib/PHPRtfLite.php';
 
-$rowCount = 3;
+$rowCount = 5;
 $rowHeight = 1;
 $columnCount = 4;
 $columnWidth = 3;
@@ -24,6 +24,13 @@ for ($rowIndex = 1; $rowIndex <= $rowCount; $rowIndex++) {
         $cell->setVerticalAlignment(PHPRtfLite_Table_Cell::VERTICAL_ALIGN_CENTER);
     }
 }
+
+$borderTop = new PHPRtfLite_Border($rtf);
+$borderTop->setBorderTop(new PHPRtfLite_Border_Format(2, '#f33'));
+$table->setBorderForCellRange($borderTop, 1, 1, 1, $columnCount);
+$borderBottom = new PHPRtfLite_Border($rtf);
+$borderBottom->setBorderBottom(new PHPRtfLite_Border_Format(2, '#33f'));
+$table->setBorderForCellRange($borderBottom, $rowCount, 1, $rowCount, $columnCount);
 
 $sect->writeText('Table with cell paddings
 (Using Microsoft Word top and bottom cell paddings are applied to all cells in a row)');

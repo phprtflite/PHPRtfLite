@@ -310,7 +310,7 @@ abstract class PHPRtfLite_Container_Base
             if ($font) {
                 $stream->write($font->getContent());
             }
-            $stream->write('{\~}}');
+            $stream->write('{\~}}\intbl');
         }
 
         $lastKey = $this->countElements() - 1;

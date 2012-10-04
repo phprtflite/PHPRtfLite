@@ -11,7 +11,7 @@ $rtf = new PHPRtfLite();
 $rtf->setHyphenation();
 
 $header = $rtf->addHeader();
-$header->writeText("PHPRtfLite class library. This is page - <pagenum> -", new PHPRtfLite_Font, new PHPRtfLite_ParFormat);
+$header->writeText("PHPRtfLite class library. This is page - <pagenum> of <pagetotal> -", new PHPRtfLite_Font, new PHPRtfLite_ParFormat);
 
 $table = $header->addTable();
 $table->addRows(1);

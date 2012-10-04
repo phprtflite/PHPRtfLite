@@ -705,7 +705,7 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
                 $stream->write('\intbl\itap1\~');
             }
             // closing tag for cell definition
-            $stream->write('\cell\pard');
+            $stream->write('\cell');
         }
         $stream->write("\r\n");
     }
