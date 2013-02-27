@@ -69,6 +69,12 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
     protected $_spaceBetweenColumns;
 
     /**
+     * flag, if true use landscape layout for this section, isLandscape of rtf must be set to portrait
+     * @var boolean
+     */
+    private $_isLandscape = false;
+
+    /**
      * paper width
      * @var float
      */
@@ -142,6 +148,26 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
      * @var bool
      */
     protected $_borderSurroundsFooter = false;
+
+
+    /**
+     * sets landscape orientation for the section
+     */
+    public function setLandscape()
+    {
+        $this->_isLandscape = true;
+    }
+
+
+    /**
+     * returns true, if landscape layout should be used
+     *
+     * @return boolean
+     */
+    public function isLandscape()
+    {
+        return $this->_isLandscape;
+    }
 
 
     /**
@@ -734,6 +760,10 @@ class PHPRtfLite_Container_Section extends PHPRtfLite_Container
         }
 
         /*---Page part---*/
+        if ($this->_isLandscape) {
+            $writer->write('\lndscpsxn ');
+        }
+
         if ($this->_paperWidth) {
             $writer->write('\pgwsxn' . PHPRtfLite_Unit::getUnitInTwips($this->_paperWidth) . ' ');
         }
