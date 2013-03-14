@@ -310,7 +310,10 @@ abstract class PHPRtfLite_Container_Base
             if ($font) {
                 $stream->write($font->getContent());
             }
-            $stream->write('{\~}}\intbl');
+            if ((!$this->isVerticalMerged() && !$this->isHorizontalMerged()) || $this->isVerticalMergedFirstInRange()) {
+                $stream->write('{\~}');
+            }
+            $stream->write('}\intbl');
         }
 
         $lastKey = $this->countElements() - 1;

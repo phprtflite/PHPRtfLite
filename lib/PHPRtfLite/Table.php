@@ -872,7 +872,6 @@ class PHPRtfLite_Table
         $stream = $this->getRtf()->getWriter();
 
         foreach ($this->_rows as $row) {
-            $stream->write('\trowd');
             $this->renderRowDefinition($row);
             $stream->write("\r\n");
             $this->renderRowCells($row);
