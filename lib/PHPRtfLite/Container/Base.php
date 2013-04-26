@@ -319,14 +319,21 @@ abstract class PHPRtfLite_Container_Base
         $lastKey = $this->countElements() - 1;
 
         foreach ($this->_elements as $key => $element) {
+            $cellAlignment = '';
             if ($this instanceof PHPRtfLite_Table_Cell && !($element instanceof PHPRtfLite_Table)) {
                 // table cell initialization
                 $stream->write('\intbl\itap' . $this->getTable()->getNestDepth() . "\r\n");
-                $stream->write($this->getCellAlignment());
+                $cellAlignment = $this->getCellAlignment();
+                if ($cellAlignment) {
+                    $stream->write('{' . $cellAlignment);
+                }
             }
 
             if ($element instanceof PHPRtfLite_Element_Plain) {
                 $element->render();
+                if ($cellAlignment) {
+                    $stream->write('}');
+                }
                 continue;
             }
 
@@ -359,6 +366,10 @@ abstract class PHPRtfLite_Container_Base
             }
 
             if ($parFormat && $this instanceof PHPRtfLite_Table_Cell && $lastKey != $key) {
+                $stream->write('}');
+            }
+
+            if ($cellAlignment) {
                 $stream->write('}');
             }
         }
