@@ -719,9 +719,6 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
     public function getCellAlignment()
     {
         switch ($this->_alignment) {
-            case self::TEXT_ALIGN_LEFT:
-                return '\ql';
-
             case self::TEXT_ALIGN_CENTER:
                 return '\qc';
 
@@ -730,6 +727,9 @@ class PHPRtfLite_Table_Cell extends PHPRtfLite_Container
 
             case self::TEXT_ALIGN_JUSTIFY:
                 return '\qj';
+
+            default:
+                return '\ql';
         }
     }
 
