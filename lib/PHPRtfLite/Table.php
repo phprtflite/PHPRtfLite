@@ -764,11 +764,9 @@ class PHPRtfLite_Table
                     $cell->setVerticalMerged();
                 }
 
-                $width += $this->getColumn($i)->getWidth();
-
+                $width += $cell->getWidth();
                 if ($i != $start) {
                     $cell->setHorizontalMerged();
-                    $cell->setWidth(null);
                 }
             }
 
