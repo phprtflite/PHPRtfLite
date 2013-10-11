@@ -1309,8 +1309,8 @@ class PHPRtfLite
      */
     public static function quoteRtfCode($text, $convertNewlines = true)
     {
-        // escape backslashes
-        $text = str_replace('\\', '\\\\', $text);
+        // escape backslashes and curly brackets
+        $text = str_replace(array('\\', '{', '}'), array('\\\\', '\\{', '\\}'), $text);
         if ($convertNewlines) {
             $text = self::convertNewlinesToRtfCode($text);
         }
