@@ -94,9 +94,9 @@ abstract class PHPRtfLite_Container_Base
      * adds element with rtf code directly
      * (no converting will be made by PHPRtfLite)
      *
-     * @param   string                  $code
-     * @param   PHPRtfLite_Font         $font
-     * @param   PHPRtfLite_ParFormat    $font
+     * @param   string               $code
+     * @param   PHPRtfLite_Font      $font
+     * @param   PHPRtfLite_ParFormat $parFormat
      * @return  PHPRtfLite_Element
      */
     public function writeRtfCode($code, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
@@ -138,7 +138,8 @@ abstract class PHPRtfLite_Container_Base
         if ($parFormat === null) {
             $parFormat = new PHPRtfLite_ParFormat();
         }
-        $element = new PHPRtfLite_Element($this->_rtf, '', $font, $parFormat);
+        $element = new PHPRtfLite_Element($this->_rtf, '\\par', $font, $parFormat);
+        $element->setIsRtfCode();
         $this->_elements[] = $element;
 
         return  $element;
