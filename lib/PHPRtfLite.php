@@ -1342,14 +1342,14 @@ class PHPRtfLite
     {
         $this->_writer->open();
 
+        $defaultFontSize = 20;
+        $defaultFontIndex = 0;
         if ($this->_defaultFont) {
             $defaultFontIndex = $this->getFontTable()->getFontIndex($this->_defaultFont->getFontFamily());
-        }
-        else {
-            $defaultFontIndex = 0;
+            $defaultFontSize = $this->_defaultFont->getSize() * 2;
         }
 
-        $this->_writer->write('{\rtf\ansi\deff' . $defaultFontIndex . "\r\n");
+        $this->_writer->write('{\rtf\ansi\deff' . $defaultFontIndex . '\fs' . $defaultFontSize . "\r\n");
 
         $this->_writer->write($this->getFontTable()->getContent());
         $this->_writer->write($this->getColorTable()->getContent());
