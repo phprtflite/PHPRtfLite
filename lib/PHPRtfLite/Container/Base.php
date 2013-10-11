@@ -378,16 +378,19 @@ abstract class PHPRtfLite_Container_Base
             $element = $this->_elements[$key];
             $isNextElementTable = $nextElement instanceof PHPRtfLite_Table;
 
+            if ($nextElement instanceof PHPRtfLite_List && $element instanceof PHPRtfLite_Element) {
+                return true;
+            }
             if ($element instanceof PHPRtfLite_Table && $element->getNestDepth() == 1) {
                 return !$element->getPreventEmptyParagraph();
             }
-            else if ($element instanceof PHPRtfLite_Element) {
+            if ($element instanceof PHPRtfLite_Element) {
                 return (!$element->isEmptyParagraph() && ($isNextElementTable || $nextElement->getParFormat()));
             }
-            else if ($element instanceof PHPRtfLite_Image) {
+            if ($element instanceof PHPRtfLite_Image) {
                 return ($isNextElementTable || $nextElement->getParFormat());
             }
-            else if ($nextElement instanceof PHPRtfLite_List) {
+            if ($nextElement instanceof PHPRtfLite_List) {
                 return true;
             }
         }
