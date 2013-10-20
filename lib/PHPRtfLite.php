@@ -90,6 +90,11 @@ class PHPRtfLite
     private $_paperHeight  = 29;
 
     /**
+     * @var string
+     */
+    private $_paperFormat = PHPRtfLite_Paper_Format::FORMAT_A4;
+
+    /**
      * left margin
      * @var float
      */
@@ -618,6 +623,23 @@ class PHPRtfLite
     public function getPaperHeight()
     {
         return $this->_paperHeight;
+    }
+
+
+    /**
+     * Sets paper format.
+     *
+     * @param string $paperFormat
+     */
+    public function setPaperFormat($paperFormat)
+    {
+        $this->_paperFormat = $paperFormat;
+
+        $paperWidth = PHPRtfLite_Paper_Format::getPaperWidthByPaperFormat($this->_paperFormat);
+        $this->setPaperWidth($paperWidth);
+
+        $paperHeight = PHPRtfLite_Paper_Format::getPaperHeightByPaperFormat($this->_paperFormat);
+        $this->setPaperHeight($paperHeight);
     }
 
 
