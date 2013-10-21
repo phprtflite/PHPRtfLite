@@ -53,10 +53,21 @@ class PHPRtfLite_Unit
 
 
     /**
+     * gets global unit
+     *
+     * @return string
+     */
+    public static function getGlobalUnit()
+    {
+        return self::$_unit;
+    }
+
+
+    /**
      * gets unit in twips
      *
      * @param  float $value
-     * @return integer
+     * @return float
      */
     public static function getUnitInTwips($value)
     {
@@ -73,6 +84,23 @@ class PHPRtfLite_Unit
     public static function getPointsInTwips($value)
     {
         return round($value * self::UNIT_POINT);
+    }
+
+
+    /**
+     * converts the value to another unit
+     *
+     * @param  float $value
+     * @param  float $unitFrom
+     * @param  float $unitTo
+     * @return float
+     */
+    public static function convertTo($value, $unitFrom, $unitTo)
+    {
+        if ($unitTo == $unitFrom) {
+            return $value;
+        }
+        return ($value * $unitFrom) / $unitTo;
     }
 
 }

@@ -9,6 +9,8 @@ PHPRtfLite::registerAutoloader();
 $rtf = new PHPRtfLite();
 $sect = $rtf->addSection();
 
+$sect->writeText('Text before the list');
+
 $enum = new PHPRtfLite_List_Enumeration($rtf);
 $enum->addItem('hello world');
 $enum->addItem('foo');

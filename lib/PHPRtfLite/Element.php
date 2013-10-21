@@ -86,7 +86,7 @@ class PHPRtfLite_Element
      */
     public function isEmptyParagraph()
     {
-        return ($this->_parFormat && $this->_text == '');
+        return ($this->_parFormat && $this->_text == '\\par' && $this->_isRtfCode);
     }
 
 
@@ -265,10 +265,7 @@ class PHPRtfLite_Element
         if ($this->_font) {
             $stream->write($this->_font->getContent());
         }
-        if ($this->isEmptyParagraph() && !$this->_isRtfCode) {
-            $stream->write('\par');
-        }
-        else {
+        if (!$this->isEmptyParagraph() || $this->_isRtfCode) {
             $stream->write($text);
         }
 

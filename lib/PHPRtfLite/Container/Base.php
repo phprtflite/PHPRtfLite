@@ -94,9 +94,9 @@ abstract class PHPRtfLite_Container_Base
      * adds element with rtf code directly
      * (no converting will be made by PHPRtfLite)
      *
-     * @param   string                  $code
-     * @param   PHPRtfLite_Font         $font
-     * @param   PHPRtfLite_ParFormat    $font
+     * @param   string               $code
+     * @param   PHPRtfLite_Font      $font
+     * @param   PHPRtfLite_ParFormat $parFormat
      * @return  PHPRtfLite_Element
      */
     public function writeRtfCode($code, PHPRtfLite_Font $font = null, PHPRtfLite_ParFormat $parFormat = null)
@@ -138,7 +138,8 @@ abstract class PHPRtfLite_Container_Base
         if ($parFormat === null) {
             $parFormat = new PHPRtfLite_ParFormat();
         }
-        $element = new PHPRtfLite_Element($this->_rtf, '', $font, $parFormat);
+        $element = new PHPRtfLite_Element($this->_rtf, '\\par', $font, $parFormat);
+        $element->setIsRtfCode();
         $this->_elements[] = $element;
 
         return  $element;
@@ -378,16 +379,19 @@ abstract class PHPRtfLite_Container_Base
             $element = $this->_elements[$key];
             $isNextElementTable = $nextElement instanceof PHPRtfLite_Table;
 
+            if ($nextElement instanceof PHPRtfLite_List && $element instanceof PHPRtfLite_Element) {
+                return true;
+            }
             if ($element instanceof PHPRtfLite_Table && $element->getNestDepth() == 1) {
                 return !$element->getPreventEmptyParagraph();
             }
-            else if ($element instanceof PHPRtfLite_Element) {
+            if ($element instanceof PHPRtfLite_Element) {
                 return (!$element->isEmptyParagraph() && ($isNextElementTable || $nextElement->getParFormat()));
             }
-            else if ($element instanceof PHPRtfLite_Image) {
+            if ($element instanceof PHPRtfLite_Image) {
                 return ($isNextElementTable || $nextElement->getParFormat());
             }
-            else if ($nextElement instanceof PHPRtfLite_List) {
+            if ($nextElement instanceof PHPRtfLite_List) {
                 return true;
             }
         }
