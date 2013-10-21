@@ -30,6 +30,7 @@ class PHPRtfLite_Unit
 
     const UNIT_TWIPS        = 1;
     const UNIT_CM           = 567;
+    const UNIT_MM           = 56.692913;
     const UNIT_INCH         = 1440;
     const UNIT_POINT        = 14.988078;
 

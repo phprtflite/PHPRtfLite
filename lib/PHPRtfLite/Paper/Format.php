@@ -22,9 +22,8 @@
 
 /**
  * Class for paper format.
+ *
  * @version     1.3.0
- * @author      Denis Slaveckij <sinedas@gmail.com>
- * @author      Steffen Zeidler <sigma_z@sigma-scripts.de>
  * @author      Mario Raspe <mario.raspe@gmail.com>
  * @copyright   2007-2008 Denis Slaveckij, 2010-2012 Steffen Zeidler
  * @package     PHPRtfLite
@@ -43,6 +42,8 @@ class PHPRtfLite_Paper_Format
      * Constants for north american paper formats.
      */
     const FORMAT_LETTER = 'Letter';
+    const FORMAT_LEGAL = 'Legal';
+
 
     /**
      * Mapping array from paper format to width and height of a paper.
@@ -62,6 +63,9 @@ class PHPRtfLite_Paper_Format
         ),
         self::FORMAT_LETTER => array(
             'width' => 216, 'height' => 279
+        ),
+        self::FORMAT_LEGAL => array(
+            'width' => 216, 'height' => 356
         )
     );
 
@@ -76,7 +80,7 @@ class PHPRtfLite_Paper_Format
         if (isset(self::$paperFormats[$paperFormat])) {
             return self::$paperFormats[$paperFormat]['width'];
         }
-        throw new PHPRtfLite_Exception('Paper format is not supported.');
+        throw new PHPRtfLite_Exception("Paper format '$paperFormat' is not supported.");
     }
 
     /**
@@ -89,6 +93,6 @@ class PHPRtfLite_Paper_Format
         if (isset(self::$paperFormats[$paperFormat])) {
             return self::$paperFormats[$paperFormat]['height'];
         }
-        throw new PHPRtfLite_Exception('Paper format is not supported.');
+        throw new PHPRtfLite_Exception("Paper format '$paperFormat' is not supported.");
     }
 }

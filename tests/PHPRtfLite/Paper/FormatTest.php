@@ -43,6 +43,7 @@ class PHPRtfLite_Paper_FormatTest extends PHPUnit_Framework_TestCase
             array(PHPRtfLite_Paper_Format::FORMAT_A4,       array('width' => 210, 'height' => 297)),
             array(PHPRtfLite_Paper_Format::FORMAT_A5,       array('width' => 148, 'height' => 210)),
             array(PHPRtfLite_Paper_Format::FORMAT_LETTER,   array('width' => 216, 'height' => 279)),
+            array(PHPRtfLite_Paper_Format::FORMAT_LEGAL,    array('width' => 216, 'height' => 356)),
         );
     }
 
