@@ -32,12 +32,6 @@ class PHPRtfLite
 
     const VERSION = 'dev';
 
-    const PAPER_A3 = 'a3';
-    const PAPER_A4 = 'a4';
-    const PAPER_A5 = 'a5';
-    const PAPER_LETTER = 'letter';
-    const PAPER_LEGAL = 'legal';
-
     const SPACE_IN_POINTS           = 20;   // used for twips conversion
     const SPACE_IN_LINES            = 240;  // used for twips conversion
 
@@ -58,17 +52,6 @@ class PHPRtfLite
     const ZOOM_MODE_FULL_PAGE       = 1;
     const ZOOM_MODE_BEST_FIT        = 2;
 
-
-    /**
-     * @var array
-     */
-    protected $_paperFormats = array(
-        self::PAPER_A3 => array(29.7, 42.0),
-        self::PAPER_A4 => array(21.0, 29.7),
-        self::PAPER_A5 => array(14.85, 21.0),
-        self::PAPER_LETTER => array(21.59, 27.94),
-        self::PAPER_LEGAL => array(21.59, 35.56)
-    );
 
     /**
      * rtf sections
@@ -258,7 +241,7 @@ class PHPRtfLite
 
     public function __construct()
     {
-        $this->setPaperFormat(self::PAPER_A4);
+        $this->setPaperFormat(PHPRtfLite_Paper_Format::FORMAT_A4);
     }
 
 
@@ -601,22 +584,19 @@ class PHPRtfLite
 
 
     /**
-     * sets the paper format
+     * Sets the paper format.
      *
-     * @param  string $paperFormat represented by class constants PAPER_*
-     * @throws PHPRtfLite_Exception
+     * @param string $paperFormat
      */
     public function setPaperFormat($paperFormat)
     {
-        if (!isset($this->_paperFormats[$paperFormat])) {
-            throw new PHPRtfLite_Exception("Paper format: '$paperFormat' is not supported!");
-        }
-
-        list($width, $height) = $this->_paperFormats[$paperFormat];
-
         $defaultUnit = PHPRtfLite_Unit::getGlobalUnit();
-        $this->_paperWidth = PHPRtfLite_Unit::convertTo($width, PHPRtfLite_Unit::UNIT_CM, $defaultUnit);
-        $this->_paperHeight = PHPRtfLite_Unit::convertTo($height, PHPRtfLite_Unit::UNIT_CM, $defaultUnit);
+
+        $paperWidth = PHPRtfLite_Paper_Format::getPaperWidthByPaperFormat($paperFormat);
+        $this->_paperWidth = PHPRtfLite_Unit::convertTo($paperWidth, PHPRtfLite_Unit::UNIT_MM, $defaultUnit);
+
+        $paperHeight = PHPRtfLite_Paper_Format::getPaperHeightByPaperFormat($paperFormat);
+        $this->_paperHeight = PHPRtfLite_Unit::convertTo($paperHeight, PHPRtfLite_Unit::UNIT_MM, $defaultUnit);
     }
 
 
