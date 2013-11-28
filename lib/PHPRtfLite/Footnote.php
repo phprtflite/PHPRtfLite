@@ -261,7 +261,7 @@ class PHPRtfLite_Footnote
         }
 
         $stream->write('{\up6\chftn}' . "\r\n"
-                     . PHPRtfLite::quoteRtfCode($this->_text)
+                     . PHPRtfLite_Utf8::getUnicodeEntities(PHPRtfLite::quoteRtfCode($this->_text))
                      . '} ');
     }
 
