@@ -30,7 +30,7 @@
 class PHPRtfLite
 {
 
-    const VERSION = '1.3.1';
+    const VERSION = '1.3.2';
 
     const PAPER_A3 = 'a3';
     const PAPER_A4 = 'a4';
