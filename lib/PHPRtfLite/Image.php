@@ -434,6 +434,7 @@ abstract class PHPRtfLite_Image
             $rtfStream->write($stringHex);
         }
 
+        fclose($this->_stream);
         $rtfStream->write('}}');
     }
 
