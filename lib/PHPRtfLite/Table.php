@@ -868,6 +868,7 @@ class PHPRtfLite_Table
         }
 
         $stream = $this->getRtf()->getWriter();
+        $stream->write('\pard');
 
         foreach ($this->_rows as $row) {
             $this->renderRowDefinition($row);
