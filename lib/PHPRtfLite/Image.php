@@ -114,7 +114,9 @@ abstract class PHPRtfLite_Image
      */
     public function __destruct()
     {
-        fclose($this->_stream);
+        if (is_resource($this->_stream)) {
+            fclose($this->_stream);
+        }
     }
 
 
