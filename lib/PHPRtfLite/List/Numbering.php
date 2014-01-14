@@ -62,7 +62,7 @@ class PHPRtfLite_List_Numbering extends PHPRtfLite_List
      * sets prefix
      *
      * @param   string  $prefix
-     * @return  PHPRtfList_Numbering
+     * @return  $this
      */
     public function setPrefix($prefix)
     {
@@ -75,7 +75,7 @@ class PHPRtfLite_List_Numbering extends PHPRtfLite_List
      * sets suffix
      *
      * @param   string  $suffix
-     * @return  PHPRtfList_Numbering
+     * @return  $this
      */
     public function setSuffix($suffix)
     {
@@ -88,7 +88,7 @@ class PHPRtfLite_List_Numbering extends PHPRtfLite_List
      * sets separator
      *
      * @param   string  $separator
-     * @return  PHPRtfList_Numbering
+     * @return  $this
      */
     public function setSeparator($separator)
     {
@@ -131,14 +131,12 @@ class PHPRtfLite_List_Numbering extends PHPRtfLite_List
     private function getAlphaNumber($number, $lowerCase = false)
     {
         $asciiStartIndex = $lowerCase ? 97 : 65;
-        $number = 1234;
         $alpha = '';
         while ($number > 0) {
             $modulus = ($number - 1) % 26;
             $alpha .= chr($modulus + $asciiStartIndex);
             $number = floor(($number - 1) / 26);
         }
-
         return strrev($alpha);
     }
 
@@ -146,38 +144,41 @@ class PHPRtfLite_List_Numbering extends PHPRtfLite_List
     /**
      * gets roman number
      * Code based from:
+     *
      * @see http://www.sajithmr.me/php-decimal-to-roman-number-conversion/
      *
-     * @param  integer $index
+     * @param  integer $number
      * @param  boolean $lowerCase
      * @return string
      */
-    private function getRomanNumber($index, $lowerCase = false)
+    private function getRomanNumber($number, $lowerCase = false)
     {
         $roman = '';
-        $lookup = array('M'     => 1000,
-                        'CM'    => 900,
-                        'D'     => 500,
-                        'CD'    => 400,
-                        'C'     => 100,
-                        'XC'    => 90,
-                        'L'     => 50,
-                        'XL'    => 40,
-                        'X'     => 10,
-                        'IX'    => 9,
-                        'V'     => 5,
-                        'IV'    => 4,
-                        'I'     => 1);
+        $romanCharMapping = array(
+            'M'     => 1000,
+            'CM'    => 900,
+            'D'     => 500,
+            'CD'    => 400,
+            'C'     => 100,
+            'XC'    => 90,
+            'L'     => 50,
+            'XL'    => 40,
+            'X'     => 10,
+            'IX'    => 9,
+            'V'     => 5,
+            'IV'    => 4,
+            'I'     => 1
+        );
 
-        foreach ($lookup as $romanChar => $value) {
+        foreach ($romanCharMapping as $romanChar => $romanValue) {
             // Determine the number of matches
-            $matches = intval($n / $value);
+            $matches = intval($number / $romanValue);
 
              // Store that many characters
             $roman .= str_repeat($romanChar, $matches);
 
             // Substract that from the number
-            $n = $n % $value;
+            $number = $number % $romanValue;
         }
 
         // The Roman numeral should be built, return it
