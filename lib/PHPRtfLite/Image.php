@@ -87,7 +87,7 @@ abstract class PHPRtfLite_Image
     protected $_imageRtfType;
     /**
      * flag, true if image file is missing
-     * @var type
+     * @var bool
      */
     protected $_isMissing = false;
 
@@ -102,10 +102,10 @@ abstract class PHPRtfLite_Image
      */
     public function __construct(PHPRtfLite $rtf, $stream, $width = null, $height = null)
     {
-        $this->_rtf         = $rtf;
-        $this->_stream      = $stream;
-        $this->_width       = $width;
-        $this->_height      = $height;
+        $this->_rtf    = $rtf;
+        $this->_stream = $stream;
+        $this->_width  = $width;
+        $this->_height = $height;
     }
 
 
@@ -114,7 +114,9 @@ abstract class PHPRtfLite_Image
      */
     public function __destruct()
     {
-        fclose($this->_stream);
+        if (is_resource($this->_stream)) {
+            fclose($this->_stream);
+        }
     }
 
 
@@ -359,12 +361,12 @@ abstract class PHPRtfLite_Image
      * factory method
      * creates rtf image from stream
      *
-     * @param   PHPRtfLite              $rtf
-     * @param   resource                $stream
-     * @param   string                  $type   (represented by class constants)
-     * @param   float                   $width  optional
-     * @param   float                   $height optional
-     * @return  PHPRtfLite_Image
+     * @param   PHPRtfLite $rtf
+     * @param   resource   $stream
+     * @param   string     $type   (represented by class constants)
+     * @param   float      $width  optional
+     * @param   float      $height optional
+     * @return  PHPRtfLite_Image_Wmf|PHPRtfLite_Image_Gd|PHPRtfLite_Image
      */
     private static function create(PHPRtfLite $rtf, $stream, $type, $width, $height)
     {
@@ -433,6 +435,8 @@ abstract class PHPRtfLite_Image
             $stringHex = bin2hex($stringBuffer);
             $rtfStream->write($stringHex);
         }
+
+        fclose($this->_stream);
 
         $rtfStream->write('}}');
     }

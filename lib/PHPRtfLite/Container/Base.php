@@ -268,13 +268,12 @@ abstract class PHPRtfLite_Container_Base
      * @return PHPRtfLite_Image
      */
     public function addImageFromString(
-                        $string,
-                        $type,
-                        PHPRtfLite_ParFormat $parFormat = null,
-                        $width = null,
-                        $height = null
-                    )
-    {
+        $string,
+        $type,
+        PHPRtfLite_ParFormat $parFormat = null,
+        $width = null,
+        $height = null
+    ) {
         $image = PHPRtfLite_Image::createFromString($this->_rtf, $string, $type, $width, $height);
         if ($parFormat) {
             $image->setParFormat($parFormat);
