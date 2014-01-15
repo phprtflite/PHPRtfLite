@@ -35,7 +35,7 @@ $subNumList->addItem('bar');
 $subNumList->addList($subSubNumList);
 
 $font = new PHPRtfLite_Font('26', 'Tahoma', '#f00');
-$numList = new PHPRtfLite_List_Numbering($rtf, null, $font);
+$numList = new PHPRtfLite_List_Numbering($rtf, PHPRtfLite_List_Numbering::TYPE_ALPHA_LOWER, $font);
 $numList->addItem('hello world');
 $numList->addItem('foo');
 $numList->addItem('bar');

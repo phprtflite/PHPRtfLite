@@ -30,7 +30,7 @@
 class PHPRtfLite
 {
 
-    const VERSION = 'dev';
+    const VERSION = '1.3.1';
 
     const SPACE_IN_POINTS           = 20;   // used for twips conversion
     const SPACE_IN_LINES            = 240;  // used for twips conversion
