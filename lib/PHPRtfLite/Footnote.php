@@ -1,5 +1,4 @@
 <?php
-
 /*
     PHPRtfLite
     Copyright 2010-2012 Steffen Zeidler <sigma_z@sigma-scripts.de>
@@ -27,18 +26,17 @@
  * @copyright   2010-2012 Steffen Zeidler
  * @package     PHPRtfLite_Footnote
  */
-
 class PHPRtfLite_Footnote
 {
 
     /**
      * constants for numbering type
-     * 	0 => Arabic numbering (1, 2, 3, ...)
+     *  0 => Arabic numbering (1, 2, 3, ...)
      *  1 => Alphabetic lowercase (a, b, c, ...)
-     * 	2 => Alphabetic uppercase (A, B, C, ...)
-     *	3 => Roman lowercase (i, ii, iii, ...)
-     *	4 => Roman uppercase (I, II, III, ...)
-     * 	5 => Chicago Manual of Style (*, [dagger], [daggerdbl], §)
+     *  2 => Alphabetic uppercase (A, B, C, ...)
+     *  3 => Roman lowercase (i, ii, iii, ...)
+     *  4 => Roman uppercase (I, II, III, ...)
+     *  5 => Chicago Manual of Style (*, [dagger], [daggerdbl], §)
      *  6 => Footnote Korean numbering 1 (*chosung).
      *  7 => Footnote Korean numbering 2 (*ganada).
      *  8 => Footnote Circle numbering (*circlenum).
@@ -119,18 +117,19 @@ class PHPRtfLite_Footnote
 
 
     /**
-     * construtor
+     * constructor
      *
      * @param PHPRtfLite            $rtf
      * @param string                $text
      * @param PHPRtfLite_Font       $font       if font is not set, use defaultFont
      * @param PHPRtfLite_ParFormat  $parFormat
      */
-    public function __construct(PHPRtfLite $rtf,
-                                $text,
-                                PHPRtfLite_Font $font = null,
-                                PHPRtfLite_ParFormat $parFormat = null)
-    {
+    public function __construct(
+        PHPRtfLite $rtf,
+        $text,
+        PHPRtfLite_Font $font = null,
+        PHPRtfLite_ParFormat $parFormat = null
+    ) {
         $this->_rtf         = $rtf;
         $this->_text        = $text;
 
@@ -219,6 +218,9 @@ class PHPRtfLite_Footnote
     }
 
 
+    /**
+     * @param string $type
+     */
     public function setTypeSettingType($type)
     {
         $this->_typeSettingType = $type;
@@ -244,13 +246,13 @@ class PHPRtfLite_Footnote
         $stream = $this->_rtf->getWriter();
 
         $typeSetting = $this->_typeSettingType != self::TYPE_NORMAL
-                ? '\\' . $this->_typeSettingType
-                : '';
+            ? '\\' . $this->_typeSettingType
+            : '';
 
         $stream->write(
-                '{' . $typeSetting . '\chftn}'
-                . '{' . $this->getTypeAsRtfCode()
-                . '\pard\plain\lin283\fi-283 '
+            '{' . $typeSetting . '\chftn}'
+            . '{' . $this->getTypeAsRtfCode()
+            . '\pard\plain\lin283\fi-283 '
         );
 
         if ($this->_parFormat) {
@@ -259,10 +261,13 @@ class PHPRtfLite_Footnote
         if ($this->_font) {
             $stream->write($this->_font->getContent());
         }
-
-        $stream->write('{\up6\chftn}' . "\r\n"
-                     . PHPRtfLite::quoteRtfCode($this->_text)
-                     . '} ');
+        $charset = $this->_rtf->getCharset();
+        $textEncoded = PHPRtfLite::quoteRtfCode($this->_text);
+        $stream->write(
+            '{\up6\chftn}' . "\r\n"
+            . PHPRtfLite_Utf8::getUnicodeEntities($textEncoded, $charset)
+            . '} '
+        );
     }
 
 }
