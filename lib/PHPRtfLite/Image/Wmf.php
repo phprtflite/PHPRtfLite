@@ -83,15 +83,15 @@ class PHPRtfLite_Image_Wmf extends PHPRtfLite_Image
             // however structures are not reversed,
             // e.g. POINT { int x, int y } where x=3000 (0x0BB8) and y=-1200 (0xFB50)
             // is stored as B8 0B 50 FB
-            if ($size > 3) {
-                $params = fread($this->_stream, 2 * ($size - 3));
-            }
 
             switch ($func) {
                 case 0x020c:  // SetWindowExt
-                    $sizes = array_reverse(unpack('s2', $params));
-                    $this->setImageWidth(PHPRtfLite_Unit::getPointsInTwips($sizes[0]));
-                    $this->setImageHeight(PHPRtfLite_Unit::getPointsInTwips($sizes[1]));
+                    if ($size > 3) {
+                        $params = fread($this->_stream, 2 * ($size - 3));
+                        $sizes = array_reverse(unpack('s2', $params));
+                        $this->setImageWidth(PHPRtfLite_Unit::getPointsInTwips($sizes[0]));
+                        $this->setImageHeight(PHPRtfLite_Unit::getPointsInTwips($sizes[1]));
+                    }
                     return;
                 case 0x0000:
                     return;
@@ -113,7 +113,7 @@ class PHPRtfLite_Image_Wmf extends PHPRtfLite_Image
         // L: vorzeichenloser Long-Typ (immer 32 Bit, Byte-Folge maschinenabhängig)
         // magic:
         $magic = fread($this->_stream, 4);
-        $headerSize = 18; // WMF header minus four bytes already read
+        $headerSize = 18; // WMF header
         if ($magic == "\xd7\xcd\xc6\x9a") {
             $this->_headerStartBytesFound = true;
             $headerSize += 22; // Aldus header
