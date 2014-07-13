@@ -196,7 +196,6 @@
 <h3>Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h3>
 <p>Images can be added to a table cell.</p>
 <div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
-<span class="nv">$cell</span> <span class="o">=</span> <span class="nv">$table</span><span class="o">-&gt;</span><span class="na">getCell</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
 <span class="c1">// adding image to cell row 1 and column 3</span>
 <span class="nv">$imageFile</span> <span class="o">=</span> <span class="s1">&#39;/path/to/image/example.jpg&#39;</span><span class="p">;</span>
 <span class="nv">$image</span> <span class="o">=</span> <span class="nv">$cell</span><span class="o">-&gt;</span><span class="na">addImage</span><span class="p">(</span><span class="nv">$imageFile</span><span class="p">);</span>
@@ -205,7 +204,7 @@
 <span class="nv">$image</span><span class="o">-&gt;</span><span class="na">setHeight</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
 
 <span class="c1">// the same as short cut</span>
-<span class="nv">$cell</span><span class="o">-&gt;</span><span class="na">addImageToCell</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="nv">$imageFile</span><span class="p">,</span> <span class="k">new</span> <span class="nx">PHPRtfLite_ParFormat</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+<span class="nv">$table</span><span class="o">-&gt;</span><span class="na">addImageToCell</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="nv">$imageFile</span><span class="p">,</span> <span class="k">new</span> <span class="nx">PHPRtfLite_ParFormat</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>Adding images to the RTF document is also described in <a class="reference internal" href="images.html#images"><em>Images</em></a>.</p>
