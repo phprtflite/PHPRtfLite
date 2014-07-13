@@ -182,7 +182,6 @@ Images can be added to a table cell.
 .. code-block:: php
 
     <?php
-    $cell = $table->getCell(1, 3);
     // adding image to cell row 1 and column 3
     $imageFile = '/path/to/image/example.jpg';
     $image = $cell->addImage($imageFile);
@@ -191,7 +190,7 @@ Images can be added to a table cell.
     $image->setHeight(3);
     
     // the same as short cut
-    $cell->addImageToCell(1, 3, $imageFile, new PHPRtfLite_ParFormat, 3, 3);
+    $table->addImageToCell(1, 3, $imageFile, new PHPRtfLite_ParFormat, 3, 3);
     
 Adding images to the RTF document is also described in :ref:`images`.
 
