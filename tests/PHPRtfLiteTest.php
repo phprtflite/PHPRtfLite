@@ -19,22 +19,6 @@ class PHPRtfLiteTest extends PHPUnit_Framework_TestCase
         $this->_rtf = new PHPRtfLite;
     }
 
-    /**
-     * tests unregisterAutoloader
-     */
-    public function testUnregisterAutoloader()
-    {
-        $this->assertTrue(PHPRtfLite::unregisterAutoloader());
-    }
-
-    /**
-     * tests registerAutoloader
-     * @depends testUnregisterAutoloader
-     */
-    public function testRegisterAutoloader()
-    {
-        $this->assertTrue(PHPRtfLite::registerAutoloader());
-    }
 
     /**
      * @covers PHPRtfLite::getProperty
@@ -63,7 +47,7 @@ class PHPRtfLiteTest extends PHPUnit_Framework_TestCase
     public function testAddSection()
     {
         $section = $this->_rtf->addSection();
-        $this->assertType('PHPRtfLite_Container_Section', $section);
+        $this->assertInstanceOf('PHPRtfLite_Container_Section', $section);
         $this->_rtf->addSection(new PHPRtfLite_Container_Section($this->_rtf));
         $this->assertEquals(2, count($this->_rtf->getSections()));
     }
@@ -93,7 +77,7 @@ class PHPRtfLiteTest extends PHPUnit_Framework_TestCase
     public function testAddHeader()
     {
         $header = $this->_rtf->addHeader();
-        $this->assertType('PHPRtfLite_Container_Header', $header);
+        $this->assertInstanceOf('PHPRtfLite_Container_Header', $header);
     }
 
     /**
@@ -145,7 +129,7 @@ class PHPRtfLiteTest extends PHPUnit_Framework_TestCase
     public function testAddFooter()
     {
         $footer = $this->_rtf->addFooter();
-        $this->assertType('PHPRtfLite_Container_Footer', $footer);
+        $this->assertInstanceOf('PHPRtfLite_Container_Footer', $footer);
     }
 
     /**

@@ -1206,12 +1206,16 @@ class PHPRtfLite
     /**
      * gets rtf document code
      *
+     * @param bool $free
      * @return string
      */
-    public function getContent()
+    public function getContent($free = true)
     {
         $this->createWriter();
         $this->render();
+        if ($free) {
+            $this->free();
+        }
         return $this->_writer->getContent();
     }
 
@@ -1220,11 +1224,23 @@ class PHPRtfLite
      * saves rtf document to file
      *
      * @param string $file Name of file
+     * @param bool   $free
      */
-    public function save($file)
+    public function save($file, $free = true)
     {
         $this->createWriter($file);
         $this->render();
+        if ($free) {
+            $this->free();
+        }
+    }
+
+
+    public function free()
+    {
+        foreach ($this->_sections as $section) {
+            $section->free();
+        }
     }
 
 
@@ -1233,7 +1249,7 @@ class PHPRtfLite
      *
      * @param string $filename
      */
-    public function sendRtf($filename = 'simple')
+    public function sendRtf($filename = 'simple', $free = true)
     {
         $pathInfo = pathinfo($filename);
 
@@ -1254,6 +1270,11 @@ class PHPRtfLite
 
         $this->createWriter();
         $this->render();
+
+        if ($free) {
+            $this->free();
+        }
+
         echo $this->_writer->getContent();
     }
 

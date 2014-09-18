@@ -1,6 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../PHPRtfLiteSampleTestCase.php';
 
 /**
  * Created on 09.06.2010

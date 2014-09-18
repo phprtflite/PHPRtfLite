@@ -29,7 +29,7 @@ class PHPRtfLite_FootnoteTest extends PHPUnit_Framework_TestCase
     {
         $footnote = new PHPRtfLite_Footnote($this->_rtf, 'hello rtf world!');
         $footnote->render();
-        $this->assertEquals('\chftn {\footnote\pard\plain \lin283\fi-283 \fs20 {\up6\chftn}'
+        $this->assertEquals('{\super\chftn}{\footnote\pard\plain\lin283\fi-283 {\up6\chftn}'
                           . "\r\n" . 'hello rtf world!} ',
                             $this->_rtf->getWriter()->getContent());
     }

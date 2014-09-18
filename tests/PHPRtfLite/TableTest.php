@@ -100,7 +100,7 @@ class PHPRtfLite_TableTest extends PHPUnit_Framework_TestCase
      */
     public function testGetColumn(PHPRtfLite_Table $table)
     {
-        $this->assertType('PHPRtfLite_Table_Column', $table->getColumn(3));
+        $this->assertInstanceOf('PHPRtfLite_Table_Column', $table->getColumn(3));
 
         return $table;
     }
@@ -112,7 +112,7 @@ class PHPRtfLite_TableTest extends PHPUnit_Framework_TestCase
      */
     public function testGetColumnWithInvalidIndex(PHPRtfLite_Table $table)
     {
-        $this->assertType('PHPRtfLite_Table_Column', $table->getColumn(4));
+        $this->assertInstanceOf('PHPRtfLite_Table_Column', $table->getColumn(4));
     }
 
     /**
@@ -122,7 +122,7 @@ class PHPRtfLite_TableTest extends PHPUnit_Framework_TestCase
     {
         $this->_table->addRow(1);
         $this->_table->addColumnsList(array(2, 2));
-        $this->assertType('PHPRtfLite_Table_Cell', $this->_table->getCell(1, 2));
+        $this->assertInstanceOf('PHPRtfLite_Table_Cell', $this->_table->getCell(1, 2));
     }
 
     /**

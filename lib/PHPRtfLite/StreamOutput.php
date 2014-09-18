@@ -76,7 +76,7 @@ class PHPRtfLite_StreamOutput implements PHPRtfLite_Writer_Interface
 
         $this->_handle = fopen($this->_filename, 'wr', false);
         if (!$this->_handle) {
-            throw new PHPRtfLite_Exception("Could not open rtf output stream (url: $url)!");
+            throw new PHPRtfLite_Exception("Could not open rtf output stream (url: $this->_filename)!");
         }
         flock($this->_handle, LOCK_EX);
     }
@@ -98,6 +98,7 @@ class PHPRtfLite_StreamOutput implements PHPRtfLite_Writer_Interface
      * writes string to file handler
      *
      * @param string $data
+     * @throws PHPRtfLite_Exception
      */
     public function write($data)
     {
@@ -111,7 +112,7 @@ class PHPRtfLite_StreamOutput implements PHPRtfLite_Writer_Interface
     /**
      * gets written content
      *
-     * @return type
+     * @return string
      */
     public function getContent()
     {

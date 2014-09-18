@@ -1,7 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../../../lib/PHPRtfLite.php';
-
 
 /**
  * Test class for PHPRtfLite_Table_Row.
@@ -31,7 +28,7 @@ class PHPRtfLite_Table_RowTest extends PHPUnit_Framework_TestCase
     {
         $this->_table->addRow(5);
         $row = $this->_table->getRow(1);
-        $this->assertType('PHPRtfLite_Table_Cell', $row->getCellByIndex(5));
+        $this->assertInstanceOf('PHPRtfLite_Table_Cell', $row->getCellByIndex(5));
     }
 
 }

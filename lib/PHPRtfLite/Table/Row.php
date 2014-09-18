@@ -44,7 +44,7 @@ class PHPRtfLite_Table_Row
 
     /**
      * instances of PHPRtfLite_Table_Cell
-     * @var array
+     * @var PHPRtfLite_Table_Cell[]
      */
     protected $_cells = array();
 
@@ -133,4 +133,11 @@ class PHPRtfLite_Table_Row
         return $this->_rowIndex;
     }
 
+
+    public function free()
+    {
+        foreach ($this->_cells as $cell) {
+            $cell->free();
+        }
+    }
 }

@@ -125,7 +125,7 @@ class PHPRtfLite_Container_SectionTest extends PHPUnit_Framework_TestCase
     public function testAddHeader()
     {
         $header = $this->_section->addHeader();
-        $this->assertType('PHPRtfLite_Container_Header', $header);
+        $this->assertInstanceOf('PHPRtfLite_Container_Header', $header);
     }
 
     /**
@@ -134,7 +134,7 @@ class PHPRtfLite_Container_SectionTest extends PHPUnit_Framework_TestCase
     public function testAddFooter()
     {
         $footer = $this->_section->addFooter();
-        $this->assertType('PHPRtfLite_Container_Footer', $footer);
+        $this->assertInstanceOf('PHPRtfLite_Container_Footer', $footer);
     }
 
     /**
@@ -143,7 +143,7 @@ class PHPRtfLite_Container_SectionTest extends PHPUnit_Framework_TestCase
     public function testAddTable()
     {
         $table = $this->_section->addTable();
-        $this->assertType('PHPRtfLite_Table', $table);
+        $this->assertInstanceOf('PHPRtfLite_Table', $table);
     }
 
     /**
@@ -153,7 +153,7 @@ class PHPRtfLite_Container_SectionTest extends PHPUnit_Framework_TestCase
     {
         $fileName = dirname(__FILE__) . '/../../../samples/sources/cats.jpg';
         $image = $this->_section->addImage($fileName);
-        $this->assertType('PHPRtfLite_Image', $image);
+        $this->assertInstanceOf('PHPRtfLite_Image', $image);
     }
 
     /**
@@ -162,7 +162,7 @@ class PHPRtfLite_Container_SectionTest extends PHPUnit_Framework_TestCase
     public function testAddFootnote()
     {
         $footnote = $this->_section->addFootnote('footnote test');
-        $this->assertType('PHPRtfLite_Footnote', $footnote);
+        $this->assertInstanceOf('PHPRtfLite_Footnote', $footnote);
     }
 
     /**
@@ -171,7 +171,7 @@ class PHPRtfLite_Container_SectionTest extends PHPUnit_Framework_TestCase
     public function testAddEndnote()
     {
         $endnote = $this->_section->addEndnote('endnote test');
-        $this->assertType('PHPRtfLite_Endnote', $endnote);
+        $this->assertInstanceOf('PHPRtfLite_Endnote', $endnote);
     }
 
     public function testWriteRtfCode()

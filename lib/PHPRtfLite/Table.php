@@ -29,7 +29,7 @@
  * @package     PHPRtfLite
  * @subpackage  PHPRtfLite_Table
  */
-class PHPRtfLite_Table
+class PHPRtfLite_Table implements PHPRtfLite_Freeable
 {
 
     /**
@@ -47,13 +47,13 @@ class PHPRtfLite_Table
 
     /**
      * array of PHPRtfLite_Table_Row instances
-     * @var array
+     * @var PHPRtfLite_Table_Row[]
      */
     protected $_rows;
 
     /**
      * array of PHPRtfLite_Table_Column instances
-     * @var array
+     * @var PHPRtfLite_Table_Column[]
      */
     protected $_columns;
 
@@ -113,6 +113,14 @@ class PHPRtfLite_Table
         $this->_container = $container;
         $this->_alignment = $alignment;
         $this->_nestDepth = $nestDepth;
+    }
+
+
+    public function free()
+    {
+        foreach ($this->_rows as $row) {
+            $row->free();
+        }
     }
 
 
