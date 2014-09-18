@@ -102,4 +102,5 @@ $img = $sect->addImage($dir . '/sources/html.png', $parGreyCenter);
 $img->setWidth(1.5);
 
 // save rtf document
-$rtf->save($dir . '/generated/' . basename(__FILE__, '.php') . '.rtf');
+$outputFile = $dir . '/generated/' . basename(__FILE__, '.php') . '.rtf';
+$rtf->save($outputFile, false); // false is only used for unit test

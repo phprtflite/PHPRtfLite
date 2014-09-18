@@ -29,10 +29,10 @@ class PHPRtfLite_BorderTest extends PHPUnit_Framework_TestCase
         $rtf = new PHPRtfLite;
         $border = PHPRtfLite_Border::create($rtf, 1.5, '#ff0', PHPRtfLite_Border_Format::TYPE_SINGLE, 5);
 
-        $this->assertType('PHPRtfLite_Border_Format', $border->getBorderTop());
-        $this->assertType('PHPRtfLite_Border_Format', $border->getBorderBottom());
-        $this->assertType('PHPRtfLite_Border_Format', $border->getBorderRight());
-        $this->assertType('PHPRtfLite_Border_Format', $border->getBorderLeft());
+        $this->assertInstanceOf('PHPRtfLite_Border_Format', $border->getBorderTop());
+        $this->assertInstanceOf('PHPRtfLite_Border_Format', $border->getBorderBottom());
+        $this->assertInstanceOf('PHPRtfLite_Border_Format', $border->getBorderRight());
+        $this->assertInstanceOf('PHPRtfLite_Border_Format', $border->getBorderLeft());
     }
 
     /**
@@ -43,10 +43,10 @@ class PHPRtfLite_BorderTest extends PHPUnit_Framework_TestCase
         $borderFormat = new PHPRtfLite_Border_Format(1.5, '#ff0', PHPRtfLite_Border_Format::TYPE_SINGLE);
         $this->_border->setBorders($borderFormat);
 
-        $this->assertType('PHPRtfLite_Border_Format', $this->_border->getBorderTop());
-        $this->assertType('PHPRtfLite_Border_Format', $this->_border->getBorderBottom());
-        $this->assertType('PHPRtfLite_Border_Format', $this->_border->getBorderRight());
-        $this->assertType('PHPRtfLite_Border_Format', $this->_border->getBorderLeft());
+        $this->assertInstanceOf('PHPRtfLite_Border_Format', $this->_border->getBorderTop());
+        $this->assertInstanceOf('PHPRtfLite_Border_Format', $this->_border->getBorderBottom());
+        $this->assertInstanceOf('PHPRtfLite_Border_Format', $this->_border->getBorderRight());
+        $this->assertInstanceOf('PHPRtfLite_Border_Format', $this->_border->getBorderLeft());
     }
 
 }

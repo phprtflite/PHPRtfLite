@@ -28,7 +28,7 @@
  * @copyright   2007-2008 Denis Slaveckij, 2010-2012 Steffen Zeidler
  * @package     PHPRtfLite
  */
-abstract class PHPRtfLite_Image
+abstract class PHPRtfLite_Image implements PHPRtfLite_Freeable
 {
 
     /**
@@ -113,6 +113,12 @@ abstract class PHPRtfLite_Image
      * destructor - closes stream
      */
     public function __destruct()
+    {
+        //$this->free();
+    }
+
+
+    public function free()
     {
         if (is_resource($this->_stream)) {
             fclose($this->_stream);
@@ -312,7 +318,7 @@ abstract class PHPRtfLite_Image
      */
     public static function createFromFile(PHPRtfLite $rtf, $file, $width = null, $height = null)
     {
-        if (file_exists($file) && is_readable($file)) {
+        if (is_readable($file)) {
             $stream = fopen($file, 'rb');
             $pathInfo = pathinfo($file);
             $type = isset($pathInfo['extension']) ? strtolower($pathInfo['extension']) : 'jpeg';
@@ -412,9 +418,14 @@ abstract class PHPRtfLite_Image
      * writes image into rtf stream
      *
      * @param integer $startFrom
+     * @throws PHPRtfLite_Exception
      */
     protected function writeIntoRtfStream($startFrom = 0)
     {
+        if (!is_resource($this->_stream)) {
+            throw new PHPRtfLite_Exception("Image stream has been closed!");
+        }
+
         fseek($this->_stream, $startFrom);
         $rtfImageType = $this->getImageTypeAsRtf();
 
@@ -435,8 +446,6 @@ abstract class PHPRtfLite_Image
             $stringHex = bin2hex($stringBuffer);
             $rtfStream->write($stringHex);
         }
-
-        fclose($this->_stream);
 
         $rtfStream->write('}}');
     }

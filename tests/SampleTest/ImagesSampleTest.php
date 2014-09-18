@@ -1,6 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-require_once dirname(__FILE__) . '/../PHPRtfLiteSampleTestCase.php';
 
 /**
  * Created on 08.04.2010
@@ -16,6 +14,7 @@ class ImagesSampleTest extends PHPRtfLiteSampleTestCase
     {
         $this->processTest($this->_name . '.php');
     }
+
 
     protected function getSampleFile()
     {

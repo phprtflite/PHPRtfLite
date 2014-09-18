@@ -1,6 +1,5 @@
 <?php
 
-require dirname(__FILE__) . '/../lib/PHPRtfLite.php';
+require dirname(__FILE__) . '/../vendor/autoload.php';
 
-// register PHPRtfLite class loader
-PHPRtfLite::registerAutoloader();
+require_once 'PHPRtfLiteSampleTestCase.php';

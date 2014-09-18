@@ -37,7 +37,7 @@ class PHPRtfLite_Element_Hyperlink extends PHPRtfLite_Element
 
 
     /**
-     * sets hyperling
+     * sets hyperlink
      *
      * @param string $hyperlink
      */
