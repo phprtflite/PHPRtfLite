@@ -49,13 +49,13 @@ class PHPRtfLite_Table implements PHPRtfLite_Freeable
      * array of PHPRtfLite_Table_Row instances
      * @var PHPRtfLite_Table_Row[]
      */
-    protected $_rows;
+    protected $_rows = [];
 
     /**
      * array of PHPRtfLite_Table_Column instances
      * @var PHPRtfLite_Table_Column[]
      */
-    protected $_columns;
+    protected $_columns = [];
 
     /**
      * @var string
