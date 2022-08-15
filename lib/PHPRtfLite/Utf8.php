@@ -31,6 +31,8 @@
 class PHPRtfLite_Utf8
 {
 
+    static $isOutputEscapingEnabled = false;
+
     /**
      * converts text with utf8 characters into rtf utf8 entites
      *
@@ -47,10 +49,30 @@ class PHPRtfLite_Utf8
                                              . 'Activate this extension or use UTF-8 encoded texts!');
             }
         }
-        $text = self::utf8ToUnicode($text);
+
+        if (self::$isOutputEscapingEnabled) {
+            $text = self::toCodePoint($text);
+        } else {
+            $text = self::utf8ToUnicode($text);
+        }
+
         return self::unicodeToEntitiesPreservingAscii($text);
     }
 
+    /**
+     * @return array
+     */
+    private static function toCodePoint($str) {
+        $utf32  = mb_convert_encoding($str, 'UTF-32', 'UTF-8');
+        $length = mb_strlen($utf32, 'UTF-32');
+        $result = [];
+
+        for( $i = 0; $i < $length; ++$i ) {
+            $result[] = hexdec( bin2hex( mb_substr( $utf32, $i, 1, 'UTF-32' ) ) );
+        }
+
+        return $result;
+    }
 
     /**
      * gets unicode for each character
