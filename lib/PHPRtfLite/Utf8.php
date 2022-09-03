@@ -61,32 +61,10 @@ class PHPRtfLite_Utf8
     private static function utf8ToUnicode($str)
     {
         $unicode = array();
-        $values = array();
-        $lookingFor = 1;
 
-        for ($i = 0; $i < strlen($str); $i++ ) {
-            $thisValue = ord($str[$i]);
-
-            if ($thisValue < 128) {
-                $unicode[] = $thisValue;
-            }
-            else {
-                if (count($values) == 0) {
-                    $lookingFor = $thisValue < 224 ? 2 : 3;
-                }
-
-                $values[] = $thisValue;
-
-                if (count($values) == $lookingFor) {
-                    $number = $lookingFor == 3
-                              ? (($values[0] % 16) * 4096) + (($values[1] % 64) * 64) + ($values[2] % 64)
-                              : (($values[0] % 32) * 64) + ($values[1] % 64);
-
-                    $unicode[] = $number;
-                    $values = array();
-                    $lookingFor = 1;
-                }
-            }
+        for ($i = 0; $i < mb_strlen($str); $i++ ) {
+            $char = mb_substr($str, $i, 1);
+            $unicode[] = mb_ord($char);
         }
 
         return $unicode;
@@ -98,6 +76,7 @@ class PHPRtfLite_Utf8
      *
      * @param  string $unicode
      * @return string
+     * @see https://www.oreilly.com/library/view/rtf-pocket-guide/9781449302047/ch01.html#unicode_in_rtf
      */
     private static function unicodeToEntitiesPreservingAscii($unicode)
     {
@@ -105,9 +84,22 @@ class PHPRtfLite_Utf8
 
         foreach ($unicode as $value) {
             if ($value != 65279) {
-                $entities .= $value > 127
-                             ? '\uc0{\u' . $value . '}'
-                             : chr($value);
+                if ($value <= 127) {
+                    $entities .= chr($value);
+                } else if ($value < 255) {
+                    $entities .= '\uc0{\u' . $value . '}';
+                } else if ($value <= 32768) {
+                    $entities .= '\uc1{\u' . $value . '}';
+                } else if ($value <= 65535) {
+                    $entities .= '\uc1{\u' . ($value - 65536) . '}';
+                } else {
+                    $hex = bin2hex(mb_convert_encoding(mb_chr($value), 'UTF-16', 'UTF-8'));
+                    $hexs = str_split($hex, 4); // split by 2 bytes
+                    $encodedChars = array_map(function ($hex) {
+                        return '\u' . (hexdec($hex) - 65536) . '?';
+                    }, $hexs);
+                    $entities .= '\uc1{' . implode('', $encodedChars) . '}';
+                }
             }
         }
 
