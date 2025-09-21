@@ -59,6 +59,11 @@ class PHPRtfLite_Autoloader
         if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/m', $className)) {
             throw new Exception("Class name '$className' is invalid");
         }
+        // Idea: Smarty - Autoloader - https://github.com/smarty-php/smarty/blob/master/libs/Autoloader.php
+        // Just autoload with your own PHPRtfLite files
+        if (stripos($className, 'PHPRtfLite') !== 0) {
+            return;
+        }
 
         $classFile = self::$_baseDir . '/' . str_replace('_', '/', $className) . '.php';
 
